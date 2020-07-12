@@ -6,13 +6,13 @@ namespace Bermuda\App;
 
 use DI\FactoryInterface;
 use Invoker\InvokerInterface;
-use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
-use Bermuda\App\AppInterface;
+use Psr\Container\ContainerInterface;
+use Bermuda\Pipeline\PipelineInterface;
 use Bermuda\ServiceFactory\FactoryException;
 use Bermuda\ErrorHandler\ErrorResponseGenerator;
-use Nyholm\Psr7Server\ServerRequestCreator;
-use Psr\Container\ContainerInterface;
-use Webmozart\PathUtil\Path;
+use Laminas\HttpHandlerRunner\RequestHandlerRunner;
+use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
+use Bermuda\MiddlewareFactory\MiddlewareFactoryInterface;
 
 
 /**
@@ -23,61 +23,13 @@ class App implements AppInterface
 {
     private array $entries = [];
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(AppFactory $factory)
     {
-        $this->entries[ContainerInterface::class] = $container;
-
-        $this->inject(Pipeline::class)
-            ->inject(EmitterInterface::class)
-            ->inject(ServerRequestCreator::class)
-            ->inject(ErrorResponseGenerator::class)
-            ->inject(InvokerInterface::class)
-            ->inject(FactoryInterface::class)
-            ->inject(Resolver::class)
-            ->injectRunner();
-
-        $this->entries['app.root'] = $container->get('app.root');
-    }
-
-
-    /**
-     * @param string $classname
-     * @return object
-     */
-    private function inject(string $classname) : self
-    {
-        $service = $this->entries[ContainerInterface::class]->get($classname);
-
-        if (!$service instanceof $classname)
-        {
-            throw new \RuntimeException();
-        }
-
-        $this->entries[$classname] = $service;
-
-        return $this;
+        $this->entries = $factory->getEntries();
     }
 
     /**
-     * @return $this
-     */
-    public function injectRunner() : self
-    {
-        $this->entries[RequestHandlerRunner::class] = new RequestHandlerRunner(
-            $this->entries[Pipeline::class],
-            $this->entries[EmitterInterface::class],
-            $this->entries[ServerRequestCreator::class],
-            $this->entries[ErrorResponseGenerator::class]
-        );
-
-        return $this;
-    }
-
-    /**
-     * @param string $service
-     * @param array $params
-     * @return object
-     * @throws FactoryException
+     * @inheritDoc
      */
     public function __invoke(string $service, array $params = []): object
     {
@@ -85,10 +37,7 @@ class App implements AppInterface
     }
 
     /**
-     * @param string $service
-     * @param array $params
-     * @return object
-     * @throws FactoryException
+     * @inheritDoc
      */
     public function make(string $service, array $params = []): object
     {
@@ -116,11 +65,17 @@ class App implements AppInterface
     /**
      * @param string $id
      * @param $value
-     * @return Application
+     * @return AppInterface
      */
-    public function set(string $id, $value): Application
+    public function set(string $id, $value): AppInterface
     {
+        if($this->has($id))
+        {
+            throw \RuntimeException(sprintf('Entry with id: %s already exists in the container', $id));
+        }
+        
         $this->entries[$id] = $value;
+        
         return $this;
     }
 
@@ -143,32 +98,17 @@ class App implements AppInterface
     /**
      * @inheritDoc
      */
-    public function call($callable, array $parameters = array())
+    public function call($callable, array $parameters = [])
     {
         return $this->entries[InvokerInterface::class]->call($callable, $parameters);
     }
 
     /**
-     * @param $middleware
-     * @return Application
-     * @throws UnresolvableMiddlewareException
+     * @inheritDoc
      */
-    public function pipe($middleware): Application
+    public function pipe($any): AppInterface
     {
-        $this->entries[Pipeline::class]->pipe($this->entries[Resolver::class]
-            ->resolve($middleware)
-        );
-
+        $this->entries[PipelineInterface::class]->pipe($this->entries[MiddlewareFactoryInterface::class]->make($any));
         return $this;
-    }
-
-    /**
-     * @param string ...$segments
-     * @return string
-     */
-    public function path(string ...$segments): string
-    {
-        array_unshift($segments, $this->entries['app.root']);
-        return Path::join($segments);
     }
 }
