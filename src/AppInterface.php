@@ -32,6 +32,7 @@ interface Application extends ContainerInterface, FactoryInterface, InvokerInter
      * @param string $id
      * @param $value
      * @return $this
+     * @throws \RuntimeException
      */
     public function set(string $id, $value): self ;
 }
