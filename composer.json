@@ -6,15 +6,16 @@
       "Bermuda\\App\\": "src/"
     },
     "files": [
-            "src/functions.php",
-            "src/EntityEvent.php"
+            "src/functions.php"
     ]
   },
   "require": {
     "php": ">= 7.4",
+    "bermudaphp/router": "^1.0",
     "bermudaphp/registry": "^1.0",
     "bermudaphp/http-factories": "^1.0",
     "bermudaphp/psr15factory": "^1.0",
-    "bermudaphp/service-factory": "^1.0"
+    "bermudaphp/service-factory": "^1.0",
+    "bermudaphp/templater": "^1.0"
   }
 }
