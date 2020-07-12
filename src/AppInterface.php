@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Bermuda\AppInterface;
+namespace Bermuda\App;
 
 
 use Invoker\InvokerInterface;
