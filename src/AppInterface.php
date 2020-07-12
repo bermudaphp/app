@@ -13,7 +13,7 @@ use Bermuda\ServiceFactory\FactoryInterface;
  * Interface AppInterface
  * @package Bermuda\App
  */
-interface Application extends ContainerInterface, FactoryInterface, InvokerInterface
+interface AppInterface extends ContainerInterface, FactoryInterface, InvokerInterface
 {
     const version = 1.0;
 
