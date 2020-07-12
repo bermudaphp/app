@@ -11,7 +11,6 @@ use Bermuda\Pipeline\PipelineInterface;
 use Bermuda\ServiceFactory\FactoryException;
 use Bermuda\ErrorHandler\ErrorResponseGenerator;
 use Laminas\HttpHandlerRunner\RequestHandlerRunner;
-use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
 use Bermuda\MiddlewareFactory\MiddlewareFactoryInterface;
 
 
