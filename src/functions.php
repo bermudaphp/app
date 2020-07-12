@@ -93,9 +93,9 @@ function route(string $name, array $params = []): string
 /**
  * @param string $name
  * @param array $params
- * @return string
+ * @return ResponseInterface
  */
-function redirect_on_route(string $name, array $params = []) : string
+function redirect_on_route(string $name, array $params = []): ResponseInterface
 {
     return redirect(route($name, $params));
 }
