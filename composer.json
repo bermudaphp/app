@@ -1,0 +1,16 @@
+{
+  "name": "bermudaphp/app",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Bermuda\\App\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">= 7.4",
+    "bermudaphp/registry": "^1.0",
+    "bermudaphp/http-factories": "^1.0",
+    "bermudaphp/psr15factory": "^1.0",
+    "bermudaphp/service-factory": "^1.0"
+  }
+}
