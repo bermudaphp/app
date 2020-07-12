@@ -4,6 +4,15 @@
 namespace Bermuda;
 
 
+use Bermuda\App\AppInterface;
+use Bermuda\Router\GeneratorInterface;
+use Bermuda\Templater\RendererInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\UriInterface;
+
+
 /**
  * @param string $entry
  * @return AppInterface|mixed
