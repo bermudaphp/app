@@ -4,7 +4,11 @@
   "autoload": {
     "psr-4": {
       "Bermuda\\App\\": "src/"
-    }
+    },
+    "files": [
+            "src/functions.php",
+            "src/EntityEvent.php"
+    ]
   },
   "require": {
     "php": ">= 7.4",
