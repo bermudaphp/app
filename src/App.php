@@ -62,9 +62,7 @@ class App implements AppInterface
     }
 
     /**
-     * @param string $id
-     * @param $value
-     * @return AppInterface
+     * @inheritDoc
      */
     public function set(string $id, $value): AppInterface
     {
@@ -74,7 +72,6 @@ class App implements AppInterface
         }
         
         $this->entries[$id] = $value;
-        
         return $this;
     }
 
