@@ -41,7 +41,7 @@ final class AppFactory
      */
     public function getEntries(): array
     {
-        return $this->entries();
+        return $this->entries;
     }
     
     /**
