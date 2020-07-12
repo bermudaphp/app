@@ -1,2 +1,4 @@
-# app
-Bermuda application
+# Install
+```bash
+composer require bermudaphp/app
+```
