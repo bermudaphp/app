@@ -5,6 +5,7 @@ namespace Bermuda;
 
 
 use Bermuda\App\AppInterface;
+use Bermuda\Registry\Registry;
 use Bermuda\Router\GeneratorInterface;
 use Bermuda\Templater\RendererInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -129,7 +130,7 @@ function html_response(string $html, ?ResponseInterface $response = null): Respo
         $response = response();
      }
   
-     $response->getBody()->write($json);
+     $response->getBody()->write($html);
     
      return $response->withHeader('Content-Type', 'text/html');
 }

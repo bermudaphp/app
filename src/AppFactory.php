@@ -26,14 +26,17 @@ final class AppFactory
         return Registry::set(AppInterface::class, $this->make($container));
     }
 
-    private function make(ContainerInterface $container): AppInterface
+    private function make(ContainerInterface $c): AppInterface
     {
-        if ($container->has(AppInterface::class))
+        if ($c->has(AppInterface::class))
         {
-            return $container->get(AppInterface::class);
+            return $c->get(AppInterface::class);
         }
 
-        return new App($this->setEntries($container));
+        return new App($this->withEntries($c, $c->get(RequestHandlerRunner::class),
+            $c->get(PipelineInterface::class), $c->get(FactoryInterface::class),
+            $c->get(InvokerInterface::class), $c->get(MiddlewareFactoryInterface::class)
+        ));
     }
     
     /**
@@ -48,12 +51,21 @@ final class AppFactory
      * @param ContainerInterface $container
      * @return $this
      */
-    private function setEntries(ContainerInterface $container): self
+    private function withEntries(
+        ContainerInterface $container, RequestHandlerRunner $runner,
+        PipelineInterface $pipeline, FactoryInterface $factory,
+        InvokerInterface $invoker, MiddlewareFactoryInterface $middlewareFactory
+    ): self
     {
-        $this->entries[RequestHandlerRunner::class] = $container->get(RequestHandlerRunner::class);
-        $this->entries[PipelineInterface::class] = $container->get(PipelineInterface::class);
-        $this->entries[FactoryInterface::class] = $container->get(FactoryInterface::class);
-        $this->entries[InvokerInterface::class] = $container->get(InvokerInterface::class);
-        $this->entries[MiddlewareFactoryInterface::class] = $container->get(MiddlewareFactoryInterface::class);
+        $copy = clone $this;
+
+        $copy->entries[ContainerInterface::class] = $container;
+        $copy->entries[RequestHandlerRunner::class] = $runner;
+        $copy->entries[PipelineInterface::class] = $pipeline;
+        $copy->entries[FactoryInterface::class] = $factory;
+        $copy->entries[InvokerInterface::class] = $invoker;
+        $copy->entries[MiddlewareFactoryInterface::class] = $middlewareFactory;
+
+        return $copy;
     }
 }
