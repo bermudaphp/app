@@ -4,6 +4,7 @@
 namespace Bermuda;
 
 
+use Laminas\Config\Config
 use Bermuda\App\AppInterface;
 use Bermuda\Registry\Registry;
 use Bermuda\Router\GeneratorInterface;
@@ -44,6 +45,15 @@ function get(string $entry)
 function service(string $service): object
 {
     return Registry::get(AppInterface::class)->get($service);
+}
+
+/**
+ * @param string|int|null $key
+ * @return Config|mixed
+ */
+function config($key = null)
+{   
+    return $key == null ? get('config') : get('config')['key'];
 }
 
 /**
