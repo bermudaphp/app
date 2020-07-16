@@ -39,7 +39,7 @@ function get(string $entry)
 
 /**
  * @param string $entry
- * @return mixed
+ * @return object
  */
 function service(string $service): object
 {
