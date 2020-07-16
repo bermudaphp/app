@@ -16,6 +16,8 @@
     "bermudaphp/http-factories": "^1.0",
     "bermudaphp/psr15factory": "^1.0",
     "bermudaphp/service-factory": "^1.0",
-    "bermudaphp/templater": "^1.0"
+    "bermudaphp/templater": "^1.0",
+    "laminas/laminas-config": "^3.3",
+    "laminas/laminas-httphandlerrunner": "^1.2"
   }
 }
