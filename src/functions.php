@@ -4,7 +4,7 @@
 namespace Bermuda;
 
 
-use Laminas\Config\Config
+use Laminas\Config\Config;
 use Bermuda\App\AppInterface;
 use Bermuda\Registry\Registry;
 use Bermuda\Router\GeneratorInterface;
@@ -53,7 +53,7 @@ function service(string $service): object
  */
 function config($key = null)
 {   
-    return $key == null ? new Config(get('config')) : new Config(get('config'))->{$key};
+    return $key == null ? new Config(get('config')) : (new Config(get('config')))->{$key};
 }
 
 /**
