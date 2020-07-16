@@ -53,7 +53,7 @@ function service(string $service): object
  */
 function config($key = null)
 {   
-    return $key == null ? get('config') : get('config')['key'];
+    return $key == null ? new Config(get('config')) : new Config(get('config'))->{$key};
 }
 
 /**
