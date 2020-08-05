@@ -88,7 +88,7 @@ function redirect($uri = '/', ?ResponseInterface $response = null): ResponseInte
         throw new \InvalidArgumentException(sprintf('Uri provided to %s must be a string or %s instance; received "%s"', __FUNCTION__, UriInterface::class, (is_object($uri) ? get_class($uri) : gettype($uri))));
     }
   
-    return ($response ?? response())->withHeader('location', (string) $uri)->withStatusCode(302);
+    return ($response ?? response())->withHeader('location', (string) $uri)->withStatus(302);
 }
 
 /**
