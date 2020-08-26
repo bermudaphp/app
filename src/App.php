@@ -20,6 +20,8 @@ use Bermuda\MiddlewareFactory\MiddlewareFactoryInterface;
  */
 class App implements AppInterface
 {
+    const version = 1.0.3;
+    
     private array $entries = [];
 
     public function __construct(AppFactory $factory)
@@ -66,12 +68,13 @@ class App implements AppInterface
      */
     public function set(string $id, $value): AppInterface
     {
-        if($this->has($id))
+        if ($this->has($id))
         {
             throw new \RuntimeException(sprintf('Entry with id: %s already exists in the container', $id));
         }
         
         $this->entries[$id] = $value;
+        
         return $this;
     }
 
@@ -104,7 +107,10 @@ class App implements AppInterface
      */
     public function pipe($any): AppInterface
     {
-        $this->entries[PipelineInterface::class]->pipe($this->entries[MiddlewareFactoryInterface::class]->make($any));
+        $this->entries[PipelineInterface::class]->pipe(
+            $this->entries[MiddlewareFactoryInterface::class]->make($any)
+        );
+        
         return $this;
     }
 }
