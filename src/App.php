@@ -49,7 +49,7 @@ class App implements AppInterface
 
         catch (\Throwable $e)
         {
-            FactoryException::wrap($e)->throw();
+            FactoryException::fromPrevious($e)->throw();
         }
 
         return $service;
