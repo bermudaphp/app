@@ -68,7 +68,7 @@ class App implements AppInterface
     {
         if($this->has($id))
         {
-            throw \RuntimeException(sprintf('Entry with id: %s already exists in the container', $id));
+            throw new \RuntimeException(sprintf('Entry with id: %s already exists in the container', $id));
         }
         
         $this->entries[$id] = $value;
