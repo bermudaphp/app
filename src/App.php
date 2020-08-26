@@ -9,7 +9,6 @@ use Invoker\InvokerInterface;
 use Psr\Container\ContainerInterface;
 use Bermuda\Pipeline\PipelineInterface;
 use Bermuda\ServiceFactory\FactoryException;
-use Bermuda\ErrorHandler\ErrorResponseGenerator;
 use Laminas\HttpHandlerRunner\RequestHandlerRunner;
 use Bermuda\MiddlewareFactory\MiddlewareFactoryInterface;
 
@@ -19,9 +18,7 @@ use Bermuda\MiddlewareFactory\MiddlewareFactoryInterface;
  * @package Bermuda\App
  */
 class App implements AppInterface
-{
-    const version = 1.0.3;
-    
+{  
     private array $entries = [];
 
     public function __construct(AppFactory $factory)
