@@ -17,13 +17,15 @@ use Psr\Http\Message\UriInterface;
 
 /**
  * @param string $entry
- * @return AppInterface|mixed
+ * @param $default
+ * @return AppInterface|mixed|null
  */
-function app(string $entry = null)
+function app(string $entry = null, $default = null)
 {
     if ($entry != null)
     {
-        return Registry::get(AppInterface::class)->get($entry);
+        return ($app = Registry::get(AppInterface::class))->has($entry) ? 
+            Registry::get(AppInterface::class)->get($entry) : $default;
     }
     
     return Registry::get(AppInterface::class);
@@ -31,11 +33,12 @@ function app(string $entry = null)
 
 /**
  * @param string $entry
+ * @param $default
  * @return mixed
  */
-function get(string $entry)
+function get(string $entry, $default = null)
 {
-    return Registry::get(AppInterface::class)->get($entry);
+    return app($entry, $default);
 }
 
 /**
@@ -44,7 +47,7 @@ function get(string $entry)
  */
 function service(string $service): object
 {
-    return Registry::get(AppInterface::class)->get($service);
+    return app($service);
 }
 
 /**
