@@ -34,7 +34,8 @@ final class AppFactory
         }
         
         $config = $c->get('config');
-        $version = isset($config['app']) ? $config->get('version', '1.0') : '1.0';
+        $version = isset($config['app']) && isset($config['version'])
+            ? (string) $config['version'] : '1.0';
 
         return new App($this->withEntries($c, $c->get(RequestHandlerRunner::class),
             $c->get(PipelineInterface::class), $c->get(FactoryInterface::class),
