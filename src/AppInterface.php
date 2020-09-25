@@ -15,8 +15,6 @@ use Bermuda\ServiceFactory\FactoryInterface;
  */
 interface AppInterface extends ContainerInterface, FactoryInterface, InvokerInterface
 {
-    const version = '1.0';
-
     /**
      * Run application
      */
@@ -27,6 +25,12 @@ interface AppInterface extends ContainerInterface, FactoryInterface, InvokerInte
      * @return $this
      */
     public function pipe($any): self ;
+    
+    /**
+     * @param mixed $any
+     * @return $this
+     */
+    public function version(string $version = null): string ;
 
     /**
      * @param string $id
