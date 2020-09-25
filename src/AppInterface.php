@@ -15,7 +15,7 @@ use Bermuda\ServiceFactory\FactoryInterface;
  */
 interface AppInterface extends ContainerInterface, FactoryInterface, InvokerInterface
 {
-    const version = '1.0.3';
+    const version = '1.0';
 
     /**
      * Run application
