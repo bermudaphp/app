@@ -56,7 +56,7 @@ function service(string $service): object
  */
 function config($key = null)
 {   
-    return $key == null ? new Config(get('config')) : (new Config(get('config')))->{$key};
+    return $key == null ? new Config(app('config')) : (new Config(app('config')))->{$key};
 }
 
 /**
