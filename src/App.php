@@ -19,10 +19,12 @@ use Bermuda\MiddlewareFactory\MiddlewareFactoryInterface;
  */
 class App implements AppInterface
 {  
+    private string $version;
     private array $entries = [];
-
-    public function __construct(AppFactory $factory)
+   
+    public function __construct(AppFactory $factory, string $version = '1.0')
     {
+        $this->version = $version;
         $this->entries = $factory->getEntries();
     }
 
@@ -51,6 +53,20 @@ class App implements AppInterface
 
         return $service;
     }
+    
+    /**
+     * @param mixed $any
+     * @return $this
+     */
+    public function version(string $version = null): string 
+    {
+        if ($version != null)
+        {
+            $this->version = $version;
+        }
+        
+        return $this->version;
+    }
 
     /**
      * Run application
@@ -71,7 +87,6 @@ class App implements AppInterface
         }
         
         $this->entries[$id] = $value;
-        
         return $this;
     }
 
