@@ -33,14 +33,10 @@ final class AppFactory
             return $c->get(AppInterface::class);
         }
         
-        $config = $c->get('config');
-        $version = isset($config['app']) && isset($config['version'])
-            ? (string) $config['version'] : '1.0';
-
         return new App($this->withEntries($c, $c->get(RequestHandlerRunner::class),
             $c->get(PipelineInterface::class), $c->get(FactoryInterface::class),
             $c->get(InvokerInterface::class), $c->get(MiddlewareFactoryInterface::class)
-        ), $version);
+        ), $c->get('config')['app']['version'] ?? '1.0');
     }
     
     /**
