@@ -9,6 +9,8 @@ use Bermuda\App\AppInterface;
 use Bermuda\Registry\Registry;
 use Bermuda\Router\GeneratorInterface;
 use Bermuda\Templater\RendererInterface;
+use Bermuda\ServiceFactory\FactoryInterface;
+use Bermuda\ServiceFactory\FactoryException;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -42,12 +44,23 @@ function get(string $entry, $default = null)
 }
 
 /**
- * @param string $entry
+ * @param string $service
  * @return object
  */
 function service(string $service): object
 {
     return app($service);
+}
+
+/**
+ * @param string $cls
+ * @param array $params
+ * @return object
+ * @throws FactoryException
+ */
+function make(string $cls, array $params = []): object
+{
+    return app(FactoryInterface::class)->make($cls, $params);
 }
 
 /**
