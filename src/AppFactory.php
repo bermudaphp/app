@@ -1,16 +1,10 @@
 <?php
 
-
 namespace Bermuda\App;
 
 
-use DI\FactoryInterface;
-use Invoker\InvokerInterface;
 use Bermuda\Registry\Registry;
 use Psr\Container\ContainerInterface;
-use Bermuda\Pipeline\PipelineInterface;
-use Laminas\HttpHandlerRunner\RequestHandlerRunner;
-use Bermuda\MiddlewareFactory\MiddlewareFactoryInterface;
 
 
 /**
@@ -19,53 +13,36 @@ use Bermuda\MiddlewareFactory\MiddlewareFactoryInterface;
  */
 final class AppFactory
 {
-    private array $entries = [];
-    
+    /**
+     * @param ContainerInterface $container
+     * @return AppInterface
+     */
     public function __invoke(ContainerInterface $container): AppInterface
     {
         return Registry::set(AppInterface::class, $this->make($container));
     }
 
-    private function make(ContainerInterface $c): AppInterface
-    {
-        if ($c->has(AppInterface::class))
-        {
-            return $c->get(AppInterface::class);
-        }
-        
-        return new App($this->withEntries($c, $c->get(RequestHandlerRunner::class),
-            $c->get(PipelineInterface::class), $c->get(FactoryInterface::class),
-            $c->get(InvokerInterface::class), $c->get(MiddlewareFactoryInterface::class)
-        ), $c->get('config')['app']['version'] ?? '1.0');
-    }
-    
     /**
-     * @return array
+     * @param ContainerInterface $container
+     * @return AppInterface
+     */
+    private function make(ContainerInterface $container): AppInterface
+    {
+        if ($container->has(AppInterface::class))
+        {
+            return $container->get(AppInterface::class);
+        }
+
+        return php_sapi_name() == 'cli' ? new Console($container)
+            : new FastCGI($container);
+    }
+
+    /**
+     * @deprecated
+     * @throws \RuntimeException
      */
     public function getEntries(): array
     {
-        return $this->entries;
-    }
-    
-    /**
-     * @param ContainerInterface $container
-     * @return $this
-     */
-    private function withEntries(
-        ContainerInterface $container, RequestHandlerRunner $runner,
-        PipelineInterface $pipeline, FactoryInterface $factory,
-        InvokerInterface $invoker, MiddlewareFactoryInterface $middlewareFactory
-    ): self
-    {
-        $copy = clone $this;
-
-        $copy->entries[ContainerInterface::class] = $container;
-        $copy->entries[RequestHandlerRunner::class] = $runner;
-        $copy->entries[PipelineInterface::class] = $pipeline;
-        $copy->entries[FactoryInterface::class] = $factory;
-        $copy->entries[InvokerInterface::class] = $invoker;
-        $copy->entries[MiddlewareFactoryInterface::class] = $middlewareFactory;
-
-        return $copy;
+        throw new \RuntimeException(__METHOD__ . ' is deprecated!');
     }
 }
