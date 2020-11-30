@@ -1,31 +1,55 @@
 <?php
 
-
 namespace Bermuda\App;
 
 
 use DI\FactoryInterface;
 use Invoker\InvokerInterface;
+use Bermuda\ServiceFactory\Factory;
 use Psr\Container\ContainerInterface;
-use Bermuda\Pipeline\PipelineInterface;
-use Bermuda\ServiceFactory\FactoryException;
-use Laminas\HttpHandlerRunner\RequestHandlerRunner;
-use Bermuda\MiddlewareFactory\MiddlewareFactoryInterface;
 
 
 /**
  * Class App
  * @package Bermuda\App
  */
-class App implements AppInterface
-{  
-    private string $version;
-    private array $entries = [];
-   
-    public function __construct(AppFactory $factory, string $version = '1.0')
+abstract class App implements AppInterface
+{
+    protected Factory $factory;
+    protected InvokerInterface $invoker;
+    protected ContainerInterface $container;
+
+    protected string $version;
+    protected array $entries = [];
+
+    public function __construct(ContainerInterface $container)
     {
-        $this->version = $version;
-        $this->entries = $factory->getEntries();
+        $this->container = $container;
+        $this->factory = new Factory($container->get(FactoryInterface::class));
+        $this->version = $this->getVersion();
+    }
+
+    /**
+     * @return string
+     */
+    private function getVersion(): string
+    {
+        return $this->container->has('app_version') ?
+            $this->container->get('app_version') : '1.0.0' ;
+    }
+
+    /**
+     * @param string|null $version
+     * @return string
+     */
+    public function version(string $version = null): string
+    {
+        if ($version != null)
+        {
+            return $this->version = $version;
+        }
+
+        return $this->version;
     }
 
     /**
@@ -33,7 +57,7 @@ class App implements AppInterface
      */
     public function __invoke(string $service, array $params = []): object
     {
-        return $this->make($service, $params);
+        return $this->factory->make($service, $params);
     }
 
     /**
@@ -41,39 +65,7 @@ class App implements AppInterface
      */
     public function make(string $service, array $params = []): object
     {
-        try
-        {
-            $service = $this->entries[FactoryInterface::class]->make($service, $params);
-        }
-
-        catch (\Throwable $e)
-        {
-            FactoryException::fromPrevious($e)->throw();
-        }
-
-        return $service;
-    }
-    
-    /**
-     * @param mixed $any
-     * @return $this
-     */
-    public function version(string $version = null): string 
-    {
-        if ($version != null)
-        {
-            $this->version = $version;
-        }
-        
-        return $this->version;
-    }
-
-    /**
-     * Run application
-     */
-    public function run(): void
-    {
-        $this->entries[RequestHandlerRunner::class]->run();
+        return $this->factory->make($service, $params);
     }
 
     /**
@@ -85,7 +77,7 @@ class App implements AppInterface
         {
             throw new \RuntimeException(sprintf('Entry with id: %s already exists in the container', $id));
         }
-        
+
         $this->entries[$id] = $value;
         return $this;
     }
@@ -95,7 +87,7 @@ class App implements AppInterface
      */
     public function get($id)
     {
-        return $this->entries[$id] ?? $this->entries[ContainerInterface::class]->get($id);
+        return $this->entries[$id] ?? $this->container->get($id);
     }
 
     /**
@@ -103,7 +95,7 @@ class App implements AppInterface
      */
     public function has($id)
     {
-        return array_key_exists($id, $this->entries) || $this->entries[ContainerInterface::class]->has($id);
+        return array_key_exists($id, $this->entries) || $this->container->has($id);
     }
 
     /**
@@ -111,18 +103,6 @@ class App implements AppInterface
      */
     public function call($callable, array $parameters = [])
     {
-        return $this->entries[InvokerInterface::class]->call($callable, $parameters);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function pipe($any): AppInterface
-    {
-        $this->entries[PipelineInterface::class]->pipe(
-            $this->entries[MiddlewareFactoryInterface::class]->make($any)
-        );
-        
-        return $this;
+        return $this->invoker->call($callable, $parameters);
     }
 }
