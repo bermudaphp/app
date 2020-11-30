@@ -12,6 +12,7 @@ interface CommandResolverInterface
     /**
      * @param mixed $any
      * @return CommandInterface
+     * @throws \RuntimeException
      */
     public function resolve($any): CommandInterface ;
 }
