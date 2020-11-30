@@ -17,6 +17,7 @@
     "bermudaphp/psr15factory": "^1.0",
     "bermudaphp/service-factory": "^1.0",
     "bermudaphp/templater": "^1.0",
+    "symfony/console": "^5.2",
     "laminas/laminas-config": "^3.3"
   }
 }
