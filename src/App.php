@@ -27,6 +27,7 @@ abstract class App implements AppInterface
         $this->container = $container;
         $this->factory = new Factory($container->get(FactoryInterface::class));
         $this->version = $this->getVersion();
+        $this->entries[AppInterface::class] = $this;
     }
 
     /**
