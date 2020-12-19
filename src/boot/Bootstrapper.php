@@ -34,6 +34,8 @@ final class Bootstrapper implements BootstrapperInterface
      */
     public function boot(AppInterface $app): void
     {
+        Registry::set(AppInterface::class, $app);
+        
         foreach ($this->bootstrap as $bootstrapper)
         {
             $bootstrapper->boot($app);
