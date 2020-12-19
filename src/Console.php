@@ -67,9 +67,17 @@ final class Console extends App
      */
     private function getRunner(): Console\CommandRunnerInterface
     {
-        return $this->container->has(CommandRunnerInterface::class)
-            ? $this->container->get(CommandRunnerInterface::class) :
-            new Console\SymfonyConsole();
+        if (!$this->container->has(CommandRunnerInterface::class))
+        {
+            ($runner = new Console\SymfonyConsole())
+                ->getConsole()->setName($this->name);
+
+            $runner->getConsole()->setVersion($this->version);
+
+            return $runner;
+        }
+
+        return $this->container->get(CommandRunnerInterface::class);
     }
 
     /**
