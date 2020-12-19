@@ -12,6 +12,8 @@ use Psr\Container\ContainerInterface;
 /**
  * Class App
  * @package Bermuda\App
+ * @property string $name;
+ * @property string $version;
  */
 abstract class App implements AppInterface
 {
@@ -19,15 +21,53 @@ abstract class App implements AppInterface
     protected InvokerInterface $invoker;
     protected ContainerInterface $container;
 
+    protected string $name;
     protected string $version;
+    
     protected array $entries = [];
 
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
         $this->factory = new Factory($container->get(FactoryInterface::class));
+        $this->name = $this->getName();
         $this->version = $this->getVersion();
-        $this->entries[AppInterface::class] = $this;
+        $this->entries[AppInterface::class]
+            = $this->entries[ContainerInterface::class]
+            = $this->entries[FactoryInterface::class]
+            = $this->entries[InvokerInterface::class]
+            = $this;
+    }
+
+    /**
+     * @param $name
+     * @return string|null
+     */
+    public function __get($name):? string
+    {
+        return $name == 'name' || $name == 'version'
+            ? $this->{$name}() : null ;
+    }
+
+    /**
+     * @param $name
+     * @param $value
+     */
+    public function __set($name, $value): void
+    {
+        if ($name == 'name' || $name == 'version')
+        {
+            $this->{$name}($value);
+        }
+    }
+
+    /**
+     * @return string
+     */
+    private function getName(): string
+    {
+        return $this->container->has('app_name') ?
+            $this->container->get('app_name') : 'Bermuda' ;
     }
 
     /**
@@ -37,6 +77,20 @@ abstract class App implements AppInterface
     {
         return $this->container->has('app_version') ?
             $this->container->get('app_version') : '1.0.0' ;
+    }
+    
+    /**
+     * @param string|null $name
+     * @return string
+     */
+    public function name(?string $name = null): string
+    {
+        if ($name != null)
+        {
+            $this->name = $name;
+        }
+        
+        return $this->name;
     }
 
     /**
