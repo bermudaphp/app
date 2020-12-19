@@ -15,10 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 final class SymfonyConsole implements CommandRunnerInterface
 {
-    /**
-     * @var Command[]
-     */
-    private array $commands = [];
+    private ?Application $console = null;
 
     /**
      * @param CommandInterface $command
@@ -26,37 +23,23 @@ final class SymfonyConsole implements CommandRunnerInterface
      */
     public function add(CommandInterface $command): CommandRunnerInterface
     {
-        if (!$command instanceof Command)
+        $this->getConsole()->add($command instanceof Command
+            ? $command : new SymfonyCommand($command));
+        
+        return $this;
+    }
+
+    /**
+     * @return Application
+     */
+    public function getConsole(): Application
+    {
+        if ($this->console == null)
         {
-            $command = new class($command) extends Command
-            {
-                private CommandInterface $command;
-
-                public function __construct(CommandInterface $command)
-                {
-                    $this->command = $command;
-                    parent::__construct(null);
-                }
-
-                protected function execute(InputInterface $input, OutputInterface $output)
-                {
-                    return ($this->command)($input, $output);
-                }
-
-                public function getName()
-                {
-                    return $this->command->getName();
-                }
-
-                public function getDescription()
-                {
-                    return $this->command->getDescription();
-                }
-            };
+            return $this->console = new Application;
         }
 
-        $this->commands[] = $command;
-        return $this;
+        return $this->console;
     }
 
     /**
@@ -65,9 +48,6 @@ final class SymfonyConsole implements CommandRunnerInterface
      */
     public function run(InputInterface $input, OutputInterface $output): void
     {
-        ($console = new Application())
-            ->addCommands($this->commands);
-
-        $console->run($input, $output);
+        $this->getConsole()->run($input, $output);
     }
 }
