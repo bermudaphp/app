@@ -27,6 +27,12 @@ interface AppInterface extends ContainerInterface, FactoryInterface, InvokerInte
     public function pipe($any): self ;
     
     /**
+     * @param string $name
+     * @return string
+     */
+    public function name(?string $name = null): string ;
+    
+    /**
      * @param string $version
      * @return string
      */
