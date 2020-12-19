@@ -19,15 +19,6 @@ final class AppFactory
      */
     public function __invoke(ContainerInterface $container): AppInterface
     {
-        return Registry::set(AppInterface::class, $this->make($container));
-    }
-
-    /**
-     * @param ContainerInterface $container
-     * @return AppInterface
-     */
-    private function make(ContainerInterface $container): AppInterface
-    {
         if ($container->has(AppInterface::class))
         {
             return $container->get(AppInterface::class);
