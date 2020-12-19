@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Bermuda\App;
 
 
@@ -36,7 +35,7 @@ interface AppInterface extends ContainerInterface, FactoryInterface, InvokerInte
      * @param string $version
      * @return string
      */
-    public function version(string $version = null): string ;
+    public function version(?string $version = null): string ;
 
     /**
      * @param string $id
