@@ -10,7 +10,7 @@ use Bermuda\App\AppInterface;
  * Class Bootstrapper
  * @package Bermuda\App\Boot
  */
-final class Bootstrapper implements BootstrapperInterface
+final class Bootstrapper
 {
     /**
      * @var BootstrapperInterface[]
