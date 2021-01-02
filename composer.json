@@ -11,7 +11,7 @@
   },
   "require": {
     "php": ">= 7.4",
-    "bermudaphp/router": "^2.0.2",
+    "bermudaphp/router": "^1.0.0",
     "bermudaphp/registry": "^1.0",
     "bermudaphp/http-factories": "^1.0",
     "bermudaphp/psr15factory": "^1.0",
