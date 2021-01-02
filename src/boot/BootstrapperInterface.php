@@ -1,14 +1,11 @@
 <?php
 
-namespace App;
-
-
-use Bermuda\App\Boot;
+namespace Bermuda\App\Boot;
 
 
 /**
  * Interface BootstrapperInterface
- * @package App
+ * @package Bermuda\App\Boot
  */
 interface BootstrapperInterface
 {
