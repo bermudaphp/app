@@ -23,6 +23,6 @@ final class RouterBootstrapper implements BootstrapperInterface
         (static function(RouteMap $routes): void
         {
             require APP_ROOT . '\config\routes.php';
-        })($app->get(RouterInterface::class)->getRoutes());
+        })($app->get(RouterInterface::class));
     }
 }
