@@ -15,7 +15,7 @@ final class Bootstrapper implements BootstrapperInterface
     /**
      * @var BootstrapperInterface[]
      */
-    private array $bootstrap;
+    private array $bootstrap = [];
 
     /**
      * Bootstrapper constructor.
