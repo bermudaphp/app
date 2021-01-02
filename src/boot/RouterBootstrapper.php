@@ -5,7 +5,6 @@ namespace Bermuda\App\Boot;
 
 use Bermuda\App\AppInterface;
 use Bermuda\Router\RouteMap;
-use Bermuda\Router\RouterInterface;
 
 
 /**
@@ -19,10 +18,9 @@ final class RouterBootstrapper implements BootstrapperInterface
      */
     public function boot(AppInterface $app): void
     {
-        PHP_SAPI === 'cli' ?:
-        (static function(RouteMap $routes): void
+        PHP_SAPI === 'cli' ?: $app->call(static function(RouteMap $routes): void
         {
             require APP_ROOT . '\config\routes.php';
-        })($app->get(RouterInterface::class));
+        });
     }
 }
