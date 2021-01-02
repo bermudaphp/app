@@ -29,6 +29,7 @@ abstract class App implements AppInterface
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
+        $this->invoker = $container->get(InvokerInterface::class);
         $this->factory = new Factory($container->get(FactoryInterface::class));
         $this->name = $this->getName();
         $this->version = $this->getVersion();
