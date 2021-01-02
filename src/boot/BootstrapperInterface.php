@@ -3,6 +3,9 @@
 namespace Bermuda\App\Boot;
 
 
+use Bermuda\App\AppInterface;
+
+
 /**
  * Interface BootstrapperInterface
  * @package Bermuda\App\Boot
