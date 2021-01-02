@@ -27,13 +27,4 @@ final class AppFactory
         return php_sapi_name() == 'cli' ? new Console($container)
             : new FastCGI($container);
     }
-
-    /**
-     * @deprecated
-     * @throws \RuntimeException
-     */
-    public function getEntries(): array
-    {
-        throw new \RuntimeException(__METHOD__ . ' is deprecated!');
-    }
 }
