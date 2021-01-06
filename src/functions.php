@@ -107,33 +107,27 @@ function redirect($uri = '/', ?ResponseInterface $response = null): ResponseInte
 }
 
 /**
- * @param string $name
+ * Генерирует url для маршрута 
+ * с именем $routeName
+ * @param string $routeName
  * @param array $params
  * @return string
  */
-function route(string $name, array $params = []): string
+function urlFor(string $routeName, array $params = []): string
 {
-    return service(GeneratorInterface::class)->generate($name, $params);
+    return service(GeneratorInterface::class)->generate($routeName, $params);
 }
 
 /**
+ * Перенаправляет на url связанный 
+ * с маршрутом с именем $routeName
  * @param string $name
  * @param array $params
  * @return ResponseInterface
  */
-function on(string $name, array $params = []): ResponseInterface
+function reTo(string $routeName, array $params = []): ResponseInterface
 {
-    return redirect(route($name, $params));
-}
-
-/**
- * @param string $name
- * @param array $params
- * @return ResponseInterface
- */
-function redirect_on_route(string $name, array $params = []): ResponseInterface
-{
-    return redirect(route($name, $params));
+    return redirect(urlFor($name, $params));
 }
 
 /**
