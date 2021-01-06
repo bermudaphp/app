@@ -127,7 +127,7 @@ function urlFor(string $routeName, array $params = []): string
  */
 function reTo(string $routeName, array $params = []): ResponseInterface
 {
-    return redirect(urlFor($name, $params));
+    return redirect(urlFor($routeName, $params));
 }
 
 /**
