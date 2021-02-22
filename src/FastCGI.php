@@ -2,7 +2,6 @@
 
 namespace Bermuda\App;
 
-
 use DI\FactoryInterface;
 use Invoker\InvokerInterface;
 use Bermuda\ServiceFactory\Factory;
@@ -12,7 +11,6 @@ use Bermuda\Pipeline\PipelineInterface;
 use Bermuda\ServiceFactory\FactoryException;
 use Laminas\HttpHandlerRunner\RequestHandlerRunner;
 use Bermuda\MiddlewareFactory\MiddlewareFactoryInterface;
-
 
 /**
  * Class FastCGI
