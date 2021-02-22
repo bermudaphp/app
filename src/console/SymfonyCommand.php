@@ -14,7 +14,7 @@ abstract class SymfonyCommand extends Command implements CommandInterface
 {
     public static function decorate(CommandInterface $command): self
     {
-        return new class extends SymfonyCommand
+        return new class($command) extends SymfonyCommand
         {
             private CommandInterface $command;
 
