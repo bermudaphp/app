@@ -2,7 +2,6 @@
 
 namespace Bermuda;
 
-
 use Laminas\Config\Config;
 use Bermuda\App\AppInterface;
 use Bermuda\Registry\Registry;
@@ -14,7 +13,6 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
-
 
 /**
  * @param string $entry
