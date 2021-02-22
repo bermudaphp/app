@@ -10,11 +10,11 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Class SymfonyCommand
  * @package Bermuda\App\Console;
  */
-class SymfonyCommand extends Command implements CommandInterface
+abstract class SymfonyCommand extends Command implements CommandInterface
 {
     public static function decorate(CommandInterface $command): self
     {
-        return new class($command) extends SymfonyCommand
+        return new class extends SymfonyCommand
         {
             private CommandInterface $command;
 
@@ -45,5 +45,31 @@ class SymfonyCommand extends Command implements CommandInterface
                 return $this->command->getDescription();
             }
         };
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getName(): string
+    {
+        return parent::getName();
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return parent::getDescription();
+    }
+
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
+    public function __invoke(InputInterface $input, OutputInterface $output): int
+    {
+        return $this->run($input, $output);
     }
 }
