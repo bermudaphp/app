@@ -2,9 +2,7 @@
 
 namespace Bermuda\App\Console;
 
-
 use Psr\Container\ContainerInterface;
-
 
 /**
  * Class CommandResolver
