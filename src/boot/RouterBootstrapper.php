@@ -2,10 +2,8 @@
 
 namespace Bermuda\App\Boot;
 
-
 use Bermuda\App\AppInterface;
 use Bermuda\Router\RouteMap;
-
 
 /**
  * Class RouterBootstrapper
