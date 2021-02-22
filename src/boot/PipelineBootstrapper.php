@@ -2,9 +2,7 @@
 
 namespace Bermuda\App\Boot;
 
-
 use Bermuda\App\AppInterface;
-
 
 /**
  * Class PipelineBootstrapper
