@@ -2,12 +2,10 @@
 
 namespace Bermuda\App\Console;
 
-
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-
 
 /**
  * Class SymfonyConsole
@@ -24,7 +22,7 @@ final class SymfonyConsole implements CommandRunnerInterface
     public function add(CommandInterface $command): CommandRunnerInterface
     {
         $this->getConsole()->add($command instanceof Command
-            ? $command : new SymfonyCommand($command));
+            ? $command : SymfonyCommand::decorate($command));
         
         return $this;
     }
