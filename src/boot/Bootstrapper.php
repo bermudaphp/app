@@ -2,10 +2,8 @@
 
 namespace Bermuda\App\Boot;
 
-
 use Bermuda\App\AppInterface;
 use Bermuda\Registry\Registry;
-
 
 /**
  * Class Bootstrapper
