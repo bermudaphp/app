@@ -2,44 +2,48 @@
 
 namespace Bermuda\App\Console;
 
-
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-
 
 /**
  * Class SymfonyCommand
  * @package Bermuda\App\Console;
  */
-final class SymfonyCommand extends Command
+class SymfonyCommand extends Command implements CommandInterface
 {
-    private CommandInterface $command;
-
-    public function __construct(CommandInterface $command)
+    public static function decorate(CommandInterface $command): self
     {
-        $this->command = $command;
-        parent::__construct(null);
-    }
+        return new class($command) extends SymfonyCommand
+        {
+            private CommandInterface $command;
 
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        return ($this->command)($input, $output);
-    }
+            public function __construct(CommandInterface $command)
+            {
+                $this->command = $command;
+                parent::__construct(null);
+            }
 
-    /**
-     * @return string|null
-     */
-    public function getName()
-    {
-        return $this->command->getName();
-    }
+            protected function execute(InputInterface $input, OutputInterface $output)
+            {
+                return ($this->command)($input, $output);
+            }
 
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->command->getDescription();
+            /**
+             * @return string|null
+             */
+            public function getName(): string
+            {
+                return $this->command->getName();
+            }
+
+            /**
+             * @return string
+             */
+            public function getDescription(): string
+            {
+                return $this->command->getDescription();
+            }
+        };
     }
 }
