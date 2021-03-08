@@ -2,11 +2,9 @@
 
 namespace Bermuda\App;
 
-
 use Invoker\InvokerInterface;
 use Psr\Container\ContainerInterface;
 use Bermuda\ServiceFactory\FactoryInterface;
-
 
 /**
  * Interface AppInterface
