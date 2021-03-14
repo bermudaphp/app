@@ -1,6 +1,6 @@
 <?php
 
-use Bermuda\App\Exception;
+use Bermuda\HTTP\Exception;
 
 class HttpException extends \Exception
 {
