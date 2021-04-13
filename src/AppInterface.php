@@ -42,4 +42,12 @@ interface AppInterface extends ContainerInterface, FactoryInterface, InvokerInte
      * @throws \RuntimeException
      */
     public function set(string $id, $value): self ;
+    
+     /**
+     * @param string $id
+     * @param callable $extender
+     * @return $this
+     * @throws \RuntimeException
+     */
+    public function extend(string $id, callable $extender): self ;
 }
