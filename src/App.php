@@ -135,6 +135,15 @@ abstract class App implements AppInterface
         $this->entries[$id] = $value;
         return $this;
     }
+    
+    /**
+     * @inheritDoc
+     */
+    public function extend(string $id, callable $extender): self
+    {
+        $this->entries[$id] = $extender($this->get($id));
+        return $this;
+    }
 
     /**
      * @inheritDoc
