@@ -9,54 +9,55 @@ use Bermuda\Registry\Registry;
  * Class Bootstrapper
  * @package Bermuda\App\Boot
  */
-final class Bootstrapper implements BootstrapperInterface
+final class Bootstrapper
 {
     /**
      * @var BootstrapperInterface[]
      */
-    private array $bootstrap = [];
-
-    /**
-     * Bootstrapper constructor.
-     * @param BootstrapperInterface[] $bootstrap
-     */
-    public function __construct(array $bootstrap = [])
-    {
-        foreach ($bootstrap as $bootstrapper)
-        {
-            $this->addBootstrapper($bootstrapper);
-        }
-    }
+    private static array $bootstrap = [];
+    private static bool $appIsBooted = false;
 
     /**
      * @param AppInterface $app
      */
-    public function boot(AppInterface $app): void
+    public static function boot(AppInterface $app): void
     {
-        Registry::set(AppInterface::class, $app);
-        
-        foreach ($this->bootstrap as $bootstrapper)
+        if (!self::$appIsBooted)
         {
-            $bootstrapper->boot($app);
+            Registry::set(AppInterface::class, $app);
+        
+            foreach (self::$bootstrap as $bootstrapper)
+            {
+                $bootstrapper->boot($app);
+            }
+            
+            self::$appIsBooted = true;
+            
+            return;
         }
+        
+        throw new \RuntimeException('App already booted.');
     }
 
     /**
      * @param BootstrapperInterface $bootstrapper
      * @return $this
      */
-    public function addBootstrapper(BootstrapperInterface $bootstrapper): self
+    public static function addBootstrapper(BootstrapperInterface $bootstrapper): self
     {
-        $this->bootstrap[] = $bootstrapper;
+        self::$bootstrap[] = $bootstrapper;
         return $this;
     }
 
     /**
      * @param BootstrapperInterface[] $bootstrap
-     * @return static
+     * @return void
      */
-    public static function makeOf(array $bootstrap = []): self
+    public static function addMany(iterable $bootstrap = []): void
     {
-        return new self($bootstrap);
+        foreach ($bootstrap as $bootstrapper)
+        {
+            self::addBootstrapper($bootstrapper);
+        }
     }
 }
