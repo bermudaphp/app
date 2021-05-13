@@ -9,55 +9,44 @@ use Bermuda\Registry\Registry;
  * Class Bootstrapper
  * @package Bermuda\App\Boot
  */
-final class Bootstrapper
+final class Bootstrapper implements BootstrapperInterface
 {
     /**
      * @var BootstrapperInterface[]
      */
-    private static array $bootstrap = [];
-    private static bool $appIsBooted = false;
+    private array $bootstrap = [];
 
     /**
      * @param AppInterface $app
      */
-    public static function boot(AppInterface $app): void
+    public function boot(AppInterface $app): void
     {
-        if (!self::$appIsBooted)
-        {
-            Registry::set(AppInterface::class, $app);
-        
-            foreach (self::$bootstrap as $bootstrapper)
-            {
-                $bootstrapper->boot($app);
-            }
-            
-            self::$appIsBooted = true;
-            
-            return;
-        }
-        
-        throw new \RuntimeException('App already booted.');
+        foreach ($this->bootstrap as $bootstrapper) $bootstrapper->boot($app);
     }
 
     /**
      * @param BootstrapperInterface $bootstrapper
      * @return $this
      */
-    public static function addBootstrapper(BootstrapperInterface $bootstrapper): self
+    public function add(BootstrapperInterface $bootstrapper): self
     {
-        self::$bootstrap[] = $bootstrapper;
+        $this->bootstrap[] = $bootstrapper;
         return $this;
     }
 
     /**
      * @param BootstrapperInterface[] $bootstrap
-     * @return void
+     * @return self
      */
-    public static function addMany(iterable $bootstrap = []): void
+    public static function makeOf(iterable $bootstrap = []): self
     {
+        $instance = new self();
+        
         foreach ($bootstrap as $bootstrapper)
         {
-            self::addBootstrapper($bootstrapper);
+            $instance->add($bootstrapper);
         }
+        
+        return $instance;
     }
 }
