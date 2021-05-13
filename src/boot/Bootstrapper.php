@@ -28,7 +28,7 @@ final class Bootstrapper implements BootstrapperInterface
      * @param BootstrapperInterface $bootstrapper
      * @return $this
      */
-    public function add(BootstrapperInterface $bootstrapper): self
+    public function addBootstrapper(BootstrapperInterface $bootstrapper): self
     {
         $this->bootstrap[] = $bootstrapper;
         return $this;
@@ -44,7 +44,7 @@ final class Bootstrapper implements BootstrapperInterface
         
         foreach ($bootstrap as $bootstrapper)
         {
-            $instance->add($bootstrapper);
+            $instance->addBootstrapper($bootstrapper);
         }
         
         return $instance;
