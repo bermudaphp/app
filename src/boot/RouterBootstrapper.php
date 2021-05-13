@@ -16,9 +16,6 @@ final class RouterBootstrapper implements BootstrapperInterface
      */
     public function boot(AppInterface $app): void
     {
-        PHP_SAPI === 'cli' ?: $app->call(static fn() => 
-        {
-            require APP_ROOT . '\config\routes.php';
-        });
+        PHP_SAPI === 'cli' ?: $app->call(static fn() => require APP_ROOT . '\config\routes.php');
     }
 }
