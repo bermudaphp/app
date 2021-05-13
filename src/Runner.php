@@ -31,10 +31,10 @@ final class Runner
     {
         if (self::$app != null)
         {
-            Registry::set(AppInterface::class, self::app = $this->container->get(AppInterface::class));
-            self::$app->get(BootstrapperInterface::class)->boot(self::$app);
+            throw new \RuntimeException('App already runned.');
         }
         
-        throw new \RuntimeException('App already runned.');
+        Registry::set(AppInterface::class, self::app = $this->container->get(AppInterface::class));
+        self::$app->get(BootstrapperInterface::class)->boot(self::$app);
     }
 }
