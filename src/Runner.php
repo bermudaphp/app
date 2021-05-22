@@ -14,7 +14,7 @@ use Psr\Container\ContainerInterface;
 final class Runner
 {
     private static ?AppInterface $app = null;
-    
+
     /**
      * Run application
      * @throws \RuntimeException
@@ -27,6 +27,8 @@ final class Runner
         }
 
         Registry::set(AppInterface::class, self::$app = $container->get(AppInterface::class));
+        
         self::$app->get(BootstrapperInterface::class)->boot(self::$app);
+        self::$app->run();
     }
 }
