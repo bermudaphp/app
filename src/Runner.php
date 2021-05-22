@@ -16,8 +16,7 @@ final class Runner
     private static ?AppInterface $app = null;
   
     private function __construct(private ContainerInterface $container)
-    {
-    }
+    {}
   
     public static function instantiate(ContainerInterface $container): self
     {
@@ -25,7 +24,8 @@ final class Runner
     }
   
     /**
-     * @param AppInterface $app
+     * Run application
+     * @throws \RuntimeException
      */
     public function run(): void
     {
@@ -34,7 +34,7 @@ final class Runner
             throw new \RuntimeException('App already runned.');
         }
         
-        Registry::set(AppInterface::class, self::app = $this->container->get(AppInterface::class));
+        Registry::set(AppInterface::class, self::$app = $this->container->get(AppInterface::class));
         self::$app->get(BootstrapperInterface::class)->boot(self::$app);
     }
 }
