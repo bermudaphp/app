@@ -14,27 +14,19 @@ use Psr\Container\ContainerInterface;
 final class Runner
 {
     private static ?AppInterface $app = null;
-  
-    private function __construct(private ContainerInterface $container)
-    {}
-  
-    public static function instantiate(ContainerInterface $container): self
-    {
-        return new self($container);
-    }
-  
+    
     /**
      * Run application
      * @throws \RuntimeException
      */
-    public function run(): void
+    public static function run(ContainerInterface $container): void
     {
         if (self::$app != null)
         {
             throw new \RuntimeException('App already runned.');
         }
-        
-        Registry::set(AppInterface::class, self::$app = $this->container->get(AppInterface::class));
+
+        Registry::set(AppInterface::class, self::$app = $container->get(AppInterface::class));
         self::$app->get(BootstrapperInterface::class)->boot(self::$app);
     }
 }
