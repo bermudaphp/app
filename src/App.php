@@ -152,6 +152,11 @@ abstract class App implements AppInterface
     {
         return $this->entries[$id] ?? $this->container->get($id);
     }
+    
+    public function getIfExists(string $id, $default = null)
+    {
+        return $this->has($id) ? $this->get($id) : $default;
+    }
 
     /**
      * @inheritDoc
