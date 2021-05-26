@@ -2,11 +2,15 @@
 
 namespace Bermuda\App;
 
+use Bermuda\App\Console\UnresolvableCommandException;
+use Bermuda\ErrorHandler\ErrorRendererInterface;
+use Bermuda\ErrorHandler\WhoopsErrorRenderer;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
+use Whoops\RunInterface;
 
 /**
  * Class Console
@@ -14,6 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 final class Console extends App
 {
+    private ErrorRendererInterface $errorRenderer;
     private Console\CommandRunnerInterface $runner;
     private Console\CommandResolverInterface $resolver;
 
@@ -21,23 +26,49 @@ final class Console extends App
     {
         parent::__construct($container);
 
-        $this->runner = $this->getRunner();
-        $this->resolver = $this->getResolver();
+        $this->errorRenderer = $this->getErrorRenderer();
+        $this->runner = $this->getRunner(); $this->resolver = $this->getResolver();
     }
 
     /**
      * @param mixed $any
-     * @return $this|AppInterface
+     * @return $this
      */
     public function pipe($any): AppInterface
     {
-        $this->runner->add($this->resolver->resolve($any));
+        try {
+            $this->runner->add($this->resolver->resolve($any));
+        }
+
+        catch (UnresolvableCommandException $e)
+        {
+            $backtrace = debug_backtrace()[0];
+            $this->handleException(new UnresolvableCommandException($e->getMessage(),
+                $backtrace['file'], $backtrace['line']
+            ));
+        }
+
         return $this;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function run(): void
     {
-        $this->runner->run($this->getInput(), $this->getOutput());
+        try {
+            $this->runner->run($this->getInput(), $this->getOutput());
+        }
+
+        catch (\Throwable $e)
+        {
+            $this->handleException($e);
+        }
+    }
+
+    private function handleException(\Throwable $e): void
+    {
+        die($this->errorRenderer->render($e));
     }
 
     /**
@@ -45,9 +76,7 @@ final class Console extends App
      */
     private function getInput(): InputInterface
     {
-        return $this->container->has(InputInterface::class)
-            ? $this->container->get(InputInterface::class) :
-            new ArgvInput();
+        return $this->getIfExists(InputInterface::class, new ArgvInput);
     }
 
     /**
@@ -55,9 +84,7 @@ final class Console extends App
      */
     private function getOutput(): OutputInterface
     {
-        return $this->container->has(OutputInterface::class)
-            ? $this->container->get(OutputInterface::class) :
-            new ConsoleOutput();
+        return $this->getIfExists(OutputInterface::class, new ConsoleOutput);
     }
 
     /**
@@ -83,8 +110,15 @@ final class Console extends App
      */
     private function getResolver(): Console\CommandResolverInterface
     {
-        return $this->container->has(CommandRunnerInterface::class)
-            ? $this->container->get(CommandRunnerInterface::class) :
-            new Console\CommandResolver($this->container);
+        return $this->getIfExists(CommandRunnerInterface::class,
+            new Console\CommandResolver($this->container)
+        );
+    }
+
+    private function getErrorRenderer(): ErrorRendererInterface
+    {
+        return $this->getIfExists(ErrorRendererInterface::class,
+            new WhoopsErrorRenderer($this->getIfExists(RunInterface::class))
+        );
     }
 }
