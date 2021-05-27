@@ -2,7 +2,6 @@
 
 namespace Bermuda\App;
 
-use Bermuda\Registry\Registry;
 use Psr\Container\ContainerInterface;
 
 /**
