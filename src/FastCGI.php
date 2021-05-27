@@ -42,7 +42,7 @@ final class FastCGI extends App
      */
     public function run(): void
     {
-        $request = $this->requestFactory->fromGlobals();
+        $request = ($this->requestFactory)($this);
         
         try
         {
