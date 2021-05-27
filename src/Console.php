@@ -43,7 +43,7 @@ final class Console extends App
         catch (UnresolvableCommandException $e)
         {
             $backtrace = debug_backtrace()[0];
-            $this->handleException(new UnresolvableCommandException($e->getMessage(),
+            throw new UnresolvableCommandException($e->getMessage(),
                 $backtrace['file'], $backtrace['line']
             ));
         }
