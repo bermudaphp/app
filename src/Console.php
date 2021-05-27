@@ -54,21 +54,9 @@ final class Console extends App
     /**
      * @inheritDoc
      */
-    public function run(): void
+    protected function doRun(): void
     {
-        try {
-            $this->runner->run($this->getInput(), $this->getOutput());
-        }
-
-        catch (\Throwable $e)
-        {
-            $this->handleException($e);
-        }
-    }
-
-    private function handleException(\Throwable $e): void
-    {
-        die($this->errorRenderer->render($e));
+        $this->runner->run($this->getInput(), $this->getOutput());
     }
 
     /**
