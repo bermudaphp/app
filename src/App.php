@@ -23,6 +23,8 @@ abstract class App implements AppInterface
     protected string $version;
     
     protected array $entries = [];
+    
+    private static bool $booted = false;
 
     public function __construct(ContainerInterface $container)
     {
@@ -74,8 +76,7 @@ abstract class App implements AppInterface
      */
     private function getVersion(): string
     {
-        return $this->container->has('app_version') ?
-            $this->container->get('app_version') : '1.0.0' ;
+        return $this->container->get('config')['app_version'] ?? '1.0' ;
     }
     
     /**
@@ -84,12 +85,7 @@ abstract class App implements AppInterface
      */
     public function name(?string $name = null): string
     {
-        if ($name != null)
-        {
-            $this->name = $name;
-        }
-        
-        return $this->name;
+        return $name != null ? $this->name = $name : $this->name;
     }
 
     /**
@@ -98,12 +94,7 @@ abstract class App implements AppInterface
      */
     public function version(string $version = null): string
     {
-        if ($version != null)
-        {
-            return $this->version = $version;
-        }
-
-        return $this->version;
+        return $version != null ? $this->version = $version : $this->version;
     }
 
     /**
@@ -164,6 +155,20 @@ abstract class App implements AppInterface
     public function has($id)
     {
         return array_key_exists($id, $this->entries) || $this->container->has($id);
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    final public function boot(): void
+    {
+        if (self::$booted)
+        {
+            throw new \RuntimeException('App is already booted!');
+        }
+        
+        self::$booted = true;
+        $this->get(Boot\BootsrapperInterface::class)->boot($this);
     }
 
     /**
