@@ -16,7 +16,7 @@ use Bermuda\MiddlewareFactory\MiddlewareFactoryInterface;
  * Class FastCGI
  * @package Bermuda\App
  */
-final class FastCGI extends App
+final class Server extends App
 {
     private PipelineInterface $pipeline;
     private ServerRequestFactory $requestFactory;
