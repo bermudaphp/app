@@ -13,7 +13,7 @@ use Laminas\HttpHandlerRunner\RequestHandlerRunner;
 use Bermuda\MiddlewareFactory\MiddlewareFactoryInterface;
 
 /**
- * Class FastCGI
+ * Class Server
  * @package Bermuda\App
  */
 final class Server extends App
