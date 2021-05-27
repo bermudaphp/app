@@ -37,7 +37,7 @@ final class FastCGI extends App
 
     /**
      * Run application
-     * @throws ServerRequestException if request handling is failure
+     * @throws RequestHandlingException if request handling is failure
      * @throws \Throwable if request creation is failure
      */
     public function run(): void
@@ -51,7 +51,7 @@ final class FastCGI extends App
         
         catch(\Throwable $e)
         {
-            throw ServerRequestException::decorate($e, $request);
+            throw RequestHandlingException::decorate($e, $request);
         }
     }
 
