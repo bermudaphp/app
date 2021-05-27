@@ -40,7 +40,7 @@ final class Server extends App
      * @throws RequestHandlingException if request handling is failure
      * @throws \Throwable if request creation is failure
      */
-    public function run(): void
+    protected function doRun(): void
     {
         $request = ($this->requestFactory)($this);
         
