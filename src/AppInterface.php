@@ -5,12 +5,14 @@ namespace Bermuda\App;
 use Invoker\InvokerInterface;
 use Psr\Container\ContainerInterface;
 use Bermuda\ServiceFactory\FactoryInterface;
+use Bermuda\ErrorHandler\ErrorHandlerInterface;
 
 /**
  * Interface AppInterface
  * @package Bermuda\App
  */
-interface AppInterface extends ContainerInterface, FactoryInterface, InvokerInterface
+interface AppInterface extends ContainerInterface, 
+    FactoryInterface, InvokerInterface, ErrorHandlerInterface
 {
     /**
      * Run application
@@ -22,6 +24,12 @@ interface AppInterface extends ContainerInterface, FactoryInterface, InvokerInte
      * @return $this
      */
     public function pipe($any): self ;
+    
+    /**
+     * Boot application
+     * @throws \RuntimeException if app is already booted
+     */
+    public function boot(): void ;
     
     /**
      * @param string $name
