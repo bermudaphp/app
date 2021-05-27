@@ -25,6 +25,7 @@ abstract class App implements AppInterface
     protected array $entries = [];
     
     private static bool $booted = false;
+    private static bool $runned = false;
 
     public function __construct(ContainerInterface $container)
     {
@@ -160,6 +161,20 @@ abstract class App implements AppInterface
     /**
      * @inheritDoc
      */
+    final public function run()
+    {
+        if (self::$runned)
+        {
+            throw new \RuntimeException('App is already runned');
+        }
+        
+        self::$runned = true;
+        $this->doRun();
+    }
+    
+    /**
+     * @inheritDoc
+     */
     final public function boot(): void
     {
         if (self::$booted)
@@ -178,4 +193,6 @@ abstract class App implements AppInterface
     {
         return $this->invoker->call($callable, $parameters);
     }
+    
+    abstract protected function doRun(): void ;
 }
