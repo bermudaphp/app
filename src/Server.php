@@ -18,19 +18,19 @@ use Bermuda\MiddlewareFactory\MiddlewareFactoryInterface;
  */
 final class Server extends App
 {
+    private EmitterInterface $emitter;
     private PipelineInterface $pipeline;
-    private ServerRequestFactory $requestFactory;
     private ResponseFactoryInterface $responseFactory;
     private MiddlewareFactoryInterface $middlewareFactory;
-    private EmitterInterface $emitter;
-
+    private ServerRequestCreatorInterface $serverRequestCreator;
+    
     public function __construct(ContainerInterface $container)
     {
         parent::__construct($container);
 
-        $this->pipeline = $this->make(PipelineInterface::class);
+        $this->pipeline = $container->get(PipelineInterface::class);
         $this->emitter = $container->get(EmitterInterface::class);
-        $this->requestFactory = $container->get(ServerRequestFactory::class);
+        $this->serverRequestCreator = $container->get(ServerRequestCreatorInterface::class);
         $this->responseFactory = $container->get(ResponseFactoryInterface::class);
         $this->middlewareFactory = $container->get(MiddlewareFactoryInterface::class);
     }
@@ -42,7 +42,7 @@ final class Server extends App
      */
     protected function doRun(): void
     {
-        $request = ($this->requestFactory)($this);
+        $request = $this->serverRequestCreator->fromGlobals();
         
         try
         {
