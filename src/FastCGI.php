@@ -28,8 +28,8 @@ final class FastCGI extends App
     {
         parent::__construct($container);
 
+        $this->pipeline = $this->make(PipelineInterface::class);
         $this->emitter = $container->get(EmitterInterface::class);
-        $this->pipeline = $container->get(PipelineInterface::class);
         $this->requestFactory = $container->get(ServerRequestFactory::class);
         $this->responseFactory = $container->get(ResponseFactoryInterface::class);
         $this->middlewareFactory = $container->get(MiddlewareFactoryInterface::class);
@@ -51,7 +51,7 @@ final class FastCGI extends App
         
         catch(\Throwable $e)
         {
-            throw RequestHandlingException::decorate($e, $request);
+            throw RequestHandlingException::wrap($e, $request);
         }
     }
 
