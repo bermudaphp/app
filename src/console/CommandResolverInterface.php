@@ -2,7 +2,6 @@
 
 namespace Bermuda\App\Console;
 
-
 /**
  * Interface CommandResolverInterface
  * @package Bermuda\App\Console
@@ -12,7 +11,7 @@ interface CommandResolverInterface
     /**
      * @param mixed $any
      * @return CommandInterface
-     * @throws \RuntimeException
+     * @throws UnresolvableCommandException
      */
     public function resolve($any): CommandInterface ;
 }
