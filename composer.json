@@ -10,7 +10,7 @@
     ]
   },
   "require": {
-    "php": ">= 7.4",
+    "php": ">= 7.4 | >= 8.0",
     "bermudaphp/router": "^1.0.0",
     "bermudaphp/registry": "^1.0",
     "bermudaphp/request-handler-factory": "^1.0",
