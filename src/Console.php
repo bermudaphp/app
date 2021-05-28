@@ -2,15 +2,12 @@
 
 namespace Bermuda\App;
 
-use Bermuda\App\Console\UnresolvableCommandException;
-use Bermuda\ErrorHandler\ErrorRendererInterface;
-use Bermuda\ErrorHandler\WhoopsErrorRenderer;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
-use Whoops\RunInterface;
+use Bermuda\App\Console\UnresolvableCommandException;
 
 /**
  * Class Console
@@ -18,21 +15,19 @@ use Whoops\RunInterface;
  */
 final class Console extends App
 {
-    private ErrorRendererInterface $errorRenderer;
     private Console\CommandRunnerInterface $runner;
     private Console\CommandResolverInterface $resolver;
 
     public function __construct(ContainerInterface $container)
     {
         parent::__construct($container);
-
-        $this->errorRenderer = $this->getErrorRenderer();
-        $this->runner = $this->getRunner(); $this->resolver = $this->getResolver();
+        
+        $this->runner = $this->getRunner(); 
+        $this->resolver = $this->getResolver();
     }
 
     /**
-     * @param mixed $any
-     * @return $this
+     * @inheritDoc
      */
     public function pipe($any): AppInterface
     {
@@ -42,18 +37,12 @@ final class Console extends App
 
         catch (UnresolvableCommandException $e)
         {
-            $backtrace = debug_backtrace()[0];
-            throw new UnresolvableCommandException($e->getMessage(),
-                $backtrace['file'], $backtrace['line']
-            ));
+            UnresolvableCommandException::reThrow($e, debug_backtrace()[0]);
         }
 
         return $this;
     }
 
-    /**
-     * @inheritDoc
-     */
     protected function doRun(): void
     {
         $this->runner->run($this->getInput(), $this->getOutput());
@@ -100,13 +89,6 @@ final class Console extends App
     {
         return $this->getIfExists(CommandRunnerInterface::class,
             new Console\CommandResolver($this->container)
-        );
-    }
-
-    private function getErrorRenderer(): ErrorRendererInterface
-    {
-        return $this->getIfExists(ErrorRendererInterface::class,
-            new WhoopsErrorRenderer($this->getIfExists(RunInterface::class))
         );
     }
 }
