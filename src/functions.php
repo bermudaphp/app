@@ -84,7 +84,7 @@ function view(string $template, array $params = []): ResponseInterface
  * @param string $reasonPhrase
  * @return ResponseInterface
  */
-function response(int $code = 200, string $reasonPhrase = ''): ResponseInterface
+function r(int $code = 200, string $reasonPhrase = ''): ResponseInterface
 {
     return service(ResponseFactoryInterface::class)->createResponse($code, $reasonPhrase);
 }
@@ -133,7 +133,7 @@ function reTo(string $routeName, array $params = []): ResponseInterface
  * @param ResponseInterface|null $response
  * @return ResponseInterface
  */
-function json_response(string $json, ?ResponseInterface $response = null): ResponseInterface
+function r_json(string $json, ?ResponseInterface $response = null): ResponseInterface
 {
      if ($response == null)
      {
@@ -150,7 +150,7 @@ function json_response(string $json, ?ResponseInterface $response = null): Respo
  * @param ResponseInterface|null $response
  * @return ResponseInterface
  */
-function html_response(string $html, ?ResponseInterface $response = null): ResponseInterface
+function r_html(string $html, ?ResponseInterface $response = null): ResponseInterface
 {
      if ($response == null)
      {
