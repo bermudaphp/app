@@ -18,8 +18,7 @@ final class CommandResolver implements CommandResolverInterface
     }
 
     /**
-     * @param mixed $any
-     * @return CommandInterface
+     * @inheritDoc
      */
     public function resolve($any): CommandInterface
     {
@@ -33,6 +32,6 @@ final class CommandResolver implements CommandResolverInterface
             return $any;
         }
 
-        throw new \RuntimeException('Unresolvable command');
+        throw new UnresolvableCommandException(null, $command);
     }
 }
