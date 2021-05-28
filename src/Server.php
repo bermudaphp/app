@@ -51,7 +51,7 @@ final class Server extends App
         
         catch(\Throwable $e)
         {
-            throw RequestHandlingException::wrap($e, $request);
+            throw new RequestHandlingException($e, $request);
         }
     }
 
@@ -60,7 +60,16 @@ final class Server extends App
      */
     public function pipe($any): AppInterface
     {
-        $this->pipeline->pipe($this->middlewareFactory->make($any));
+        try
+        {
+            $this->pipeline->pipe($this->middlewareFactory->make($any));
+        }
+        
+        catch (UnresolvableMiddlewareException $e)
+        {
+            UnresolvableMiddlewareException::reThrow($e, debug_backtrace()[0]);
+        }
+
         return $this;
     }
 }
