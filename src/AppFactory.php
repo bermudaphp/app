@@ -18,7 +18,7 @@ final class AppFactory
     public function __invoke(ContainerInterface $container): AppInterface
     {
         return php_sapi_name() == 'cli' ? new Console($container)
-            : new FastCGI($container);
+            : new Server($container);
     }
 
     public static function make(ContainerInterface $container): AppInterface
