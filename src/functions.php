@@ -89,6 +89,18 @@ function r(int $code = 200, string $reasonPhrase = ''): ResponseInterface
     return service(ResponseFactoryInterface::class)->createResponse($code, $reasonPhrase);
 }
 
+function r_write(ResponseInterface $r, string $content, array $headers = [], int &$size = null): int
+{    
+    foreach($headers as $name => $value)
+    {
+        $r = $r->withHeader($name, $value);
+    }
+    
+    $size = $r->getBody()->write($content);
+    
+    return $r;
+}
+
 /**
  * @param string|UriInterface $uri
  * @param ResponseInterface|null $response
@@ -101,7 +113,7 @@ function redirect($uri = '/', ?ResponseInterface $response = null): ResponseInte
         throw new \InvalidArgumentException(sprintf('Uri provided to %s must be a string or %s instance; received "%s"', __FUNCTION__, UriInterface::class, (is_object($uri) ? get_class($uri) : gettype($uri))));
     }
   
-    return ($response ?? response())->withHeader('location', (string) $uri)->withStatus(302);
+    return ($response ?? r())->withHeader('location', (string) $uri)->withStatus(302);
 }
 
 /**
@@ -128,36 +140,12 @@ function reTo(string $routeName, array $params = []): ResponseInterface
     return redirect(urlFor($routeName, $params));
 }
 
-/**
- * @param string $json
- * @param ResponseInterface|null $response
- * @return ResponseInterface
- */
-function r_json(string $json, ?ResponseInterface $response = null): ResponseInterface
+function r_json(string $content, ?ResponseInterface $response = null): ResponseInterface
 {
-     if ($response == null)
-     {
-        $response = response();
-     }
-  
-     $response->getBody()->write($json);
-    
-     return $response->withHeader('Content-Type', 'application/json');
+     return r_write($response ?? $r, $content, ['Content-Type' => 'application/json']);
 }
 
-/**
- * @param string $json
- * @param ResponseInterface|null $response
- * @return ResponseInterface
- */
-function r_html(string $html, ?ResponseInterface $response = null): ResponseInterface
+function r_html(string $content, ?ResponseInterface $response = null): ResponseInterface
 {
-     if ($response == null)
-     {
-        $response = response();
-     }
-  
-     $response->getBody()->write($html);
-    
-     return $response->withHeader('Content-Type', 'text/html');
+     return r_write($response ?? r(), $content, ['Content-Type' => 'text/html']);
 }
