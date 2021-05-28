@@ -6,6 +6,7 @@ use DI\FactoryInterface;
 use Invoker\InvokerInterface;
 use Bermuda\ServiceFactory\Factory;
 use Psr\Container\ContainerInterface;
+use Bermuda\ErrorHandler\ErrorHandlerInterface;
 
 /**
  * Class App
@@ -18,6 +19,7 @@ abstract class App implements AppInterface
     protected Factory $factory;
     protected InvokerInterface $invoker;
     protected ContainerInterface $container;
+    protected ErrorHandlerInterface $errorHandler;
 
     protected string $name;
     protected string $version;
@@ -32,6 +34,7 @@ abstract class App implements AppInterface
         $this->container = $container;
         $this->invoker = $container->get(InvokerInterface::class);
         $this->factory = new Factory($container->get(FactoryInterface::class));
+        $this->errorHandler = $container->get(ErrorHandlerInterface);
         $this->name = $this->getName();
         $this->version = $this->getVersion();
         $this->entries[AppInterface::class]
@@ -184,6 +187,14 @@ abstract class App implements AppInterface
         
         self::$booted = true;
         $this->get(Boot\BootsrapperInterface::class)->boot($this);
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public function handleException(\Throwable $e): void
+    {
+        $this->errorHandler->handleException($e);
     }
 
     /**
