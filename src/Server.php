@@ -9,8 +9,9 @@ use Psr\Container\ContainerInterface;
 use Bermuda\Pipeline\PipelineFactory;
 use Bermuda\Pipeline\PipelineInterface;
 use Bermuda\ServiceFactory\FactoryException;
-use Laminas\HttpHandlerRunner\RequestHandlerRunner;
+use Bermuda\ErrorHandler\RequestHandlingException;
 use Bermuda\MiddlewareFactory\MiddlewareFactoryInterface;
+use Bermuda\MiddlewareFactory\UnresolvableMiddlewareException;
 
 /**
  * Class Server
