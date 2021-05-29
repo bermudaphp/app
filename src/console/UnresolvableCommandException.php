@@ -12,7 +12,7 @@ final class UnresolvableCommandException extends \RuntimeException
 {
     private $command;
     
-    public function __construct(?$message = null, $command = null)
+    public function __construct(?string $message = null, $command = null)
     {
         $this->command = $command;
         
