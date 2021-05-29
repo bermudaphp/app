@@ -76,7 +76,7 @@ function config($key = null)
  */
 function view(string $template, array $params = []): ResponseInterface
 {
-    return html_response(service(RendererInterface::class)->render($template, $params));
+    return r_html(service(RendererInterface::class)->render($template, $params));
 }
 
 /**
@@ -89,7 +89,7 @@ function r(int $code = 200, string $reasonPhrase = ''): ResponseInterface
     return service(ResponseFactoryInterface::class)->createResponse($code, $reasonPhrase);
 }
 
-function r_write(ResponseInterface $r, string $content, array $headers = [], int &$size = null): int
+function r_write(ResponseInterface $r, string $content, array $headers = [], int &$size = null): ResponseInterface
 {    
     foreach($headers as $name => $value)
     {
