@@ -34,7 +34,7 @@ abstract class App implements AppInterface
         $this->container = $container;
         $this->invoker = $container->get(InvokerInterface::class);
         $this->factory = new Factory($container->get(FactoryInterface::class));
-        $this->errorHandler = $container->get(ErrorHandlerInterface);
+        $this->errorHandler = $container->get(ErrorHandlerInterface::class);
         $this->name = $this->getName();
         $this->version = $this->getVersion();
         $this->entries[AppInterface::class]
@@ -164,7 +164,7 @@ abstract class App implements AppInterface
     /**
      * @inheritDoc
      */
-    final public function run()
+    final public function run():void
     {
         if ($this->runned)
         {
