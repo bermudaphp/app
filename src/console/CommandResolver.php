@@ -32,6 +32,6 @@ final class CommandResolver implements CommandResolverInterface
             return $any;
         }
 
-        throw new UnresolvableCommandException(null, $command);
+        throw new UnresolvableCommandException(null, $any);
     }
 }
