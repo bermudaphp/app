@@ -6,6 +6,7 @@ use DI\FactoryInterface;
 use Invoker\InvokerInterface;
 use Bermuda\ServiceFactory\Factory;
 use Psr\Container\ContainerInterface;
+use Bermuda\App\Boot\BootstrapperInterface;
 use Bermuda\ErrorHandler\ErrorHandlerInterface;
 
 /**
@@ -186,7 +187,7 @@ abstract class App implements AppInterface
         }
         
         $this->booted = true;
-        $this->get(Boot\BootsrapperInterface::class)->boot($this);
+        $this->get(BootstrapperInterface::class)->boot($this);
     }
     
     /**
