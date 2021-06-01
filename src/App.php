@@ -179,7 +179,7 @@ abstract class App implements AppInterface
     /**
      * @inheritDoc
      */
-    final public function boot(): void
+    final public function boot(): AppInterface
     {
         if ($this->booted)
         {
@@ -188,6 +188,8 @@ abstract class App implements AppInterface
         
         $this->booted = true;
         $this->get(BootstrapperInterface::class)->boot($this);
+        
+        return $this;
     }
     
     /**
