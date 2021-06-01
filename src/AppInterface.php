@@ -28,9 +28,10 @@ interface AppInterface extends ContainerInterface,
     
     /**
      * Boot application
+     * @return $this
      * @throws \RuntimeException if app is already booted
      */
-    public function boot(): void ;
+    public function boot(): AppInterface ;
     
     /**
      * @param string $name
