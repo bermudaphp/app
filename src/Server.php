@@ -9,7 +9,7 @@ use Psr\Container\ContainerInterface;
 use Bermuda\Pipeline\PipelineFactory;
 use Bermuda\Pipeline\PipelineInterface;
 use Bermuda\ServiceFactory\FactoryException;
-use Bermuda\ErrorHandler\RequestHandlingException;
+use Bermuda\ErrorHandler\HttpException;
 use Bermuda\MiddlewareFactory\MiddlewareFactoryInterface;
 use Bermuda\MiddlewareFactory\UnresolvableMiddlewareException;
 use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
@@ -55,7 +55,7 @@ final class Server extends App
         
         catch(\Throwable $e)
         {
-            throw new RequestHandlingException($e, $request);
+            throw new HttpException($e, $request);
         }
     }
 
