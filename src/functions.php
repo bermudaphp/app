@@ -2,6 +2,7 @@
 
 namespace Bermuda;
 
+use Bermuda\String\Json;
 use Laminas\Config\Config;
 use Bermuda\App\AppInterface;
 use Bermuda\Registry\Registry;
@@ -140,12 +141,13 @@ function reTo(string $routeName, array $params = []): ResponseInterface
     return redirect(urlFor($routeName, $params));
 }
 
-function r_json(string $content, ?ResponseInterface $response = null): ResponseInterface
+function json($content, ?ResponseInterface $response = null): ResponseInterface
 {
-     return r_write($response ?? r(), $content, ['Content-Type' => 'application/json']);
+     return r_write($response ?? r(), Json::isJson($content) ? $content : json_encode($content), ['Content-Type' => 'application/json']);
 }
 
-function r_html(string $content, ?ResponseInterface $response = null): ResponseInterface
+function html(string $content, ?ResponseInterface $response = null): ResponseInterface
 {
      return r_write($response ?? r(), $content, ['Content-Type' => 'text/html']);
 }
+
