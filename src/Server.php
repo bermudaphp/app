@@ -41,7 +41,7 @@ final class Server extends App
 
     /**
      * Run application
-     * @throws RequestHandlingException if request handling is failure
+     * @throws HttpException if request handling is failure
      * @throws \Throwable if request creation is failure
      */
     protected function doRun(): void
