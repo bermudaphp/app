@@ -5,6 +5,7 @@ namespace Bermuda\App\Boot;
 use Bermuda\App\AppInterface;
 use Bermuda\ErrorHandler\ErrorHandler;
 use Bermuda\ErrorHandler\ErrorHandlerInterface;
+use Bermuda\ErrorHandler\ErrorListenerInterface;
 
 /**
  * Class ErrorHandlerBootstrapper
@@ -27,7 +28,12 @@ class ErrorHandlerBootstrapper implements BootstrapperInterface
         {
             foreach ($this->getListeners() as $listener)
             {
-                $handler->listen($app->get($listener));
+                if (!$listener instanceof ErrorListenerInterface)
+                {
+                    $listener = $app->get($listener);
+                }
+
+                $handler->listen($listener);
             }
         }
     }
