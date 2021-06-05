@@ -26,20 +26,26 @@ class ErrorHandlerBootstrapper implements BootstrapperInterface
 
         if ($handler instanceof ErrorHandler)
         {
-            foreach ($this->getListeners() as $listener)
+            foreach ($this->getListeners($app) as $listener)
             {
-                if (!$listener instanceof ErrorListenerInterface)
-                {
-                    $listener = $app->get($listener);
-                }
-
                 $handler->listen($listener);
             }
         }
     }
 
-    public function getListeners(): iterable
+    /**
+     * @return ErrorListenerInterface[]
+     */
+    public function getListeners(AppInterface $app): iterable
     {
-        return $this->listeners;
+        foreach ($this->listeners as $listener)
+        {
+            if (!$listener instanceof ErrorListenerInterface)
+            {
+                $listener = $app->get($listener);
+            }
+            
+            yield $listener;
+        }
     }
 }
