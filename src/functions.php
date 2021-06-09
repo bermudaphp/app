@@ -77,7 +77,7 @@ function config($key = null)
  */
 function view(string $template, array $params = []): ResponseInterface
 {
-    return r_html(service(RendererInterface::class)->render($template, $params));
+    return html(service(RendererInterface::class)->render($template, $params));
 }
 
 /**
