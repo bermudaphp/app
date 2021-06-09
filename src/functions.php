@@ -151,16 +151,6 @@ function html(string $content, ?ResponseInterface $response = null): ResponseInt
      return r_write($response ?? r(), $content, ['Content-Type' => 'text/html']);
 }
 
-function r_json($content, ?ResponseInterface $response = null): ResponseInterface
-{
-     return json($content, $response);
-}
-
-function r_html(string $content, ?ResponseInterface $response = null): ResponseInterface
-{
-     return html($content, $response);
-}
-
 function is_console_sapi(): bool
 {
     return PHP_SAPI == 'cli' || PHP_SAPI == 'cli-server';
