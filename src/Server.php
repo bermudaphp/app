@@ -32,8 +32,8 @@ final class Server extends App
     {
         parent::__construct($container);
 
-        $this->pipeline = $container->get(PipelineInterface::class);
         $this->emitter = $container->get(EmitterInterface::class);
+        $this->pipeline = $this->make(PipelineInterface::class);
         $this->serverRequestCreator = $container->get(ServerRequestCreatorInterface::class);
         $this->responseFactory = $container->get(ResponseFactoryInterface::class);
         $this->middlewareFactory = $container->get(MiddlewareFactoryInterface::class);
