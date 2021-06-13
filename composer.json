@@ -13,6 +13,7 @@
     "php": "^7.4 || ~8.0.0",
     "bermudaphp/router": "^1.0.8",
     "bermudaphp/registry": "^1.0",
+    "bermudaphp/stringy": "^1.0.8",
     "bermudaphp/psr-7-server-factory": "^1.0",
     "bermudaphp/error-handler": "^1.0",
     "bermudaphp/psr15factory": "^2.0",
