@@ -153,5 +153,5 @@ function html(string $content, ?ResponseInterface $response = null): ResponseInt
 
 function is_console_sapi(): bool
 {
-    return PHP_SAPI == 'cli' || PHP_SAPI == 'cli-server';
+    return PHP_SAPI == 'cli';
 }
