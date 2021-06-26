@@ -143,7 +143,7 @@ function reTo(string $routeName, array $params = []): ResponseInterface
 
 function json($content, ?ResponseInterface $response = null): ResponseInterface
 {
-     return r_write($response ?? r(), Json::isJson($content) ? $content : json_encode($content), ['Content-Type' => 'application/json']);
+    return r_write($response ?? r(), Json::isJson($content) ? $content : Json::encode($content), ['Content-Type' => 'application/json']);
 }
 
 function html(string $content, ?ResponseInterface $response = null): ResponseInterface
