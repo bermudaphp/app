@@ -65,7 +65,7 @@ function make(string $cls, array $params = []): object
  * @param string|int|null $key
  * @return Config|mixed
  */
-function config($key = null)
+function config(string|int|null $key = null)
 {   
     return $key == null ? new Config(app('config')) : (new Config(app('config')))->{$key};
 }
@@ -107,13 +107,8 @@ function r_write(ResponseInterface $r, string $content, array $headers = [], int
  * @param ResponseInterface|null $response
  * @return ResponseInterface
  */
-function redirect($uri = '/', ?ResponseInterface $response = null): ResponseInterface
-{
-    if (!is_string($uri) && !$uri instanceof UriInterface)
-    {
-        throw new \InvalidArgumentException(sprintf('Uri provided to %s must be a string or %s instance; received "%s"', __FUNCTION__, UriInterface::class, (is_object($uri) ? get_class($uri) : gettype($uri))));
-    }
-  
+function redirect(string|UriInterface $uri = '/', ?ResponseInterface $response = null): ResponseInterface
+{  
     return ($response ?? r())->withHeader('location', (string) $uri)->withStatus(302);
 }
 
