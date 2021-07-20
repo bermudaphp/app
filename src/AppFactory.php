@@ -5,6 +5,8 @@ namespace Bermuda\App;
 use Bermuda\Registry\Registry;
 use Psr\Container\ContainerInterface;
 
+use function Bermuda\{is_console_sapi, containerGet};
+
 /**
  * Class AppFactory
  * @package Bermuda\App
@@ -17,15 +19,11 @@ final class AppFactory
      */
     public function __invoke(ContainerInterface $container): AppInterface
     {
-        return php_sapi_name() == 'cli' ? new Console($container)
-            : new Server($container);
+        return is_console_sapi() ? Console::makeFrom($container) : Server::makeFrom($container);
     }
 
     public static function make(ContainerInterface $container): AppInterface
     {
-        $app = $container->has(AppInterface::class) ? $container->get(AppInterface::class)
-            : (new self())($container);
-        
-        return Registry::set(AppInterface::class, $app);
+        return Registry::set(AppInterface::class, containerGet($container, AppInterface::class, (new AppFactory)($container)));
     }
 }
