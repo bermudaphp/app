@@ -47,9 +47,9 @@ function get(string $entry, $default = null)
  * @param $default
  * @return mixed
  */
-function containerGet(ContainerInterface $container, string $id, $default = null)
+function containerGet(ContainerInterface $container, string $id, $default = null, bool $invokeCallback = false)
 {
-    return $container->has($id) ? $container->get($id) : $default ;
+    return $container->has($id) ? $container->get($id) : ($invokeCallback && is_callable($default) ? $default() : $default);
 }
 
 /**
@@ -58,7 +58,14 @@ function containerGet(ContainerInterface $container, string $id, $default = null
  */
 function service(string $service): object
 {
-    return app($service);
+    $obj = app($service);
+    
+    if (!$obj instanceof $service)
+    {
+        throw new \RuntimeException('Invalid service');
+    }
+    
+    return $obj;
 }
 
 /**
