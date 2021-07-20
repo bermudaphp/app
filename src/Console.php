@@ -18,14 +18,19 @@ final class Console extends App
     private Console\CommandRunnerInterface $runner;
     private Console\CommandResolverInterface $resolver;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, InvokerInterface $invoker, 
+        ServiceFactoryInterface $serviceFactory, ErrorHandlerInterface $errorHandler,
+        BootstrapperInterface $bootstrapper, ?string $name = null, ?string $version = null
+    )
     {
-        parent::__construct($container);
-        
+        parent::__construct($container, $invoker, $serviceFactory,
+            $errorHandler, $bootstrapper, $name, $version
+        );
+ 
         $this->runner = $this->getRunner(); 
         $this->resolver = $this->getResolver();
     }
-
+    
     /**
      * @inheritDoc
      */
@@ -53,7 +58,7 @@ final class Console extends App
      */
     private function getInput(): InputInterface
     {
-        return $this->getIfExists(InputInterface::class, new ArgvInput);
+        return containerGet($this, InputInterface::class, static fn() => new ArgvInput, true);
     }
 
     /**
@@ -61,7 +66,7 @@ final class Console extends App
      */
     private function getOutput(): OutputInterface
     {
-        return $this->getIfExists(OutputInterface::class, new ConsoleOutput);
+         return containerGet($this, OutputInterface::class, static fn() => new ConsoleOutput, true);
     }
 
     /**
@@ -87,8 +92,6 @@ final class Console extends App
      */
     private function getResolver(): Console\CommandResolverInterface
     {
-        return $this->getIfExists(CommandRunnerInterface::class,
-            new Console\CommandResolver($this->container)
-        );
+        return containerGet($this, CommandRunnerInterface::class, fn() => new Console\CommandResolver($this->container), true);
     }
 }
