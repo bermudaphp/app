@@ -22,14 +22,14 @@ interface AppInterface extends ContainerInterface,
     /**
      * @param mixed $any
      * @return $this
-     * @throws \RuntimeException
+     * @throws AppException
      */
     public function pipe($any): self ;
     
     /**
      * Boot application
      * @return $this
-     * @throws \RuntimeException if app is already booted
+     * @throws AppException if app is already booted
      */
     public function boot(): AppInterface ;
     
@@ -49,7 +49,7 @@ interface AppInterface extends ContainerInterface,
      * @param string $id
      * @param $value
      * @return $this
-     * @throws \RuntimeException
+     * @throws AppException
      */
     public function set(string $id, $value): self ;
     
@@ -57,7 +57,7 @@ interface AppInterface extends ContainerInterface,
      * @param string $id
      * @param callable $extender
      * @return $this
-     * @throws \RuntimeException
+     * @throws AppException
      */
     public function extend(string $id, callable $extender): self ;
 }
