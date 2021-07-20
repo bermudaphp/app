@@ -21,22 +21,23 @@ use Psr\Http\Message\ResponseFactoryInterface;
  * @package Bermuda\App
  */
 final class Server extends App
-{
-    private EmitterInterface $emitter;
+{ 
     private PipelineInterface $pipeline;
-    private ResponseFactoryInterface $responseFactory;
-    private MiddlewareFactoryInterface $middlewareFactory;
-    private ServerRequestCreatorInterface $serverRequestCreator;
     
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, InvokerInterface $invoker, 
+        ServiceFactoryInterface $serviceFactory, ErrorHandlerInterface $errorHandler,
+        BootstrapperInterface $bootstrapper, private EmitterInterface $emitter, 
+        private ResponseFactoryInterface $responseFactory,
+        private MiddlewareFactoryInterface $middlewareFactory, 
+        private ServerRequestCreatorInterface $serverRequestCreator,
+        ?string $name = null, ?string $version = null
+    )
     {
-        parent::__construct($container);
-
-        $this->emitter = $container->get(EmitterInterface::class);
+        parent::__construct($container, $invoker, $serviceFactory,
+            $errorHandler, $bootstrapper, $name, $version
+        );
+ 
         $this->pipeline = $this->make(PipelineInterface::class);
-        $this->serverRequestCreator = $container->get(ServerRequestCreatorInterface::class);
-        $this->responseFactory = $container->get(ResponseFactoryInterface::class);
-        $this->middlewareFactory = $container->get(MiddlewareFactoryInterface::class);
     }
 
     /**
