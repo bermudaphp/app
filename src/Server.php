@@ -4,9 +4,7 @@ namespace Bermuda\App;
 
 use DI\FactoryInterface;
 use Invoker\InvokerInterface;
-use Bermuda\ServiceFactory\Factory;
 use Psr\Container\ContainerInterface;
-use Bermuda\Pipeline\PipelineFactory;
 use Bermuda\Pipeline\PipelineInterface;
 use Bermuda\ServiceFactory\FactoryException;
 use Bermuda\ErrorHandler\HttpException;
@@ -15,6 +13,7 @@ use Bermuda\MiddlewareFactory\UnresolvableMiddlewareException;
 use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
 use Nyholm\Psr7Server\ServerRequestCreatorInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
+use Bermuda\ServiceFactory\FactoryInterface as ServiceFactoryInterface;
 
 /**
  * Class Server
@@ -38,6 +37,17 @@ final class Server extends App
         );
  
         $this->pipeline = $this->make(PipelineInterface::class);
+    }
+    
+    public static function makeFrom(ContainerInterface $container): self
+    { 
+        return new static($container, $container->get(InvokerInterface::class),
+            static::getServiceFactory($container), $container->get(ErrorHandlerInterface::class),
+            $container->get(BootstrapperInterface::class), $container->get(EmitterInterface::class),
+            $container->get(ResponseFactoryInterface::class), $container->get(MiddlewareFactoryInterface::class),
+            $container->get(ServerRequestCreatorInterface::class), static::getAppName($container), 
+            static::getAppVersion($container)
+        )
     }
 
     /**
