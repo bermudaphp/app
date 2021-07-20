@@ -42,6 +42,17 @@ function get(string $entry, $default = null)
 }
 
 /**
+ * @param ContainerInterface $container
+ * @param string $id
+ * @param $default
+ * @return mixed
+ */
+function containerGet(ContainerInterface $container, string $id, $default = null)
+{
+    return $container->has($id) ? $container->get($id) : $default ;
+}
+
+/**
  * @param string $service
  * @return object
  */
