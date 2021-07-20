@@ -43,7 +43,7 @@ abstract class App implements AppInterface
             = $this;
     }
     
-    public static function fromContainer(ContainerInterface $container): self
+    public static function makeFrom(ContainerInterface $container): self
     { 
         return new static($container, $container->get(InvokerInterface::class),
             static::getServiceFactory($container), $container->get(ErrorHandlerInterface::class),
