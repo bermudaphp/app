@@ -4,45 +4,68 @@ namespace Bermuda\App;
 
 use DI\FactoryInterface;
 use Invoker\InvokerInterface;
-use Bermuda\ServiceFactory\Factory;
 use Psr\Container\ContainerInterface;
 use Bermuda\App\Boot\BootstrapperInterface;
 use Bermuda\ErrorHandler\ErrorHandlerInterface;
+use Bermuda\ServiceFactory\Factory as ServiceFactory;
+use Bermuda\ServiceFactory\FactoryInterface as ServiceFactoryInterface;
+
+use function Bermuda\containerGet;
 
 /**
  * Class App
  * @package Bermuda\App
- * @property string $name;
- * @property string $version;
+ * @property string|null $name;
+ * @property string|null $version;
  */
 abstract class App implements AppInterface
 {
-    protected Factory $factory;
-    protected InvokerInterface $invoker;
-    protected ContainerInterface $container;
-    protected ErrorHandlerInterface $errorHandler;
-
-    protected string $name;
-    protected string $version;
-    
     protected array $entries = [];
     
     private bool $booted = false;
     private bool $runned = false;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(protected ContainerInterface $container, protected InvokerInterface $invoker, 
+        protected ServiceFactoryInterface $serviceFactory, protected ErrorHandlerInterface $errorHandler,
+        protected BootstrapperInterface $bootstrapper, protected ?string $name = null, protected ?string $version = null
+    )
     {
-        $this->container = $container;
-        $this->invoker = $container->get(InvokerInterface::class);
-        $this->factory = new Factory($container->get(FactoryInterface::class));
-        $this->errorHandler = $container->get(ErrorHandlerInterface::class);
-        $this->name = $this->getName();
-        $this->version = $this->getVersion();
-        $this->entries[AppInterface::class]
+        $this->bindEntries();
+    }
+    
+    protected function bindEntries(): void
+    {
+         $this->entries[AppInterface::class]
             = $this->entries[ContainerInterface::class]
             = $this->entries[FactoryInterface::class]
+            = $this->entries[ServiceFactoryInterface::class]
             = $this->entries[InvokerInterface::class]
             = $this;
+    }
+    
+    public static function fromContainer(ContainerInterface $container): self
+    { 
+        return new static($container, $container->get(InvokerInterface::class),
+            static::getServiceFactory($container), $container->get(ErrorHandlerInterface::class),
+            $container->get(BootstrapperInterface::class), static::getAppName($container), 
+            static::getAppVersion($container)
+        )
+    }
+    
+    protected static function getServiceFactory(ContainerInterface $container): ServiceFactoryInterface
+    {
+        return $container->has(ServiceFactoryInterface::class) ? $container->get(ServiceFactoryInterface::class)
+            new ServiceFactory($container->get(FactoryInterface::class));
+    }
+    
+    protected static function getAppVersion(ContainerInterface $container):? string
+    {
+        return containerGet($container, static::appVersionID);
+    }
+    
+    protected static function getAppName(ContainerInterface $container):? string
+    {
+        return containerGet($container, static::appNameID);
     }
 
     /**
@@ -67,23 +90,6 @@ abstract class App implements AppInterface
         }
     }
 
-    /**
-     * @return string
-     */
-    private function getName(): string
-    {
-        return $this->container->has('app_name') ?
-            $this->container->get('app_name') : 'Bermuda' ;
-    }
-
-    /**
-     * @return string
-     */
-    private function getVersion(): string
-    {
-        return $this->container->get('config')['app_version'] ?? '1.0' ;
-    }
-    
     /**
      * @param string|null $name
      * @return string
@@ -151,7 +157,7 @@ abstract class App implements AppInterface
     
     public function getIfExists(string $id, $default = null)
     {
-        return $this->has($id) ? $this->get($id) : $default;
+        return containerGet($this, $id, $default);
     }
 
     /**
@@ -165,11 +171,11 @@ abstract class App implements AppInterface
     /**
      * @inheritDoc
      */
-    final public function run():void
+    final public function run(): void
     {
         if ($this->runned)
         {
-            throw new \RuntimeException('App is already runned');
+            throw AppException::alredyRunned();
         }
         
         $this->runned = true;
@@ -183,11 +189,20 @@ abstract class App implements AppInterface
     {
         if ($this->booted)
         {
-            throw new \RuntimeException('App is already booted!');
+            throw AppException::alredyBooted();
+        }
+
+        try
+        {
+            $this->bootstrapper->boot($this);
+        }
+        
+        catch (\Throwable $e)
+        {
+            throw AppException::fromPrev($e);
         }
         
         $this->booted = true;
-        $this->get(BootstrapperInterface::class)->boot($this);
         
         return $this;
     }
