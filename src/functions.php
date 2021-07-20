@@ -55,6 +55,7 @@ function containerGet(ContainerInterface $container, string $id, $default = null
 /**
  * @param string $service
  * @return object
+ * @throws \RuntimeException
  */
 function service(string $service): object
 {
