@@ -24,6 +24,9 @@ abstract class App implements AppInterface
     
     private bool $booted = false;
     private bool $runned = false;
+    
+    protected const appNameID = 'app.name';
+    protected const appVersionID = 'app.version';
 
     public function __construct(protected ContainerInterface $container, protected InvokerInterface $invoker, 
         protected ServiceFactoryInterface $serviceFactory, protected ErrorHandlerInterface $errorHandler,
@@ -54,8 +57,9 @@ abstract class App implements AppInterface
     
     protected static function getServiceFactory(ContainerInterface $container): ServiceFactoryInterface
     {
-        return $container->has(ServiceFactoryInterface::class) ? $container->get(ServiceFactoryInterface::class)
-            new ServiceFactory($container->get(FactoryInterface::class));
+        return containerGet($container, ServiceFactoryInterface::class,
+            static fn() => new ServiceFactory($container->get(FactoryInterface::class))
+        );
     }
     
     protected static function getAppVersion(ContainerInterface $container):? string
