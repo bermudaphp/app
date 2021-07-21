@@ -154,16 +154,12 @@ abstract class App implements AppInterface
     /**
      * @inheritDoc
      */
-    public function get($id)
+    public function get($id, $default = null, bool $invoke = false)
     {
-        return $this->entries[$id] ?? $this->container->get($id);
+        return $this->entries[$id] ?? ($this->container->has($id) ? $this->container->get($id)
+            : ($invoke && is_callable($default)) ? $default() : $default);
     }
     
-    public function getIfExists(string $id, $default = null)
-    {
-        return containerGet($this, $id, $default);
-    }
-
     /**
      * @inheritDoc
      */
