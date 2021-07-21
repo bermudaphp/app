@@ -40,13 +40,13 @@ final class Bootstrapper implements BootstrapperInterface
      */
     public static function makeOf(iterable $bootstrap = []): self
     {
-        $instance = new self();
+        $bootstrapper = new self;
         
-        foreach ($bootstrap as $bootstrapper)
+        foreach ($bootstrap as $i)
         {
-            $instance->addBootstrapper($bootstrapper);
+            $bootstrapper->addBootstrapper($i);
         }
         
-        return $instance;
+        return $bootstrapper;
     }
 }
