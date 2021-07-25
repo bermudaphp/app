@@ -10,9 +10,18 @@ use Laminas\Config as LaminasConfig;
  */
 final class Config implements ConfigInterface
 {  
-    public function __construct(private array $data)
+    private array $data;
+    
+    public function __construct(iterable $data)
     {
-        $this->delegate = new LaminasConfig($data);
+        $array = [];
+        
+        foreach($data as $k => $v)
+        {
+            $array[$k] = is_iterable($v) ? new Config($v) : $v ;
+        }
+        
+        $this->data = $array ;
     }
   
     public function get($name, $default = null, bool $invoke = true)
@@ -23,20 +32,15 @@ final class Config implements ConfigInterface
   
     public function __get($name)
     {
-        return $this->get($name);
+        return $this->offsetGet($name);
     }
 
     public function __set($name, $value)
     {
-        throw new \RuntimeException('Config is not immutable');
+        $this->offsetSet($name, $value);
     }
-  
-    /**
-     * Return an associative array of the stored data.
-     *
-     * @return array
-     */
-    public function toArray()
+    
+    public function toArray(): array
     {
         $array = [];
         $data  = $this->data;
@@ -51,20 +55,14 @@ final class Config implements ConfigInterface
         return $array;
     }
 
-    /**
-     * isset() overloading
-     *
-     * @param  string $name
-     * @return bool
-     */
-    public function __isset($name)
+    public function __isset($name): bool
     {
-        return array_key_exists($name, $this->data);
+        return $this->offsetExists($name);
     }
 
-    public function __unset($name)
+    public function __unset($name): void
     {
-        throw new \RuntimeException('Config is not immutable');
+        $this->offsetUnset($name);
     }
 
     public function count(): int
@@ -77,23 +75,11 @@ final class Config implements ConfigInterface
         return current($this->data);
     }
 
-    /**
-     * key(): defined by Iterator interface.
-     *
-     * @see    Iterator::key()
-     * @return mixed
-     */
     public function key()
     {
         return key($this->data);
     }
 
-    /**
-     * next(): defined by Iterator interface.
-     *
-     * @see    Iterator::next()
-     * @return void
-     */
     public function next()
     {
         next($this->data);
@@ -104,36 +90,16 @@ final class Config implements ConfigInterface
         reset($this->data);
     }
 
-    /**
-     * valid(): defined by Iterator interface.
-     *
-     * @see    Iterator::valid()
-     * @return bool
-     */
     public function valid()
     {
         return ($this->key() !== null);
     }
 
-    /**
-     * offsetExists(): defined by ArrayAccess interface.
-     *
-     * @see    ArrayAccess::offsetExists()
-     * @param  mixed $offset
-     * @return bool
-     */
     public function offsetExists($offset)
     {
-        return $this->isset($offset);
+        return array_key_exists($name, $this->data);
     }
 
-    /**
-     * offsetGet(): defined by ArrayAccess interface.
-     *
-     * @see    ArrayAccess::offsetGet()
-     * @param  mixed $offset
-     * @return mixed
-     */
     public function offsetGet($offset)
     {
         return $this->get($offset);
@@ -149,7 +115,7 @@ final class Config implements ConfigInterface
      */
     public function offsetSet($offset, $value)
     {
-        $this->_set($offset, $value);
+         throw new \RuntimeException('Config is not immutable');
     }
 
     /**
@@ -161,6 +127,6 @@ final class Config implements ConfigInterface
      */
     public function offsetUnset($offset)
     {
-        $this->__unset($offset);
+         throw new \RuntimeException('Config is not immutable');
     }
 }
