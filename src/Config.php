@@ -103,26 +103,11 @@ final class Config implements ConfigInterface
         return $this->get($offset);
     }
 
-    /**
-     * offsetSet(): defined by ArrayAccess interface.
-     *
-     * @see    ArrayAccess::offsetSet()
-     * @param  mixed $offset
-     * @param  mixed $value
-     * @return void
-     */
     public function offsetSet($offset, $value)
     {
          throw new \RuntimeException('Config is not immutable');
     }
 
-    /**
-     * offsetUnset(): defined by ArrayAccess interface.
-     *
-     * @see    ArrayAccess::offsetUnset()
-     * @param  mixed $offset
-     * @return void
-     */
     public function offsetUnset($offset)
     {
          throw new \RuntimeException('Config is not immutable');
