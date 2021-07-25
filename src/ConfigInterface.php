@@ -5,9 +5,9 @@ namespace Bermuda\App;
 use Bermuda\Arrayable
 
 /**
- * Interface Config
+ * Interface ConfigInterface
  */
-Interface Config implements Countable, Iterator, ArrayAccess, Arrayable
+Interface ConfigInterface implements Countable, Iterator, ArrayAccess, Arrayable
 {
     public function get($name, $default = null, bool $invoke = true);
 
