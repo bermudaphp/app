@@ -3,10 +3,12 @@
 namespace Bermuda\App;
 
 use DI\FactoryInterface;
+use Laminas\Config\Config;
 use Invoker\InvokerInterface;
 use Psr\Container\ContainerInterface;
 use Bermuda\App\Boot\BootstrapperInterface;
 use Bermuda\ErrorHandler\ErrorHandlerInterface;
+
 use Bermuda\ServiceFactory\Factory as ServiceFactory;
 use Bermuda\ServiceFactory\FactoryInterface as ServiceFactoryInterface;
 
@@ -26,6 +28,7 @@ abstract class App implements AppInterface
     private bool $runned = false;
     
     protected const appNameID = 'app.name';
+    protected const appConfigID = 'config';
     protected const appVersionID = 'app.version';
 
     public function __construct(protected ContainerInterface $container, protected InvokerInterface $invoker, 
@@ -38,12 +41,13 @@ abstract class App implements AppInterface
     
     protected function bindEntries(): void
     {
-         $this->entries[AppInterface::class]
+        $this->entries[AppInterface::class]
             = $this->entries[ContainerInterface::class]
             = $this->entries[FactoryInterface::class]
             = $this->entries[ServiceFactoryInterface::class]
             = $this->entries[InvokerInterface::class]
             = $this;
+        $this->entries[static::appConfigID] = new Config($this->container->get(static::appConfigID));
     }
     
     public static function makeFrom(ContainerInterface $container): self
