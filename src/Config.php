@@ -2,8 +2,6 @@
 
 namespace Bermuda\App;
 
-use Laminas\Config as LaminasConfig;
-
 /**
  * Class Config
  * @package Bermuda\App
