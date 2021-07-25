@@ -19,11 +19,16 @@ final class AppFactory
      */
     public function __invoke(ContainerInterface $container): AppInterface
     {
-        return is_console_sapi() ? Console::makeFrom($container) : Server::makeFrom($container);
+        return is_console_sapi() ? Console::makeFrom($container)
+            : Server::makeFrom($container);
     }
 
     public static function make(ContainerInterface $container): AppInterface
     {
-        return Registry::set(AppInterface::class, containerGet($container, AppInterface::class, (new AppFactory)($container)));
+        $app = containerGet($container, AppInterface::class, 
+            static fn() => (new AppFactory)($container))
+        );
+        
+        return Registry::set(AppInterface::class, $app);
     }
 }
