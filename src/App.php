@@ -25,6 +25,9 @@ abstract class App implements AppInterface
     private bool $booted = false;
     private bool $runned = false;
     
+    private ?string $name = null;
+    private ?string $version = null;
+    
     protected const appNameID = 'app.name';
     protected const appVersionID = 'app.version';
 
@@ -34,6 +37,8 @@ abstract class App implements AppInterface
     )
     {
         $this->bindEntries();
+        $this->name = $config[static::appNameID];
+        $this->version = $config[static::appVersionID];
     }
     
     protected function bindEntries(): void
