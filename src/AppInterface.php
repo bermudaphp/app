@@ -44,6 +44,11 @@ interface AppInterface extends ContainerInterface,
      * @return string
      */
     public function version(?string $version = null): string ;
+        
+    /**
+     * @return ConfigInterface
+     */
+    public function getConfig(): ConfigInterface ;
 
     /**
      * @param string $id
