@@ -20,11 +20,11 @@ final class Console extends App
 
     public function __construct(ContainerInterface $container, InvokerInterface $invoker, 
         ServiceFactoryInterface $serviceFactory, ErrorHandlerInterface $errorHandler,
-        BootstrapperInterface $bootstrapper, ?string $name = null, ?string $version = null
+        BootstrapperInterface $bootstrapper, ConfigInterface $config
     )
     {
         parent::__construct($container, $invoker, $serviceFactory,
-            $errorHandler, $bootstrapper, $name, $version
+            $errorHandler, $bootstrapper, $config
         );
  
         $this->runner = $this->getRunner(); 
