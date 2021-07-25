@@ -43,7 +43,6 @@ final class Config implements ConfigInterface
         $array = [];
         $data  = $this->data;
 
-        /** @var self $value */
         foreach ($data as $key => $value)
         {
             $array[$key] = $value instanceof self
