@@ -82,11 +82,11 @@ function make(string $cls, array $params = []): object
 
 /**
  * @param string|int|null $key
- * @return Config|mixed
+ * @return ConfigInterface|mixed
  */
 function config(string|int|null $key = null)
 {   
-    return $key == null ? new Config(app('config')) : (new Config(app('config')))->{$key};
+    return $key == null ? app()->getConfig() : app()->getConfig()[$key];
 }
 
 /**
