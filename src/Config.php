@@ -45,7 +45,7 @@ final class Config implements ConfigInterface
 
         foreach ($data as $key => $value)
         {
-            $array[$key] = $value instanceof self
+            $array[$key] = $value instanceof Config
               ? $value->toArray() : $value ;
         }
 
