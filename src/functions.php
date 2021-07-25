@@ -22,13 +22,9 @@ use Psr\Http\Message\UriInterface;
  */
 function app(string $entry = null, $default = null)
 {
-    if ($entry != null)
-    {
-        return ($app = Registry::get(AppInterface::class))->has($entry) ? 
-            Registry::get(AppInterface::class)->get($entry) : $default;
-    }
-    
-    return Registry::get(AppInterface::class);
+    return $entry != null ? 
+        containerGet($app = Registry::get(AppInterface::class), $entry, $default)
+        : $app;
 }
 
 /**
@@ -63,7 +59,7 @@ function service(string $service): object
     
     if (!$obj instanceof $service)
     {
-        throw new \RuntimeException('Invalid service');
+        throw new \RuntimeException(sprintf('Service must be instance of %s', $service));
     }
     
     return $obj;
