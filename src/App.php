@@ -3,12 +3,10 @@
 namespace Bermuda\App;
 
 use DI\FactoryInterface;
-use Laminas\Config\Config;
 use Invoker\InvokerInterface;
 use Psr\Container\ContainerInterface;
 use Bermuda\App\Boot\BootstrapperInterface;
 use Bermuda\ErrorHandler\ErrorHandlerInterface;
-
 use Bermuda\ServiceFactory\Factory as ServiceFactory;
 use Bermuda\ServiceFactory\FactoryInterface as ServiceFactoryInterface;
 
@@ -28,12 +26,11 @@ abstract class App implements AppInterface
     private bool $runned = false;
     
     protected const appNameID = 'app.name';
-    protected const appConfigID = 'config';
     protected const appVersionID = 'app.version';
 
     public function __construct(protected ContainerInterface $container, protected InvokerInterface $invoker, 
         protected ServiceFactoryInterface $serviceFactory, protected ErrorHandlerInterface $errorHandler,
-        protected BootstrapperInterface $bootstrapper, protected ?string $name = null, protected ?string $version = null
+        protected BootstrapperInterface $bootstrapper, protected ConfigInterface $config
     )
     {
         $this->bindEntries();
@@ -47,15 +44,14 @@ abstract class App implements AppInterface
             = $this->entries[ServiceFactoryInterface::class]
             = $this->entries[InvokerInterface::class]
             = $this;
-        $this->entries[static::appConfigID] = new Config($this->container->get(static::appConfigID));
+        $this->entries[ConfigInterface::class] = $this->config;
     }
     
     public static function makeFrom(ContainerInterface $container): self
     { 
         return new static($container, $container->get(InvokerInterface::class),
             static::getServiceFactory($container), $container->get(ErrorHandlerInterface::class),
-            $container->get(BootstrapperInterface::class), static::getAppName($container), 
-            static::getAppVersion($container)
+            $container->get(BootstrapperInterface::class), static::getAppConfig($container)
         )
     }
     
@@ -66,16 +62,11 @@ abstract class App implements AppInterface
         );
     }
     
-    protected static function getAppVersion(ContainerInterface $container):? string
+    protected static function getAppConfig(ContainerInterface $container): ConfigInterface
     {
-        return containerGet($container, static::appVersionID);
+        return new Config(containerGet($container, 'config', []);
     }
-    
-    protected static function getAppName(ContainerInterface $container):? string
-    {
-        return containerGet($container, static::appNameID);
-    }
-
+  
     /**
      * @param $name
      * @return string|null
@@ -83,7 +74,7 @@ abstract class App implements AppInterface
     public function __get($name):? string
     {
         return $name == 'name' || $name == 'version'
-            ? $this->{$name}() : null ;
+            ? $this->config->{$name} : null ;
     }
 
     /**
