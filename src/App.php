@@ -97,6 +97,14 @@ abstract class App implements AppInterface
     {
         return $name != null ? $this->name = $name : $this->name;
     }
+                          
+    /**
+     * @return ConfigInterface
+     */
+    public function getConfig(): ConfigInterface
+    {
+        return $this->config;
+    }
 
     /**
      * @param string|null $version
