@@ -53,7 +53,8 @@ final class Server extends App
      */
     protected function doRun(): void
     {
-        $request = $this->serverRequestCreator->fromGlobals();
+        $request = $this->serverRequestCreator
+            ->fromGlobals();
         
         try {
             $this->emitter->emit($this->pipeline->handle($request));
