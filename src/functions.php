@@ -43,7 +43,7 @@ function get(string $entry, $default = null)
  * @param $default
  * @return mixed
  */
-function containerGet(ContainerInterface $container, string $id, $default = null, bool $invokeCallback = false)
+function cget(ContainerInterface $container, string $id, $default = null, bool $invokeCallback = false)
 {
     return $container->has($id) ? $container->get($id) : ($invokeCallback && is_callable($default) ? $default() : $default);
 }
