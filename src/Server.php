@@ -16,10 +16,6 @@ use Nyholm\Psr7Server\ServerRequestCreatorInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Bermuda\ServiceFactory\FactoryInterface as ServiceFactoryInterface;
 
-/**
- * Class Server
- * @package Bermuda\App
- */
 final class Server extends App
 { 
     private PipelineInterface $pipeline;
@@ -52,20 +48,16 @@ final class Server extends App
 
     /**
      * Run application
-     * @throws HttpException if request handling is failure
+     * @throws ServerException if request handling is failure
      * @throws \Throwable if request creation is failure
      */
     protected function doRun(): void
     {
         $request = $this->serverRequestCreator->fromGlobals();
         
-        try
-        {
+        try {
             $this->emitter->emit($this->pipeline->handle($request));
-        }
-        
-        catch(Throwable $e)
-        {
+        } catch(Throwable $e) {
             throw new ServerException($e, $request);
         }
     }
@@ -75,13 +67,9 @@ final class Server extends App
      */
     public function pipe($any): AppInterface
     {
-        try
-        {
+        try {
             $this->pipeline->pipe($this->middlewareFactory->make($any));
-        }
-        
-        catch (UnresolvableMiddlewareException $e)
-        {
+        } catch (UnresolvableMiddlewareException $e) {
             UnresolvableMiddlewareException::reThrow($e, debug_backtrace()[0]);
         }
 
