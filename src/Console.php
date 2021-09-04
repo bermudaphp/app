@@ -51,7 +51,7 @@ final class Console extends App
      */
     private function getInput(): InputInterface
     {
-        return containerGet($this, InputInterface::class, static fn() => new ArgvInput, true);
+        return cget($this, InputInterface::class, static fn() => new ArgvInput, true);
     }
 
     /**
@@ -59,7 +59,7 @@ final class Console extends App
      */
     private function getOutput(): OutputInterface
     {
-         return containerGet($this, OutputInterface::class, static fn() => new ConsoleOutput, true);
+         return cget($this, OutputInterface::class, static fn() => new ConsoleOutput, true);
     }
 
     /**
