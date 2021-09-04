@@ -9,10 +9,6 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Bermuda\App\Console\UnresolvableCommandException;
 
-/**
- * Class Console
- * @package Bermuda\App
- */
 final class Console extends App
 {
     private Console\CommandRunnerInterface $runner;
@@ -38,10 +34,7 @@ final class Console extends App
     {
         try {
             $this->runner->add($this->resolver->resolve($any));
-        }
-
-        catch (UnresolvableCommandException $e)
-        {
+        } catch (UnresolvableCommandException $e) {
             UnresolvableCommandException::reThrow($e, debug_backtrace()[0]);
         }
 
