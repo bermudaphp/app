@@ -2,6 +2,7 @@
 
 namespace Bermuda\App;
 
+use Throwable;
 use DI\FactoryInterface;
 use Invoker\InvokerInterface;
 use Psr\Container\ContainerInterface;
@@ -10,14 +11,8 @@ use Bermuda\ErrorHandler\ErrorHandlerInterface;
 use Bermuda\ServiceFactory\Factory as ServiceFactory;
 use Bermuda\ServiceFactory\FactoryInterface as ServiceFactoryInterface;
 
-use function Bermuda\containerGet;
+use function Bermuda\cget;
 
-/**
- * Class App
- * @package Bermuda\App
- * @property string|null $name;
- * @property string|null $version;
- */
 abstract class App implements AppInterface
 {
     protected array $entries = [];
@@ -62,14 +57,14 @@ abstract class App implements AppInterface
     
     protected static function getServiceFactory(ContainerInterface $container): ServiceFactoryInterface
     {
-        return containerGet($container, ServiceFactoryInterface::class,
+        return cget($container, ServiceFactoryInterface::class,
             static fn() => new ServiceFactory($container->get(FactoryInterface::class))
         );
     }
     
     protected static function getAppConfig(ContainerInterface $container): ConfigInterface
     {
-        return new Config(containerGet($container, 'config', []);
+        return new Config(cget($container, 'config', []);
     }
   
     /**
@@ -141,11 +136,10 @@ abstract class App implements AppInterface
      */
     public function set(string $id, $value): AppInterface
     {
-        if ($this->has($id))
-        {
-            throw new AppException(sprintf('Entry with id: %s already exists in the container', $id));
-        }
-
+        !$this->has($id) ?: throw new AppException(
+            sprintf('Entry with id: %s already exists in the container', $id)
+        );
+        
         $this->entries[$id] = $value;
         return $this;
     }
@@ -164,7 +158,7 @@ abstract class App implements AppInterface
      */
     public function get($id, $default = null, bool $invoke = false)
     {
-        return $this->entries[$id] ?? containerGet($this->container, $id, $default, $invoke);
+        return $this->entries[$id] ?? cget($this->container, $id, $default, $invoke);
     }
     
     /**
@@ -180,11 +174,7 @@ abstract class App implements AppInterface
      */
     final public function run(): void
     {
-        if ($this->runned)
-        {
-            throw AppException::alredyRunned();
-        }
-        
+        !$this->runned ?: throw AppException::alredyRunned();
         $this->runned = true;
         $this->doRun();
     }
@@ -194,18 +184,11 @@ abstract class App implements AppInterface
      */
     final public function boot(): AppInterface
     {
-        if ($this->booted)
-        {
-            throw AppException::alredyBooted();
-        }
-
-        try
-        {
-            $this->bootstrapper->boot($this);
-        }
+        !$this->booted ?: throw AppException::alredyBooted();
         
-        catch (\Throwable $e)
-        {
+        try {
+            $this->bootstrapper->boot($this);
+        } catch (\Throwable $e) {
             throw AppException::fromPrev($e);
         }
         
@@ -217,7 +200,7 @@ abstract class App implements AppInterface
     /**
      * @inheritDoc
      */
-    public function handleException(\Throwable $e): void
+    public function handleException(Throwable $e): void
     {
         $this->errorHandler->handleException($e);
     }
