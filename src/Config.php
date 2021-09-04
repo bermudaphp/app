@@ -2,10 +2,6 @@
 
 namespace Bermuda\App;
 
-/**
- * Class Config
- * @package Bermuda\App
- */
 final class Config implements ConfigInterface
 {  
     private array $data;
