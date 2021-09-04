@@ -85,6 +85,6 @@ final class Console extends App
      */
     private function getResolver(): Console\CommandResolverInterface
     {
-        return containerGet($this, CommandRunnerInterface::class, fn() => new Console\CommandResolver($this->container), true);
+        return cget($this, CommandRunnerInterface::class, fn() => new Console\CommandResolver($this->container), true);
     }
 }
