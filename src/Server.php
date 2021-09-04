@@ -2,6 +2,7 @@
 
 namespace Bermuda\App;
 
+use Throwable;
 use DI\FactoryInterface;
 use Invoker\InvokerInterface;
 use Psr\Container\ContainerInterface;
@@ -63,9 +64,9 @@ final class Server extends App
             $this->emitter->emit($this->pipeline->handle($request));
         }
         
-        catch(\Throwable $e)
+        catch(Throwable $e)
         {
-            throw new HttpException($e, $request);
+            throw new ServerRequestException($e, $request);
         }
     }
 
