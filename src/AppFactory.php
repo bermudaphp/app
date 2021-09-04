@@ -5,7 +5,7 @@ namespace Bermuda\App;
 use Bermuda\Registry\Registry;
 use Psr\Container\ContainerInterface;
 
-use function Bermuda\{is_console_sapi, containerGet};
+use function Bermuda\{is_console_sapi, cget};
 
 /**
  * Class AppFactory
@@ -25,10 +25,7 @@ final class AppFactory
 
     public static function make(ContainerInterface $container): AppInterface
     {
-        $app = containerGet($container, AppInterface::class, 
-            static fn() => (new AppFactory)($container))
-        );
-        
+        $app = cget($container, AppInterface::class, static fn() => (new AppFactory)($container)));
         return Registry::set(AppInterface::class, $app);
     }
 }
