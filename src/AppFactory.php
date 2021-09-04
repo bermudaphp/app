@@ -7,10 +7,6 @@ use Psr\Container\ContainerInterface;
 
 use function Bermuda\{is_console_sapi, cget};
 
-/**
- * Class AppFactory
- * @package Bermuda\App
- */
 final class AppFactory
 {
     /**
