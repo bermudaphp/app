@@ -114,10 +114,10 @@ function err(int $code, ?string $template = null): ResponseInterface
  * @throws \League\Flysystem\FilesystemException
  * @throws NoSuchFile
  */
-function file(string $location, bool $inline = false): ResponseInterface
+function file(string $location, ?bool $inline = null): ResponseInterface
 {
     $file = service(Flysystem::class)->openFile($location);
-    return $file->responde(response(), $inline);
+    return $file->responde(response(), $inline ?? $file instanceof Image);
 }
 
 /**
