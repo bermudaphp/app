@@ -6,7 +6,7 @@ use Bermuda\Flysystem\Exceptions\NoSuchFile;
 use Bermuda\Flysystem\Flysystem;
 use Bermuda\Flysystem\Image;
 use Bermuda\String\Json;
-use Bermuda\Utils\Application;
+use Bermuda\Utils\Types\Application;
 use Bermuda\Utils\Header;
 use Bermuda\Utils\Types\Text;
 use Bermuda\Utils\URL;
@@ -172,21 +172,22 @@ function redirect(string|UriInterface $uri = '/', ?ResponseInterface $response =
 }
 
 /**
- * Генерирует url для маршрута 
- * с именем $routeName
  * @param string $routeName
  * @param array $params
  * @return string
  */
 function route(string $routeName, array $params = [], bool $asUrl = false): string
 {
-    $path = service(GeneratorInterface::class)->generate($name, $params);
+    $path = service(GeneratorInterface::class)->generate($routeName, $params);
     return $asUrl ? Url::build(compact('path')) : $path;
 }
 
 function json($content, ?ResponseInterface $response = null): ResponseInterface
 {
-    return write($response ?? response(), Json::isJson($content) ? $content : Json::encode($content), [Header::contentType => Application::json]);
+    return write($response ?? response(),
+        Json::isJson($content) ? $content : Json::encode($content),
+        [Header::contentType => Application::json]
+    );
 }
 
 function html(string $content, ?ResponseInterface $response = null): ResponseInterface
