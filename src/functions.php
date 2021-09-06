@@ -94,7 +94,7 @@ function config(string|int|null $key = null)
     return $key == null ? app()->getConfig() : app()->getConfig()[$key];
 }
 
-function err(int $code, ?string $template = null)
+function err(int $code, ?string $template = null): ResponseInterface
 {
     $code = get_error_code($code);
     $response = response($code);
@@ -104,7 +104,7 @@ function err(int $code, ?string $template = null)
         $template = sprintf('errors::%s', $code);
     }
 
-    return render($template);
+    return view($template);
 }
 
 /**
