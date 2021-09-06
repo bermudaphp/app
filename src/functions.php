@@ -104,7 +104,7 @@ function err(int $code, ?string $template = null): ResponseInterface
         $template = sprintf('errors::%s', $code);
     }
 
-    return view($template);
+    return html(render($template), $response);
 }
 
 /**
