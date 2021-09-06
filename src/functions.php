@@ -4,6 +4,7 @@ namespace Bermuda;
 
 use Bermuda\Flysystem\Exceptions\NoSuchFile;
 use Bermuda\Flysystem\Flysystem;
+use Bermuda\Flysystem\Image;
 use Bermuda\String\Json;
 use Bermuda\Utils\Application;
 use Bermuda\Utils\Header;
