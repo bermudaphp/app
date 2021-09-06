@@ -32,7 +32,7 @@ use function Bermuda\ErrorHandler\get_status_code_from_throwable;
 function app(string $entry = null, $default = null)
 {
     return $entry != null ? 
-        containerGet($app = Registry::get(AppInterface::class), $entry, $default)
+        cget($app = Registry::get(AppInterface::class), $entry, $default)
         : $app;
 }
 
@@ -167,13 +167,12 @@ function redirect(string|UriInterface $uri = '/', ?ResponseInterface $response =
 }
 
 /**
- * Генерирует url для маршрута 
- * с именем $routeName
  * @param string $routeName
  * @param array $params
+ * @param bool $asUrl
  * @return string
  */
-function route(string $routeName, array $params = [], bool $asUrl): string
+function route(string $routeName, array $params = [], bool $asUrl = false): string
 {
     $path = service(GeneratorInterface::class)->generate($name, $params);
     return $asUrl ? Url::build(compact('path')) : $path;
