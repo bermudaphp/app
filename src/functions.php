@@ -31,9 +31,8 @@ use function Bermuda\ErrorHandler\get_status_code_from_throwable;
  */
 function app(string $entry = null, $default = null)
 {
-    return $entry != null ? 
-        cget($app = Registry::get(AppInterface::class), $entry, $default)
-        : $app;
+    $app = Registry::get(AppInterface::class);
+    return $entry !== null ? cget($app, $entry, $default) : $app;
 }
 
 /**
