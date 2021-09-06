@@ -21,7 +21,6 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
-
 use function Bermuda\ErrorHandler\get_error_code;
 use function Bermuda\ErrorHandler\get_status_code_from_throwable;
 
@@ -32,8 +31,13 @@ use function Bermuda\ErrorHandler\get_status_code_from_throwable;
  */
 function app(string $entry = null, $default = null)
 {
-    $app = Registry::get(AppInterface::class);
-    return $entry !== null ? cget($app, $entry, $default) : $app;
+    if ($entry != null)
+    {
+        return ($app = Registry::get(AppInterface::class))->has($entry) ? 
+            Registry::get(AppInterface::class)->get($entry) : $default;
+    }
+    
+    return Registry::get(AppInterface::class);
 }
 
 /**
@@ -47,31 +51,12 @@ function get(string $entry, $default = null)
 }
 
 /**
- * @param ContainerInterface $container
- * @param string $id
- * @param $default
- * @return mixed
- */
-function cget(ContainerInterface $container, string $id, $default = null, bool $invokeCallback = false)
-{
-    return $container->has($id) ? $container->get($id) : ($invokeCallback && is_callable($default) ? $default() : $default);
-}
-
-/**
  * @param string $service
  * @return object
- * @throws \RuntimeException
  */
 function service(string $service): object
 {
-    $obj = app($service);
-    
-    if (!$obj instanceof $service)
-    {
-        throw new \RuntimeException(sprintf('Service must be instance of %s', $service));
-    }
-    
-    return $obj;
+    return app($service);
 }
 
 /**
@@ -87,11 +72,31 @@ function make(string $cls, array $params = []): object
 
 /**
  * @param string|int|null $key
- * @return ConfigInterface|mixed
+ * @return Config|mixed
  */
-function config(string|int|null $key = null)
+function config($key = null)
 {   
-    return $key == null ? app()->getConfig() : app()->getConfig()[$key];
+    return $key == null ? new Config(app('config')) : (new Config(app('config')))->{$key};
+}
+
+/**
+ * @param string $template
+ * @param array $params
+ * @return string
+ */
+function render(string $template, array $params = []): string
+{
+    return service(RendererInterface::class)->render($template, $params);
+}
+
+/**
+ * @param string $template
+ * @param array $params
+ * @return ResponseInterface
+ */
+function view(string $template, array $params = []): ResponseInterface
+{
+    return html(render($template, $params));
 }
 
 function err(int $code, ?string $template = null): ResponseInterface
@@ -167,9 +172,10 @@ function redirect(string|UriInterface $uri = '/', ?ResponseInterface $response =
 }
 
 /**
+ * Генерирует url для маршрута 
+ * с именем $routeName
  * @param string $routeName
  * @param array $params
- * @param bool $asUrl
  * @return string
  */
 function route(string $routeName, array $params = [], bool $asUrl = false): string
@@ -186,21 +192,6 @@ function json($content, ?ResponseInterface $response = null): ResponseInterface
 function html(string $content, ?ResponseInterface $response = null): ResponseInterface
 {
      return write($response ?? response(), $content, [Header::contentType => Text::html]);
-}
-
-function render(string $template, array $params = []): string
-{
-    return service(RendererInterface::class)->render($template, $params)
-}
-
-/**
- * @param string $template
- * @param array $params
- * @return ResponseInterface
- */
-function view(string $template, array $params = []): ResponseInterface
-{
-    return html(render($template, $params));
 }
 
 function is_console_sapi(): bool
