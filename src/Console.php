@@ -8,7 +8,6 @@ use Invoker\InvokerInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Input\{ArgvInput, InputInterface};
 use Symfony\Component\Console\Output\{ConsoleOutput, OutputInterface};
-use function Bermuda\cget;
 
 final class Console extends App
 {
