@@ -9,7 +9,7 @@ use Psr\Log\LoggerInterface;
 
 final class Bootstrapper implements BootstrapperInterface
 {
-    private array $bootstrap;
+    private array $bootstrap = [];
     public function __construct(iterable $bootstrap = [])
     {
         foreach($bootstrap as $b) {
