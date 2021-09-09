@@ -11,7 +11,6 @@ use Bermuda\ServiceFactory\{
     FactoryInterface as ServiceFactoryInterface
 };
 use Bermuda\ErrorHandler\ErrorHandlerInterface;
-use function Bermuda\cget;
 
 abstract class App implements AppInterface
 {
