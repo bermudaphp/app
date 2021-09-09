@@ -72,8 +72,7 @@ function make(string $cls, array $params = []): object
  */
 function config(string|int|null $key = null)
 {
-    if ($key !== null)
-    {
+    if ($key !== null) {
         return app()->getConfig()[$key];
     }
     
