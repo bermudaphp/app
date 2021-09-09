@@ -19,9 +19,14 @@ final class AppFactory
             : Server::makeFrom($container);
     }
 
+    /**
+     * @param ContainerInterface $container
+     * @return AppInterface
+     */
     public static function make(ContainerInterface $container): AppInterface
     {
         $app = cget($container, AppInterface::class, static fn() => (new AppFactory)($container)));
+        cget($app, BootstrapperInterface::class, null)?->boot($app);
         return Registry::set(AppInterface::class, $app);
     }
 }
