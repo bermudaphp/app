@@ -169,7 +169,10 @@ abstract class App implements AppInterface
      */
     final public function run(): void
     {
-        !$this->runned ?: throw AppException::alredyRunned();
+        if ($this->runned) {
+            throw AppException::runned();
+        }
+        
         $this->runned = true;
         $this->doRun();
     }
