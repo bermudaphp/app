@@ -34,6 +34,7 @@ abstract class App implements AppInterface
         $this->bindEntries();
         $this->name = $config[static::appNameID];
         $this->version = $config[static::appVersionID];
+        $this->config = Config::makeFrom($container);
     }
     
     protected function bindEntries(): void
@@ -50,8 +51,7 @@ abstract class App implements AppInterface
     public static function makeFrom(ContainerInterface $container): self
     { 
         return new static($container, $container->get(InvokerInterface::class),
-            static::getServiceFactory($container), $container->get(ErrorHandlerInterface::class),
-            Config::makeFrom($container)
+            static::getServiceFactory($container), $container->get(ErrorHandlerInterface::class)
         )
     }
     
@@ -94,7 +94,7 @@ abstract class App implements AppInterface
     }
                           
     /**
-     * @return ConfigInterface
+     * @return Config
      */
     public function getConfig(): Config
     {
