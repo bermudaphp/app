@@ -3,7 +3,7 @@
 namespace Bermuda\App\Boot;
 
 use Bermuda\App\AppInterface;
-use Bermuda\ErrorHandler\{ErrorHandlerInterface, ErrorListenerInterface};
+use Bermuda\ErrorHandler\{ErrorHandlerInterface, ErrorListenerInterface, ErrorHandler};
 
 final class ErrorHandlerBootstrapper implements BootstrapperInterface
 {
@@ -19,7 +19,7 @@ final class ErrorHandlerBootstrapper implements BootstrapperInterface
      */
     public function boot(AppInterface $app): void
     {
-        $handler = $app->get(ErrorHandlerInterface::class);
+        $handler = self::getErrorHandler($app);
 
         if ($handler instanceof ErrorHandler) {
             foreach ($this->getListeners($app) as $listener) {
@@ -28,7 +28,10 @@ final class ErrorHandlerBootstrapper implements BootstrapperInterface
         }
     }
     
-    private function getErrorHandler(AppInterface $app): ErrorHandlerInterface
+    private static function getErrorHandler(AppInterface $app): ErrorHandlerInterface
+    {
+        return $app->get(ErrorHandlerInterface::class);
+    }
 
     private function getListeners(AppInterface $app): \Generator
     {
