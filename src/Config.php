@@ -12,7 +12,7 @@ use Countable, Iterator, ArrayAccess, RuntimeException;
 
 final class Config implements Countable, Iterator, ArrayAccess, Arrayable
 {
-    private array $data;
+    private array $data = [];
 
     public function __construct(iterable $data)
     {
