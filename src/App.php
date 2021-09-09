@@ -6,37 +6,37 @@ use Throwable;
 use DI\FactoryInterface;
 use Invoker\InvokerInterface;
 use Psr\Container\ContainerInterface;
-use Bermuda\App\Boot\BootstrapperInterface;
+use Bermuda\ServiceFactory\{
+    Factory as ServiceFactory,
+    FactoryInterface as ServiceFactoryInterface
+};
 use Bermuda\ErrorHandler\ErrorHandlerInterface;
-use Bermuda\ServiceFactory\Factory as ServiceFactory;
-use Bermuda\ServiceFactory\FactoryInterface as ServiceFactoryInterface;
-
 use function Bermuda\cget;
 
 abstract class App implements AppInterface
 {
     protected array $entries = [];
     
-    private bool $runned = false;
-    
     protected ?string $name = null;
     protected ?string $version = null;
     
+    private bool $isRun = false;
+
     protected Config $config;
-    
+
     protected const appNameID = 'app.name';
     protected const appVersionID = 'app.version';
 
-    public function __construct(protected ContainerInterface $container, protected InvokerInterface $invoker, 
-        protected ServiceFactoryInterface $serviceFactory, protected ErrorHandlerInterface $errorHandler
+    public function __construct(protected ContainerInterface      $container, protected InvokerInterface $invoker,
+                                protected ServiceFactoryInterface $serviceFactory, protected ErrorHandlerInterface $errorHandler
     )
     {
-        $this->bindEntries();
-        $this->name = $config[static::appNameID];
-        $this->version = $config[static::appVersionID];
         $this->config = Config::makeFrom($container);
+        $this->name = $this->config[static::appNameID];
+        $this->version = $this->config[static::appVersionID];
+        $this->bindEntries();
     }
-    
+
     protected function bindEntries(): void
     {
         $this->entries[AppInterface::class]
@@ -47,29 +47,29 @@ abstract class App implements AppInterface
             = $this;
         $this->entries[Config::class] = $this->config;
     }
-    
+
     public static function makeFrom(ContainerInterface $container): self
-    { 
+    {
         return new static($container, $container->get(InvokerInterface::class),
             static::getServiceFactory($container), $container->get(ErrorHandlerInterface::class)
-        )
+        );
     }
-    
+
     protected static function getServiceFactory(ContainerInterface $container): ServiceFactoryInterface
     {
         return cget($container, ServiceFactoryInterface::class,
             static fn() => new ServiceFactory($container->get(FactoryInterface::class))
         );
     }
-    
+
     /**
      * @param $name
      * @return string|null
      */
-    public function __get($name):? string
+    public function __get($name): ?string
     {
         return $name == 'name' || $name == 'version'
-            ? $this->config->{$name} : null ;
+            ? $this->config->{$name} : null;
     }
 
     /**
@@ -78,8 +78,7 @@ abstract class App implements AppInterface
      */
     public function __set($name, $value): void
     {
-        if ($name == 'name' || $name == 'version')
-        {
+        if ($name == 'name' || $name == 'version') {
             $this->{$name}($value);
         }
     }
@@ -92,7 +91,7 @@ abstract class App implements AppInterface
     {
         return $name != null ? $this->name = $name : $this->name;
     }
-                          
+
     /**
      * @return Config
      */
@@ -115,7 +114,7 @@ abstract class App implements AppInterface
      */
     public function __invoke(string $service, array $params = []): object
     {
-        return $this->factory->make($service, $params);
+        return $this->serviceFactory->make($service, $params);
     }
 
     /**
@@ -123,7 +122,7 @@ abstract class App implements AppInterface
      */
     public function make(string $service, array $params = []): object
     {
-        return $this->factory->make($service, $params);
+        return $this->serviceFactory->make($service, $params);
     }
 
     /**
@@ -131,14 +130,22 @@ abstract class App implements AppInterface
      */
     public function set(string $id, $value): AppInterface
     {
-        !$this->has($id) ?: throw new AppException(
-            sprintf('Entry with id: %s already exists in the container', $id)
-        );
-        
+        if ($this->has($id)) {
+            AppException::entryExists($id);
+        }
+
         $this->entries[$id] = $value;
         return $this;
     }
-    
+
+    /**
+     * @inheritDoc
+     */
+    public function has($id)
+    {
+        return array_key_exists($id, $this->entries) || $this->container->has($id);
+    }
+
     /**
      * @inheritDoc
      */
@@ -155,28 +162,22 @@ abstract class App implements AppInterface
     {
         return $this->entries[$id] ?? $this->container->get($id);
     }
-    
-    /**
-     * @inheritDoc
-     */
-    public function has($id)
-    {
-        return array_key_exists($id, $this->entries) || $this->container->has($id);
-    }
-    
+
     /**
      * @inheritDoc
      */
     final public function run(): void
     {
-        if ($this->runned) {
-            throw AppException::runned();
+        if ($this->isRun) {
+            throw AppException::isRun();
         }
-        
-        $this->runned = true;
+
+        $this->isRun = true;
         $this->doRun();
     }
-     
+
+    abstract protected function doRun(): void;
+
     /**
      * @inheritDoc
      */
@@ -192,6 +193,4 @@ abstract class App implements AppInterface
     {
         return $this->invoker->call($callable, $parameters);
     }
-    
-    abstract protected function doRun(): void ;
 }
