@@ -4,7 +4,6 @@ namespace Bermuda\App;
 
 use Bermuda\Registry\Registry;
 use Psr\Container\ContainerInterface;
-use function Bermuda\{cget, is_console_sapi};
 
 final class AppFactory
 {
