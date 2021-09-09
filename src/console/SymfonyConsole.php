@@ -2,15 +2,8 @@
 
 namespace Bermuda\App\Console;
 
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\{Application, Command\Command, Input\InputInterface, Output\OutputInterface};
 
-/**
- * Class SymfonyConsole
- * @package Bermuda\App\Console
- */
 final class SymfonyConsole implements CommandRunnerInterface
 {
     private ?Application $console = null;
@@ -23,7 +16,7 @@ final class SymfonyConsole implements CommandRunnerInterface
     {
         $this->getConsole()->add($command instanceof Command
             ? $command : SymfonyCommand::decorate($command));
-        
+
         return $this;
     }
 
@@ -32,8 +25,7 @@ final class SymfonyConsole implements CommandRunnerInterface
      */
     public function getConsole(): Application
     {
-        if ($this->console == null)
-        {
+        if ($this->console == null) {
             return $this->console = new Application;
         }
 
@@ -43,6 +35,7 @@ final class SymfonyConsole implements CommandRunnerInterface
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
+     * @throws \Exception
      */
     public function run(InputInterface $input, OutputInterface $output): void
     {
