@@ -25,6 +25,14 @@ interface AppInterface extends ContainerInterface,
      * @throws \RuntimeException
      */
     public function pipe($any): self ;
+        
+    /**
+     * @param mixed $id
+     * @param mixed|null $default
+     * @param bool $invoke
+     * @return mixed
+     */
+    public function get($id, $default = null, bool $invoke = false)
      
     /**
      * @param string $name
