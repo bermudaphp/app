@@ -2,7 +2,7 @@
 
 namespace Bermuda\App;
 
-final class Config implements ConfigInterface
+final class Config implements Countable, Iterator, ArrayAccess, Arrayable
 {  
     private array $data;
     
