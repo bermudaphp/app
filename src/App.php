@@ -69,7 +69,7 @@ abstract class App implements AppInterface
     public function __get($name): ?string
     {
         return $name == 'name' || $name == 'version'
-            ? $this->config->{$name} : null;
+            ? $this->config[$name] : null;
     }
 
     /**
