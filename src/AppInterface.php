@@ -7,10 +7,6 @@ use Psr\Container\ContainerInterface;
 use Bermuda\ServiceFactory\FactoryInterface;
 use Bermuda\ErrorHandler\ErrorHandlerInterface;
 
-/**
- * Interface AppInterface
- * @package Bermuda\App
- */
 interface AppInterface extends ContainerInterface, 
     FactoryInterface, InvokerInterface, ErrorHandlerInterface
 {
