@@ -109,7 +109,11 @@ function err(int $code, ?string $template = null): ResponseInterface
 
 function path(?string $location = null): Location
 {
-    return new Location($location ?? \getcwd());
+    if ($location !== null) {
+        return (new Location(\getcwd()))->append($location);
+    }
+    
+    return new Location(\getcwd());
 }
 
 /**
