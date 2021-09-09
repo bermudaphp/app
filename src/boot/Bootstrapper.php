@@ -9,8 +9,12 @@ use Psr\Log\LoggerInterface;
 
 final class Bootstrapper implements BootstrapperInterface
 {
-    public function __construct(private ?iterable $bootstrap = [])
+    private array $bootstrap;
+    public function __construct(iterable $bootstrap = [])
     {
+        foreach($bootstrap as $b) {
+            $this->bootstrap[] = $b;
+        }
     }
 
     /**
@@ -43,7 +47,7 @@ final class Bootstrapper implements BootstrapperInterface
      */
     public function merge(array $bootstrap): self
     {
-        return array_merge($this->bootstrap, $bootstrap);
+        $this->bootstrap = array_merge($this->bootstrap, $bootstrap);
     }
 
     /**
