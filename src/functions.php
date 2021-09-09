@@ -2,9 +2,6 @@
 
 namespace Bermuda\App;
 
-use Bermuda\Flysystem\Exceptions\NoSuchFile;
-use Bermuda\Flysystem\Flysystem;
-use Bermuda\Flysystem\Image;
 use Bermuda\Registry\Registry;
 use Bermuda\Router\GeneratorInterface;
 use Bermuda\ServiceFactory\FactoryException;
@@ -16,9 +13,8 @@ use Bermuda\Utils\Types\Application;
 use Bermuda\Utils\Types\Text;
 use Bermuda\Utils\URL;
 use League\Flysystem\FilesystemException;
-use Psr\Http\Message\ResponseFactoryInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\UriInterface;
+use Bermuda\Flysystem\{Location, Image, Flysystem, Exceptions\NoSuchFile};
+use Psr\Http\Message\{ResponseFactoryInterface, ResponseInterface, UriInterface};
 use function Bermuda\ErrorHandler\get_error_code;
 
 /**
@@ -109,6 +105,11 @@ function err(int $code, ?string $template = null): ResponseInterface
     }
 
     return html(render($template), $response);
+}
+
+function path(?string $location = null): Location
+{
+    return new Location($location ?? \getcwd());
 }
 
 /**
