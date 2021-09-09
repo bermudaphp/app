@@ -3,15 +3,9 @@
 namespace Bermuda\App\Boot;
 
 use Bermuda\App\AppInterface;
-use Bermuda\ErrorHandler\ErrorHandler;
-use Bermuda\ErrorHandler\ErrorHandlerInterface;
-use Bermuda\ErrorHandler\ErrorListenerInterface;
+use Bermuda\ErrorHandler\{ErrorHandlerInterface, ErrorListenerInterface};
 
-/**
- * Class ErrorHandlerBootstrapper
- * @package Bermuda\App\Boot
- */
-class ErrorHandlerBootstrapper implements BootstrapperInterface
+final class ErrorHandlerBootstrapper implements BootstrapperInterface
 {
     protected iterable $listeners;
 
@@ -20,28 +14,26 @@ class ErrorHandlerBootstrapper implements BootstrapperInterface
         $this->listeners = $listeners;
     }
 
+    /**
+     * @inerhitDoc 
+     */
     public function boot(AppInterface $app): void
     {
         $handler = $app->get(ErrorHandlerInterface::class);
 
-        if ($handler instanceof ErrorHandler)
-        {
-            foreach ($this->getListeners($app) as $listener)
-            {
+        if ($handler instanceof ErrorHandler) {
+            foreach ($this->getListeners($app) as $listener) {
                 $handler->listen($listener);
             }
         }
     }
+    
+    private function getErrorHandler(AppInterface $app): ErrorHandlerInterface
 
-    /**
-     * @return ErrorListenerInterface[]
-     */
-    public function getListeners(AppInterface $app): iterable
+    private function getListeners(AppInterface $app): \Generator
     {
-        foreach ($this->listeners as $listener)
-        {
-            if (!$listener instanceof ErrorListenerInterface)
-            {
+        foreach ($this->listeners as $listener) {
+            if (!$listener instanceof ErrorListenerInterface) {
                 $listener = $app->get($listener);
             }
             
