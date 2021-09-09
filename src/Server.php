@@ -22,15 +22,11 @@ final class Server extends App
     
     public function __construct(ContainerInterface $container, InvokerInterface $invoker, 
         ServiceFactoryInterface $serviceFactory, ErrorHandlerInterface $errorHandler,
-        BootstrapperInterface $bootstrapper, private EmitterInterface $emitter, 
-        private ResponseFactoryInterface $responseFactory,
-        private MiddlewareFactoryInterface $middlewareFactory, 
-        private ServerRequestCreatorInterface $serverRequestCreator,
+        private EmitterInterface $emitter, private ResponseFactoryInterface $responseFactory,
+        private MiddlewareFactoryInterface $middlewareFactory, private ServerRequestCreatorInterface $serverRequestCreator,
     )
     {
-        parent::__construct($container, $invoker, $serviceFactory,
-            $errorHandler, $bootstrapper, $config
-        );
+        parent::__construct($container, $invoker, $serviceFactory, $errorHandler);
  
         $this->pipeline = $this->make(PipelineInterface::class);
     }
@@ -38,8 +34,7 @@ final class Server extends App
     public static function makeFrom(ContainerInterface $container): self
     { 
         return new static($container, $container->get(InvokerInterface::class),
-            static::getServiceFactory($container), $container->get(ErrorHandlerInterface::class),
-            $container->get(BootstrapperInterface::class), $container->get(EmitterInterface::class),
+            static::getServiceFactory($container), $container->get(ErrorHandlerInterface::class), $container->get(EmitterInterface::class),
             $container->get(ResponseFactoryInterface::class), $container->get(MiddlewareFactoryInterface::class),
             $container->get(ServerRequestCreatorInterface::class)
         )
