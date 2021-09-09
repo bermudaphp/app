@@ -25,15 +25,7 @@ interface AppInterface extends ContainerInterface,
      * @throws \RuntimeException
      */
     public function pipe($any): self ;
-        
-    /**
-     * @param mixed $id
-     * @param mixed|null $default
-     * @param bool $invoke
-     * @return mixed
-     */
-    public function get($id, $default = null, bool $invoke = false)
-     
+         
     /**
      * @param string $name
      * @return string
@@ -47,9 +39,9 @@ interface AppInterface extends ContainerInterface,
     public function version(?string $version = null): string ;
         
     /**
-     * @return ConfigInterface
+     * @return Config
      */
-    public function getConfig(): ConfigInterface ;
+    public function getConfig(): Config ;
 
     /**
      * @param string $id
