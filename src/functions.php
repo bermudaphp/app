@@ -1,49 +1,45 @@
 <?php
 
-namespace Bermuda;
+namespace Bermuda\App;
 
 use Bermuda\Flysystem\Exceptions\NoSuchFile;
 use Bermuda\Flysystem\Flysystem;
 use Bermuda\Flysystem\Image;
-use Bermuda\String\Json;
-use Bermuda\Utils\Types\Application;
-use Bermuda\Utils\Header;
-use Bermuda\Utils\Types\Text;
-use Bermuda\Utils\URL;
-use Laminas\Config\Config;
-use Bermuda\App\AppInterface;
 use Bermuda\Registry\Registry;
 use Bermuda\Router\GeneratorInterface;
-use Bermuda\Templater\RendererInterface;
-use Bermuda\ServiceFactory\FactoryInterface;
 use Bermuda\ServiceFactory\FactoryException;
+use Bermuda\ServiceFactory\FactoryInterface;
+use Bermuda\String\Json;
+use Bermuda\Templater\RendererInterface;
+use Bermuda\Utils\Header;
+use Bermuda\Utils\Types\Application;
+use Bermuda\Utils\Types\Text;
+use Bermuda\Utils\URL;
+use League\Flysystem\FilesystemException;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
 use function Bermuda\ErrorHandler\get_error_code;
-use function Bermuda\ErrorHandler\get_status_code_from_throwable;
 
 /**
- * @param string $entry
- * @param $default
- * @return AppInterface|mixed|null
+ * @param string|null $entry
+ * @param null $default
+ * @return mixed|null|AppInterface
  */
 function app(string $entry = null, $default = null)
 {
-    if ($entry != null)
-    {
-        return ($app = Registry::get(AppInterface::class))->has($entry) ? 
-            Registry::get(AppInterface::class)->get($entry) : $default;
+    if ($entry != null) {
+        return ($app = Registry::get(AppInterface::class))->has($entry) ?
+            $app->get($entry) : $default;
     }
-    
+
     return Registry::get(AppInterface::class);
 }
 
 /**
  * @param string $entry
- * @param $default
- * @return mixed
+ * @param null $default
+ * @return AppInterface|mixed|string|null
  */
 function get(string $entry, $default = null)
 {
@@ -74,9 +70,14 @@ function make(string $cls, array $params = []): object
  * @param string|int|null $key
  * @return Config|mixed
  */
-function config($key = null)
-{   
-    return $key == null ? new Config(app('config')) : (new Config(app('config')))->{$key};
+function config(string|int|null $key = null)
+{
+    if ($key !== null)
+    {
+        return app()->getConfig()[$key];
+    }
+    
+    return app()->getConfig();
 }
 
 /**
@@ -104,8 +105,7 @@ function err(int $code, ?string $template = null): ResponseInterface
     $code = get_error_code($code);
     $response = response($code);
 
-    if ($template === null)
-    {
+    if ($template === null) {
         $template = sprintf('errors::%s', $code);
     }
 
@@ -116,7 +116,7 @@ function err(int $code, ?string $template = null): ResponseInterface
  * @param string $location
  * @param bool $inline
  * @return ResponseInterface
- * @throws \League\Flysystem\FilesystemException
+ * @throws FilesystemException
  * @throws NoSuchFile
  */
 function file(string $location, ?bool $inline = null): ResponseInterface
@@ -145,14 +145,13 @@ function response(int $code = 200, string $reasonPhrase = ''): ResponseInterface
 }
 
 function write(ResponseInterface $response, string $content, array $headers = [], int &$size = null): ResponseInterface
-{    
-    foreach($headers as $name => $value)
-    {
+{
+    foreach ($headers as $name => $value) {
         $response = $response->withHeader($name, $value);
     }
-    
+
     $size = $response->getBody()->write($content);
-    
+
     return $response;
 }
 
@@ -168,7 +167,7 @@ function onRoute(string $routeName, array $params = []): ResponseInterface
  */
 function redirect(string|UriInterface $uri = '/', ?ResponseInterface $response = null): ResponseInterface
 {
-    return ($response ?? response())->withHeader(Header::location, (string) $uri)->withStatus(302);
+    return ($response ?? response())->withHeader(Header::location, (string)$uri)->withStatus(302);
 }
 
 /**
@@ -192,7 +191,7 @@ function json($content, ?ResponseInterface $response = null): ResponseInterface
 
 function html(string $content, ?ResponseInterface $response = null): ResponseInterface
 {
-     return write($response ?? response(), $content, [Header::contentType => Text::html]);
+    return write($response ?? response(), $content, [Header::contentType => Text::html]);
 }
 
 function is_console_sapi(): bool
