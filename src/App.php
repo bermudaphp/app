@@ -19,15 +19,16 @@ abstract class App implements AppInterface
     
     private bool $runned = false;
     
-    private ?string $name = null;
-    private ?string $version = null;
+    protected ?string $name = null;
+    protected ?string $version = null;
+    
+    protected Config $config;
     
     protected const appNameID = 'app.name';
     protected const appVersionID = 'app.version';
 
     public function __construct(protected ContainerInterface $container, protected InvokerInterface $invoker, 
-        protected ServiceFactoryInterface $serviceFactory, protected ErrorHandlerInterface $errorHandler,
-        protected ConfigInterface $config
+        protected ServiceFactoryInterface $serviceFactory, protected ErrorHandlerInterface $errorHandler
     )
     {
         $this->bindEntries();
@@ -43,7 +44,7 @@ abstract class App implements AppInterface
             = $this->entries[ServiceFactoryInterface::class]
             = $this->entries[InvokerInterface::class]
             = $this;
-        $this->entries[ConfigInterface::class] = $this->config;
+        $this->entries[Config::class] = $this->config;
     }
     
     public static function makeFrom(ContainerInterface $container): self
@@ -61,11 +62,6 @@ abstract class App implements AppInterface
         );
     }
     
-    protected static function getAppConfig(ContainerInterface $container): ConfigInterface
-    {
-        return new Config(cget($container, 'config', []);
-    }
-  
     /**
      * @param $name
      * @return string|null
@@ -100,7 +96,7 @@ abstract class App implements AppInterface
     /**
      * @return ConfigInterface
      */
-    public function getConfig(): ConfigInterface
+    public function getConfig(): Config
     {
         return $this->config;
     }
@@ -155,9 +151,9 @@ abstract class App implements AppInterface
     /**
      * @inheritDoc
      */
-    public function get($id, $default = null, bool $invoke = false)
+    public function get($id)
     {
-        return $this->entries[$id] ?? cget($this->container, $id, $default, $invoke);
+        return $this->entries[$id] ?? $this->container->get($id);
     }
     
     /**
