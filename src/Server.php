@@ -26,7 +26,6 @@ final class Server extends App
         private ResponseFactoryInterface $responseFactory,
         private MiddlewareFactoryInterface $middlewareFactory, 
         private ServerRequestCreatorInterface $serverRequestCreator,
-        ConfigInterface $config
     )
     {
         parent::__construct($container, $invoker, $serviceFactory,
@@ -42,7 +41,7 @@ final class Server extends App
             static::getServiceFactory($container), $container->get(ErrorHandlerInterface::class),
             $container->get(BootstrapperInterface::class), $container->get(EmitterInterface::class),
             $container->get(ResponseFactoryInterface::class), $container->get(MiddlewareFactoryInterface::class),
-            $container->get(ServerRequestCreatorInterface::class), static::getAppConfig($container)
+            $container->get(ServerRequestCreatorInterface::class)
         )
     }
 
