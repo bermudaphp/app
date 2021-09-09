@@ -4,10 +4,6 @@ namespace Bermuda\App\Console;
 
 use Psr\Container\ContainerInterface;
 
-/**
- * Class CommandResolver
- * @package Bermuda\App\Console
- */
 final class CommandResolver implements CommandResolverInterface
 {
     private ContainerInterface $container;
@@ -22,13 +18,11 @@ final class CommandResolver implements CommandResolverInterface
      */
     public function resolve($any): CommandInterface
     {
-        if (is_string($any) && $this->container->has($any))
-        {
+        if (is_string($any) && $this->container->has($any)) {
             $any = $this->container->get($any);
         }
 
-        if ($any instanceof CommandInterface)
-        {
+        if ($any instanceof CommandInterface) {
             return $any;
         }
 
