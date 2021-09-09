@@ -17,7 +17,6 @@ abstract class App implements AppInterface
 {
     protected array $entries = [];
     
-    private bool $booted = false;
     private bool $runned = false;
     
     private ?string $name = null;
@@ -28,7 +27,7 @@ abstract class App implements AppInterface
 
     public function __construct(protected ContainerInterface $container, protected InvokerInterface $invoker, 
         protected ServiceFactoryInterface $serviceFactory, protected ErrorHandlerInterface $errorHandler,
-        protected BootstrapperInterface $bootstrapper, protected ConfigInterface $config
+        protected ConfigInterface $config
     )
     {
         $this->bindEntries();
@@ -51,7 +50,7 @@ abstract class App implements AppInterface
     { 
         return new static($container, $container->get(InvokerInterface::class),
             static::getServiceFactory($container), $container->get(ErrorHandlerInterface::class),
-            $container->get(BootstrapperInterface::class), static::getAppConfig($container)
+            Config::makeFrom($container)
         )
     }
     
@@ -178,25 +177,7 @@ abstract class App implements AppInterface
         $this->runned = true;
         $this->doRun();
     }
-    
-    /**
-     * @inheritDoc
-     */
-    final public function boot(): AppInterface
-    {
-        !$this->booted ?: throw AppException::alredyBooted();
-        
-        try {
-            $this->bootstrapper->boot($this);
-        } catch (\Throwable $e) {
-            throw AppException::fromPrev($e);
-        }
-        
-        $this->booted = true;
-        
-        return $this;
-    }
-    
+     
     /**
      * @inheritDoc
      */
