@@ -2,10 +2,6 @@
 
 namespace Bermuda\App\Console;
 
-/**
- * Interface CommandResolverInterface
- * @package Bermuda\App\Console
- */
 interface CommandResolverInterface
 {
     /**
