@@ -2,24 +2,12 @@
 
 namespace Bermuda\App;
 
-/**
- * Class AppException
- * @package Bermuda\App
- */
+use Throwable;
+
 class AppException extends \RuntimeException
 {
-    public static function alreadyBooted(): self
-    {
-        return new static('Application already booted.');
-    }
-  
-    public static function alreadyRunned(): self
+    public static function runned(): self
     {
         return new static('Application already runned.');
-    }
-  
-    public static function fromPrev(\Throwable $e): self
-    {
-        return new static($e->getMessage(), $e->getCode(), $e);
     }
 }
