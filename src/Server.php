@@ -6,10 +6,14 @@ use Throwable;
 use Invoker\InvokerInterface;
 use Psr\Container\ContainerInterface;
 use Bermuda\Pipeline\PipelineInterface;
-use Bermuda\ErrorHandler\ServerException;
-use Bermuda\ErrorHandler\ErrorHandlerInterface;
-use Bermuda\MiddlewareFactory\MiddlewareFactoryInterface;
-use Bermuda\MiddlewareFactory\UnresolvableMiddlewareException;
+use Bermuda\ErrorHandler\{
+    ServerException,
+    ErrorHandlerInterface
+};
+use Bermuda\MiddlewareFactory\{
+    MiddlewareFactoryInterface, 
+    UnresolvableMiddlewareException
+};
 use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
 use Nyholm\Psr7Server\ServerRequestCreatorInterface;
 use Bermuda\ServiceFactory\FactoryInterface as ServiceFactoryInterface;
@@ -25,7 +29,6 @@ final class Server extends App
     )
     {
         parent::__construct($container, $invoker, $serviceFactory, $errorHandler);
-
         $this->pipeline = $this->make(PipelineInterface::class);
     }
 
