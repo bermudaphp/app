@@ -15,13 +15,10 @@ final class Console extends App
     private Console\CommandResolverInterface $resolver;
 
     public function __construct(ContainerInterface $container, InvokerInterface $invoker, 
-        ServiceFactoryInterface $serviceFactory, ErrorHandlerInterface $errorHandler,
-        BootstrapperInterface $bootstrapper, ConfigInterface $config
+        ServiceFactoryInterface $serviceFactory, ErrorHandlerInterface $errorHandler
     )
     {
-        parent::__construct($container, $invoker, $serviceFactory,
-            $errorHandler, $bootstrapper, $config
-        );
+        parent::__construct($container, $invoker, $serviceFactory, $errorHandler);
  
         $this->runner = $this->getRunner(); 
         $this->resolver = $this->getResolver();
