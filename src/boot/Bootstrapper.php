@@ -13,7 +13,7 @@ final class Bootstrapper implements BootstrapperInterface
     private array $bootstrap = [];
 
     /**
-     * @param AppInterface $app
+     * @inerhitDoc
      */
     public function boot(AppInterface $app): void
     {
@@ -38,8 +38,7 @@ final class Bootstrapper implements BootstrapperInterface
     {
         $bootstrapper = new self;
         
-        foreach ($bootstrap as $i)
-        {
+        foreach ($bootstrap as $i) {
             $bootstrapper->addBootstrapper($i);
         }
         
