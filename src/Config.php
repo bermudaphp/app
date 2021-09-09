@@ -2,9 +2,13 @@
 
 namespace Bermuda\App;
 
-use RuntimeException;
 use Bermuda\Arrayable;
-use Countable, Iterator, ArrayAccess;
+use Psr\Container\{
+    ContainerInterface, 
+    NotFoundExceptionInterface, 
+    ContainerExceptionInterface
+};
+use Countable, Iterator, ArrayAccess, RuntimeException;
 
 final class Config implements Countable, Iterator, ArrayAccess, Arrayable
 {
@@ -13,9 +17,20 @@ final class Config implements Countable, Iterator, ArrayAccess, Arrayable
     public function __construct(iterable $data)
     {
         foreach ($data as $key => $value) {
-            $this->data[$key] = is_iterable($value) 
+            $this->data[$key] = is_iterable($value)
                 ? new Config($value) : $value;
         }
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @return static
+     * @throws NotFoundExceptionInterface  No entry was found for **this** identifier.
+     * @throws ContainerExceptionInterface Error while retrieving the entry.
+     */
+    public static function makeFrom(ContainerInterface $container): self
+    {
+        return new self($container->get('config'));
     }
 
     /**
