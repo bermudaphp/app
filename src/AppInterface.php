@@ -25,14 +25,7 @@ interface AppInterface extends ContainerInterface,
      * @throws \RuntimeException
      */
     public function pipe($any): self ;
-    
-    /**
-     * Boot application
-     * @return $this
-     * @throws AppException if app is already booted
-     */
-    public function boot(): AppInterface ;
-    
+     
     /**
      * @param string $name
      * @return string
