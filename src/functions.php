@@ -126,7 +126,7 @@ function path(?string $location = null): Location
 function file(string $location, ?bool $inline = null): ResponseInterface
 {
     $file = service(Flysystem::class)->openFile($location);
-    return $file->responde(response(), $inline ?? $file instanceof Image);
+    return $file->respond(response(), $inline ?? $file instanceof Image);
 }
 
 /**
