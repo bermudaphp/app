@@ -3,16 +3,13 @@
 namespace Bermuda\App;
 
 use Bermuda\Registry\Registry;
-use Bermuda\Router\GeneratorInterface;
+use Bermuda\Router\Router;
 use Bermuda\ServiceFactory\FactoryException;
 use Bermuda\ServiceFactory\FactoryInterface;
 use Bermuda\String\Json;
 use Bermuda\Templater\RendererInterface;
-use Bermuda\Utils\Header;
-use Bermuda\Utils\Types\Application;
-use Bermuda\Utils\Types\Text;
-use Bermuda\Utils\URL;
 use League\Flysystem\FilesystemException;
+use Bermuda\Utils\{Header, URL, Types\Text, Types\Application};
 use Bermuda\Flysystem\{Location, Image, Flysystem, Exceptions\NoSuchFile};
 use Psr\Http\Message\{ResponseFactoryInterface, ResponseInterface, UriInterface};
 use function Bermuda\ErrorHandler\get_error_code;
@@ -181,7 +178,7 @@ function redirect(string|UriInterface $uri = '/', ?ResponseInterface $response =
  */
 function route(string $routeName, array $params = [], bool $asUrl = false): string
 {
-    $path = service(GeneratorInterface::class)->generate($routeName, $params);
+    $path = service(Route::class)->generate($routeName, $params);
     return $asUrl ? Url::build(compact('path')) : $path;
 }
 
