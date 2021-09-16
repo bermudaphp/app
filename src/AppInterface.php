@@ -24,15 +24,18 @@ interface AppInterface extends ContainerInterface,
          
     /**
      * @param string $name
-     * @return string
+     * @param array $arguments
+     * @return Exceptions\BadMethodCallException
      */
-    public function name(?string $name = null): string ;
-    
+    public function __call(string $name, array $arguments): mixed ;
+
     /**
-     * @param string $version
-     * @return string
+     * @param string $name
+     * @param callable $callback
+     * @return AppInterface
+     * @throws AppException
      */
-    public function version(?string $version = null): string ;
+    public function registerCallback(string $name, callable $callback): AppInterface;
         
     /**
      * @return Config
