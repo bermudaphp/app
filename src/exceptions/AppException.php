@@ -2,7 +2,7 @@
 
 namespace Bermuda\App;
 
-use RuntimeException;
+use Bermuda\Exceptor\RuntimeException;
 
 class AppException extends RuntimeException
 {
