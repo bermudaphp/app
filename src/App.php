@@ -15,16 +15,11 @@ use Bermuda\ErrorHandler\ErrorHandlerInterface;
 abstract class App implements AppInterface
 {
     protected array $entries = [];
-    
-    protected ?string $name = null;
-    protected ?string $version = null;
+    protected array $callbacks = [];
     
     private bool $isRun = false;
 
     protected Config $config;
-
-    protected const appNameID = 'app.name';
-    protected const appVersionID = 'app.version';
 
     public function __construct(protected ContainerInterface      $container, protected InvokerInterface $invoker,
                                 protected ServiceFactoryInterface $serviceFactory, protected ErrorHandlerInterface $errorHandler
@@ -62,50 +57,11 @@ abstract class App implements AppInterface
     }
 
     /**
-     * @param $name
-     * @return string|null
-     */
-    public function __get($name): ?string
-    {
-        return $name == 'name' || $name == 'version'
-            ? $this->config[$name] : null;
-    }
-
-    /**
-     * @param $name
-     * @param $value
-     */
-    public function __set($name, $value): void
-    {
-        if ($name == 'name' || $name == 'version') {
-            $this->{$name}($value);
-        }
-    }
-
-    /**
-     * @param string|null $name
-     * @return string
-     */
-    public function name(?string $name = null): string
-    {
-        return $name != null ? $this->name = $name : $this->name;
-    }
-
-    /**
      * @return Config
      */
     public function getConfig(): Config
     {
         return $this->config;
-    }
-
-    /**
-     * @param string|null $version
-     * @return string
-     */
-    public function version(string $version = null): string
-    {
-        return $version != null ? $this->version = $version : $this->version;
     }
 
     /**
@@ -191,5 +147,34 @@ abstract class App implements AppInterface
     public function call($callable, array $parameters = [])
     {
         return $this->invoker->call($callable, $parameters);
+    }
+    
+     /**
+     * @param string $name
+     * @param array $arguments
+     * @return mixed
+     */
+    public function __call(string $name, array $arguments): mixed
+    {
+        if (isset($this->callbacks[$name])) {
+            return $this->call(callbacks[$name], $arguments);
+        }
+
+        throw BadMethodCallException::doesntExists($name);
+    }
+
+    /**
+     * @param string $name
+     * @param callable $callback
+     * @return AppInterface
+     */
+    public function registerCallback(string $name, callable $callback): AppInterface
+    {
+        if (!isset($this->callbacks[$name])) {
+            $this->callbacks[$name] = $callback;
+            return $this;
+        }
+
+        throw AppException::callback($name);
     }
 }
