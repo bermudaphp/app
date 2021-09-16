@@ -56,7 +56,7 @@ function service(string $service): object
  */
 function make(string $cls, array $params = []): object
 {
-    return app(FactoryInterface::class)->make($cls, $params);
+    return app()->make($cls, $params);
 }
 
 /**
@@ -79,7 +79,7 @@ function config(string|int|null $key = null)
  */
 function render(string $template, array $params = []): string
 {
-    return service(RendererInterface::class)->render($template, $params);
+    return app()->render($template, $params);
 }
 
 /**
@@ -140,7 +140,7 @@ function build_url(array $segments = []): string
  * @param string $reasonPhrase
  * @return ResponseInterface
  */
-function response(int $code = 200, string $reasonPhrase = ''): ResponseInterface
+function respond(int $code = 200, string $content): ResponseInterface
 {
     return service(ResponseFactoryInterface::class)->createResponse($code, $reasonPhrase);
 }
