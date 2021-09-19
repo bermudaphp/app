@@ -46,9 +46,19 @@ final class Server extends App implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->pipeline->handle($request);
+        $response = $this->pipeline->handle($request);
+        
+        if (strtoupper($request->getMethod()) === 'HEAD' 
+            && ($size = $response->getBody()) !== null || $size > 0){
+            $body = $this->make(ResponseFactoryInterface::class)->createResponse()
+                ->getBody();
+            
+            return $response->withBody($body);
+        }
+        
+        return $response;
     }
-
+    
     /**
      * Run application
      * @throws ServerException if request handling is failure
@@ -56,8 +66,7 @@ final class Server extends App implements RequestHandlerInterface
      */
     protected function doRun(): void
     {
-        $request = $this->serverRequestCreator
-            ->fromGlobals();
+        $request = $this->serverRequestCreator->fromGlobals();
         
         try {
             $this->emitter->emit($this->handle($request));
