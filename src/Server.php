@@ -16,9 +16,10 @@ use Bermuda\MiddlewareFactory\{
 };
 use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
 use Nyholm\Psr7Server\ServerRequestCreatorInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Bermuda\ServiceFactory\FactoryInterface as ServiceFactoryInterface;
 
-final class Server extends App
+final class Server extends App implements RequestHandlerInterface
 {
     private PipelineInterface $pipeline;
 
@@ -39,6 +40,14 @@ final class Server extends App
             $container->get(MiddlewareFactoryInterface::class), $container->get(ServerRequestCreatorInterface::class)
         );
     }
+    
+    /**
+     * @inheritDoc
+     */
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return $this->pipeline->handle($request);
+    }
 
     /**
      * Run application
@@ -49,9 +58,9 @@ final class Server extends App
     {
         $request = $this->serverRequestCreator
             ->fromGlobals();
-
+        
         try {
-            $this->emitter->emit($this->pipeline->handle($request));
+            $this->emitter->emit($this->handle($request));
         } catch(Throwable $e) {
             throw new ServerException($e, $request);
         }
