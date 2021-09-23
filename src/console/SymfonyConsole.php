@@ -2,7 +2,10 @@
 
 namespace Bermuda\App\Console;
 
-use Symfony\Component\Console\{Application, Command\Command, Input\InputInterface, Output\OutputInterface};
+use Symfony\Component\Console\{
+    Application, Command\Command, 
+    Input\InputInterface, Output\OutputInterface
+};
 
 final class SymfonyConsole implements CommandRunnerInterface
 {
@@ -25,11 +28,8 @@ final class SymfonyConsole implements CommandRunnerInterface
      */
     public function getConsole(): Application
     {
-        if ($this->console == null) {
-            return $this->console = new Application;
-        }
-
-        return $this->console;
+        return $this->console == null ? $this->console 
+            : $this->console = new Application;
     }
 
     /**
