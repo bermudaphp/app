@@ -13,13 +13,14 @@ final class SymfonyConsole implements CommandRunnerInterface
 
     /**
      * @param CommandInterface $command
-     * @return $this
+     * @return SymfonyConsole
      */
     public function add(CommandInterface $command): CommandRunnerInterface
     {
-        $this->getConsole()->add($command instanceof Command
-            ? $command : SymfonyCommand::decorate($command));
-
+        $this->getConsole()->add(
+            SymfonyCommand::decorate($command)
+        );
+        
         return $this;
     }
 
