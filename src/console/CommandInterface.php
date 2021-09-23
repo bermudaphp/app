@@ -2,6 +2,11 @@
 
 namespace Bermuda\App\Console;
 
+use Symfony\Component\Console\{
+    Input\InputInterface, 
+    Output\OutputInterface
+};
+
 interface CommandInterface
 {
     public const success = 1;
