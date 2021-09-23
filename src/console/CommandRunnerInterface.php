@@ -8,9 +8,9 @@ interface CommandRunnerInterface
 {
     /**
      * @param CommandInterface $command
-     * @return $this
+     * @return CommandRunnerInterface
      */
-    public function add(CommandInterface $command): self;
+    public function add(CommandInterface $command): CommandRunnerInterface;
 
     /**
      * @param InputInterface $input
