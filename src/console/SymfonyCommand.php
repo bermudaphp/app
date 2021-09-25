@@ -2,28 +2,32 @@
 
 namespace Bermuda\App\Console;
 
-use Symfony\Component\Console\{Command\Command, Input\InputInterface, Output\OutputInterface};
+use Symfony\Component\Console\{
+    Command\Command, 
+    Input\InputInterface, 
+    Output\OutputInterface
+};
 
 abstract class SymfonyCommand extends Command implements CommandInterface
 {
     public static function decorate(CommandInterface $command): self
     {
         return new class($command) extends SymfonyCommand {
-            private CommandInterface $command;
-
-            public function __construct(CommandInterface $command)
+            public function __construct(private CommandInterface $command)
             {
-                $this->command = $command;
                 parent::__construct(null);
             }
 
-            protected function execute(InputInterface $input, OutputInterface $output)
+            /**
+             * @inerhitDoc 
+             */
+            protected function execute(InputInterface $input, OutputInterface $output): int
             {
                 return ($this->command)($input, $output);
             }
 
             /**
-             * @return string|null
+             * @return string
              */
             public function getName(): string
             {
@@ -41,7 +45,7 @@ abstract class SymfonyCommand extends Command implements CommandInterface
     }
 
     /**
-     * @return string|null
+     * @return string
      */
     public function getName(): string
     {
@@ -60,6 +64,7 @@ abstract class SymfonyCommand extends Command implements CommandInterface
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
+     * @throws \Exception
      */
     public function __invoke(InputInterface $input, OutputInterface $output): int
     {
