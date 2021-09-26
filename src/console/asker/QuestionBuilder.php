@@ -1,6 +1,6 @@
 <?php
 
-namespace Bermuda\App\Console;
+namespace Bermuda\App\Console\Asker;
 
 abstract class QuestionBuilder
 {
