@@ -1,6 +1,6 @@
 <?php
 
-namespace Bermuda\App\Console;
+namespace Bermuda\App\Console\Asker;
 
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
