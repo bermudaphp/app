@@ -11,12 +11,12 @@
   },
   "require": {
     "php": "~8.0.0",
-    "bermudaphp/router": "^1.0.8",
+    "bermudaphp/router": "^3.0",
     "bermudaphp/registry": "^1.0",
     "bermudaphp/stringy": "^2.0",
     "bermudaphp/psr-7-server-factory": "^1.0",
-    "bermudaphp/error-handler": "^1.0",
-    "bermudaphp/psr15factory": "^2.0.2",
+    "bermudaphp/error-handler": "^1.1.1",
+    "bermudaphp/psr15factory": "^2.0.3",
     "bermudaphp/service-factory": "^1.0",
     "symfony/console": "^5.2",
     "laminas/laminas-config": "^3.3"
