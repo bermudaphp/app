@@ -17,6 +17,7 @@ use Bermuda\MiddlewareFactory\{
 use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
 use Nyholm\Psr7Server\ServerRequestCreatorInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 use Bermuda\ServiceFactory\FactoryInterface as ServiceFactoryInterface;
 
 final class Server extends App implements RequestHandlerInterface
@@ -50,9 +51,7 @@ final class Server extends App implements RequestHandlerInterface
         
         if (strtoupper($request->getMethod()) === 'HEAD' 
             && ($size = $response->getBody()) !== null || $size > 0){
-            $body = $this->make(ResponseFactoryInterface::class)->createResponse()
-                ->getBody();
-            
+            $body = $this->make(StreamFactoryInterface::class)->createStream();
             return $response->withBody($body);
         }
         
