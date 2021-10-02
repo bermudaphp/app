@@ -2,7 +2,7 @@
 
 namespace Bermuda\App\Boot;
 
-use App\Responder;
+use Bermuda\HTTP\Responder;
 use Bermuda\App\AppInterface;
 use Bermuda\String\Json;
 use Bermuda\String\Stringable;
