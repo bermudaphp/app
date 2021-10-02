@@ -62,3 +62,11 @@ function config(string|int|null $key = null)
 
     return app()->getConfig();
 }
+
+/**
+ * @return bool
+ */
+function is_console_sapi(): bool
+{
+    return PHP_SAPI == 'cli';
+}
