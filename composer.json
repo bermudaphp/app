@@ -18,8 +18,6 @@
     "bermudaphp/error-handler": "^1.0",
     "bermudaphp/psr15factory": "^2.0.2",
     "bermudaphp/service-factory": "^1.0",
-    "bermudaphp/templater": "^1.0",
-    "bermudaphp/flysystem": "^1.4",
     "symfony/console": "^5.2",
     "laminas/laminas-config": "^3.3"
   }
