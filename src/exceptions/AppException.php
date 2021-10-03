@@ -25,6 +25,6 @@ class AppException extends \RuntimeException
     
     public static function callback(string $name): self
     {
-        return static::create('Callback [%s] is already registered in the app', $name);
+        return static::create('Callback [ %s ] is already registered in the app', $name);
     }
 }
