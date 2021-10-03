@@ -20,7 +20,7 @@ final class RouterBootstrapper implements BootstrapperInterface
 
     public function __invoke(AppInterface $app): RouteMap
     {
-        return (static function (RouteMap $routes): RouteMap {
+        return (static function (RouteMap $routes) use ($app): RouteMap {
             require_once '.\config\routes.php';
             return $routes;
         })($app->registerAlias('router', Router::class)->router->getRoutes());
