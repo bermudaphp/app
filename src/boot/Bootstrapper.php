@@ -56,8 +56,9 @@ final class Bootstrapper implements BootstrapperInterface
     public static function makeDefault(ContainerInterface $container): self
     {
         return new self([
-            new RouterBootstrapper(),
-            new PipelineBootstrapper(),
+            new RouterBootstrapper,
+            new PipelineBootstrapper,
+            new HttpBootstrapper,
             new ErrorHandlerBootstrapper([
                 (new LogErrorListener($container->get(LoggerInterface::class)))
                     ->except('Bermuda\Router\Exception\RouteNotFoundException')
