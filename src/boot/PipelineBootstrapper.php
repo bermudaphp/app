@@ -11,6 +11,6 @@ final class PipelineBootstrapper implements BootstrapperInterface
      */
     public function boot(AppInterface $app): void
     {
-        require APP_ROOT . '\config\\' . (PHP_SAPI === 'cli' ? 'commands.php' : 'pipeline.php' );
+        require '.\config' . (PHP_SAPI === 'cli' ? '\commands.php' : '\pipeline.php' );
     }
 }
