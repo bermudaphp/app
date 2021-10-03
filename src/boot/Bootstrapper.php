@@ -53,17 +53,15 @@ final class Bootstrapper implements BootstrapperInterface
     /**
      * @inerhitDoc
      */
-    public static function makeDefault(ContainerInterface $container): self
+    public static function withDefaults(ContainerInterface $container): self
     {
         return new self([
             new RouterBootstrapper,
             new PipelineBootstrapper,
+            new ErrorHandlerBootstrapper(
+                $container->get('config')['errors']['listeners']
+            ),
             new HttpBootstrapper,
-            new ErrorHandlerBootstrapper([
-                (new LogErrorListener($container->get(LoggerInterface::class)))
-                    ->except('Bermuda\Router\Exception\RouteNotFoundException')
-                    ->except('Bermuda\Router\Exception\MethodNotAllowedException')
-            ])
         ]);
     }
 }
