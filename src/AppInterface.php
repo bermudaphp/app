@@ -2,11 +2,16 @@
 
 namespace Bermuda\App;
 
+use Bermuda\App\Exceptions\AppException;
 use Invoker\InvokerInterface;
 use Psr\Container\ContainerInterface;
 use Bermuda\ServiceFactory\FactoryInterface;
 use Bermuda\ErrorHandler\ErrorHandlerInterface;
+use Autocomplete\App as Autocomplete;
 
+/**
+ * @mixin Autocomplete
+ */
 interface AppInterface extends ContainerInterface, 
     FactoryInterface, InvokerInterface, ErrorHandlerInterface
 {
@@ -17,7 +22,7 @@ interface AppInterface extends ContainerInterface,
 
     /**
      * @param mixed $any
-     * @return $this
+     * @return AppInterface
      * @throws \RuntimeException
      */
     public function pipe($any): self ;
@@ -35,8 +40,23 @@ interface AppInterface extends ContainerInterface,
      * @return AppInterface
      * @throws AppException
      */
-    public function registerCallback(string $name, callable $callback): AppInterface;
-        
+    public function registerCallback(string $name, callable $callback): AppInterface ;
+
+    /**
+     * @param string $alias
+     * @param string $link
+     * @return AppInterface
+     * @throws AppException
+     */
+    public function registerAlias(string $alias, string $link): AppInterface ;
+
+    /**
+     * @param $name
+     * @return mixed
+     * @see ContainerInterface::get()
+     */
+    public function __get(string $name);
+
     /**
      * @return Config
      */
@@ -45,7 +65,7 @@ interface AppInterface extends ContainerInterface,
     /**
      * @param string $id
      * @param $value
-     * @return $this
+     * @return AppInterface
      * @throws AppException
      */
     public function set(string $id, $value): self ;
@@ -53,7 +73,7 @@ interface AppInterface extends ContainerInterface,
      /**
      * @param string $id
      * @param callable $extender
-     * @return $this
+     * @return AppInterface
      * @throws AppException
      */
     public function extend(string $id, callable $extender): self ;
