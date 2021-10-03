@@ -4,6 +4,7 @@ namespace Bermuda\App;
 
 use Bermuda\Registry\Registry;
 use Psr\Container\ContainerInterface;
+use function Bermuda\Config\cget;
 
 final class AppFactory
 {
