@@ -2,6 +2,8 @@
 
 namespace Bermuda\App;
 
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 use Invoker\InvokerInterface;
 use Psr\Container\ContainerInterface;
@@ -50,7 +52,7 @@ final class Server extends App implements RequestHandlerInterface
         $response = $this->pipeline->handle($request);
         
         if (strtoupper($request->getMethod()) === 'HEAD' 
-            && ($size = $response->getBody()) !== null || $size > 0){
+            && ($size = $response->getBody()->getSize()) !== null && $size !== 0) {
             $body = $this->make(StreamFactoryInterface::class)->createStream();
             return $response->withBody($body);
         }
