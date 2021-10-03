@@ -18,6 +18,7 @@ abstract class App implements AppInterface
 {
     protected array $entries = [];
     protected array $callbacks = [];
+    protected array $aliases = [];
     
     private bool $isRun = false;
 
@@ -115,6 +116,10 @@ abstract class App implements AppInterface
      */
     public function get($id)
     {
+        if (isset($this->aliases[$id])) {
+            $id = $this->aliases[$id];
+        }
+
         return $this->entries[$id] ?? $this->container->get($id);
     }
 
@@ -161,6 +166,34 @@ abstract class App implements AppInterface
         }
 
         throw new BadMethodCallException('Callback [%s] not registered in app', $name);
+    }
+
+    public function __get(string $name)
+    {
+        if ($name === 'config') {
+            return $this->config;
+        }
+        
+        return $this->get($name);
+    }
+
+    /**
+     * @param string $alias
+     * @param string $link
+     * @return AppInterface
+     * @throws AppException
+     */
+    public function registerAlias(string $alias, string $link): AppInterface
+    {
+        if (array_key_exists($alias, $this->entries)) {
+            throw AppException::entryExists($alias);
+        } elseif (isset($this->aliases[$alias])) {
+            throw AppException::aliasExists($alias);
+        }
+
+        $this->aliases[$alias] = $link;
+
+        return $this;
     }
 
     /**
