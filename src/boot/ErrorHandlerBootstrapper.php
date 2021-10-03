@@ -7,13 +7,21 @@ use Bermuda\ErrorHandler\{ErrorHandlerInterface, ErrorListenerInterface, ErrorHa
 
 final class ErrorHandlerBootstrapper implements BootstrapperInterface
 {
-    protected iterable $listeners;
-
-    public function __construct(iterable $listeners = [])
+    public function __construct(private iterable $listeners = [])
     {
         $this->listeners = $listeners;
     }
 
+    /**
+     * @param iterable $listeners
+     * @return $this
+     */
+    public function setListeners(iterable  $listeners): self
+    {
+        $this->listeners = $listeners;
+        return $this;
+    }
+    
     /**
      * @inerhitDoc 
      */
