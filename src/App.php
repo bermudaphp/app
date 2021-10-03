@@ -2,6 +2,8 @@
 
 namespace Bermuda\App;
 
+use Bermuda\App\Exceptions\AppException;
+use Bermuda\App\Exceptions\BadMethodCallException;
 use Throwable;
 use DI\FactoryInterface;
 use Invoker\InvokerInterface;
@@ -26,8 +28,6 @@ abstract class App implements AppInterface
     )
     {
         $this->config = Config::makeFrom($container);
-        $this->name = $this->config[static::appNameID];
-        $this->version = $this->config[static::appVersionID];
         $this->bindEntries();
     }
 
@@ -52,7 +52,7 @@ abstract class App implements AppInterface
     protected static function getServiceFactory(ContainerInterface $container): ServiceFactoryInterface
     {
         return cget($container, ServiceFactoryInterface::class,
-            static fn() => new ServiceFactory($container->get(FactoryInterface::class))
+            static fn() => new ServiceFactory($container->get(FactoryInterface::class), true)
         );
     }
 
@@ -86,7 +86,7 @@ abstract class App implements AppInterface
     public function set(string $id, $value): AppInterface
     {
         if ($this->has($id)) {
-            AppException::entryExists($id);
+            throw AppException::entryExists($id);
         }
 
         $this->entries[$id] = $value;
@@ -96,7 +96,7 @@ abstract class App implements AppInterface
     /**
      * @inheritDoc
      */
-    public function has($id)
+    public function has($id): bool
     {
         return array_key_exists($id, $this->entries) || $this->container->has($id);
     }
@@ -157,10 +157,10 @@ abstract class App implements AppInterface
     public function __call(string $name, array $arguments): mixed
     {
         if (isset($this->callbacks[$name])) {
-            return $this->call(callbacks[$name], $arguments);
+            return $this->call($this->callbacks[$name], $arguments);
         }
 
-        throw BadMethodCallException::doesntExists($name);
+        throw new BadMethodCallException('Callback [%s] not registered in app', $name);
     }
 
     /**
