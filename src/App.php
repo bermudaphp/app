@@ -166,7 +166,7 @@ abstract class App implements AppInterface
             return $this->call($this->callbacks[$name], $arguments);
         }
 
-        throw BadMethodCallException::create('Callback [%s] not registered in app', $name);
+        throw BadMethodCallException::create('Callback [ %s ] not registered in app', $name);
     }
 
     public function __get(string $name)
