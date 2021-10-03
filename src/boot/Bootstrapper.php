@@ -59,7 +59,7 @@ final class Bootstrapper implements BootstrapperInterface
             new RouterBootstrapper,
             new PipelineBootstrapper,
             new ErrorHandlerBootstrapper(
-                $container->get('config')['errors']['listeners']
+                $container->get('config')['errors']['listeners'] ?? []
             ),
             new HttpBootstrapper,
         ]);
