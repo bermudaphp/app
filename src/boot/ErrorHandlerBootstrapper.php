@@ -9,7 +9,7 @@ final class ErrorHandlerBootstrapper implements BootstrapperInterface
 {
     protected iterable $listeners;
 
-    public function __construct(iterable $listeners)
+    public function __construct(iterable $listeners = [])
     {
         $this->listeners = $listeners;
     }
