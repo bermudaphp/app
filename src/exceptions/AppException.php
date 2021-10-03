@@ -1,11 +1,13 @@
 <?php
 
-namespace Bermuda\App;
+namespace Bermuda\App\Exceptions;
 
-use Bermuda\Exceptor\RuntimeException;
+use Bermuda\Exceptor\Exceptor;
 
-class AppException extends RuntimeException
+class AppException extends \RuntimeException
 {
+    use Exceptor;
+    
     public static function isRun(): self
     {
         return new static('Application already run');
@@ -13,6 +15,11 @@ class AppException extends RuntimeException
 
     public static function entryExists(string $id): self
     {
-        return new static(sprintf('Entry with id: %s already exists in the container', $id));
+        return static::create('Entry with id: %s already exists in the container', $id);
+    }
+    
+    public static function callback(string $name): self
+    {
+        return static::create('Callback [%s] already registered in app', $name);
     }
 }
