@@ -12,7 +12,7 @@ final class AppFactory
      * @param ContainerInterface $container
      * @return AppInterface
      */
-    public static function make(ContainerInterface $container): AppInterface
+    public static function create(ContainerInterface $container): AppInterface
     {
         $app = cget($container, AppInterface::class, static fn() => (new AppFactory)($container));
         cget($app, Boot\BootstrapperInterface::class, null)?->boot($app);
