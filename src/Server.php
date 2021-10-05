@@ -43,23 +43,7 @@ final class Server extends App implements RequestHandlerInterface
             $container->get(MiddlewareFactoryInterface::class), $container->get(ServerRequestCreatorInterface::class)
         );
     }
-    
-    /**
-     * @inheritDoc
-     */
-    public function handle(ServerRequestInterface $request): ResponseInterface
-    {
-        $response = $this->pipeline->handle($request);
-        
-        if (strtoupper($request->getMethod()) === 'HEAD' 
-            && ($size = $response->getBody()->getSize()) !== null && $size !== 0) {
-            $body = $this->make(StreamFactoryInterface::class)->createStream();
-            return $response->withBody($body);
-        }
-        
-        return $response;
-    }
-    
+
     /**
      * Run application
      * @throws ServerException if request handling is failure
@@ -70,7 +54,8 @@ final class Server extends App implements RequestHandlerInterface
         $request = $this->serverRequestCreator->fromGlobals();
         
         try {
-            $this->emitter->emit($this->handle($request));
+            $response = $this->pipeline->handle($request);
+            $this->emitter->emit($response);
         } catch(Throwable $e) {
             throw new ServerException($e, $request);
         }
