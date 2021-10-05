@@ -43,7 +43,15 @@ final class Server extends App implements RequestHandlerInterface
             $container->get(MiddlewareFactoryInterface::class), $container->get(ServerRequestCreatorInterface::class)
         );
     }
-
+    
+    /**
+     * @inheritDoc
+     */
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return $this->pipeline->handle($request);
+    }
+    
     /**
      * Run application
      * @throws ServerException if request handling is failure
