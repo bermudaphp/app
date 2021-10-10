@@ -8,6 +8,7 @@ use Invoker\InvokerInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Input\{ArgvInput, InputInterface};
 use Symfony\Component\Console\Output\{ConsoleOutput, OutputInterface};
+use function Bermuda\Config\cget;
 
 final class Console extends App
 {
@@ -26,20 +27,12 @@ final class Console extends App
 
     private static function getRunner(self $console): Console\CommandRunnerInterface
     {
-        if (!$console->container->has(Console\CommandRunnerInterface::class)) {
-            ($runner = new Console\SymfonyConsole())
-                ->getConsole()->setName($console->name);
-            $runner->getConsole()->setVersion($console->version);
-
-            return $runner;
-        }
-
-        return $console->container->get(Console\CommandRunnerInterface::class);
+        return cget($console, Console\CommandRunnerInterface::class, fn() => new Console\SymfonyConsole, true);
     }
 
     private static function getResolver(self $console): Console\CommandResolverInterface
     {
-        return cget($console, Console\CommandRunnerInterface::class, fn() => new Console\CommandResolver($console), true);
+        return cget($console, Console\CommandResolverInterface::class, fn() => new Console\CommandResolver($console), true);
     }
 
     /**
