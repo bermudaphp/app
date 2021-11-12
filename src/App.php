@@ -108,7 +108,7 @@ abstract class App implements AppInterface
      */
     public function extend(string $id, callable $extender): self
     {
-        $this->entries[$id] = $extender($this->get($id));
+        $this->entries[$id] = $extender($this->get($id), $this);
         return $this;
     }
 
