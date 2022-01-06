@@ -43,12 +43,7 @@ final class ErrorHandlerBootstrapper implements BootstrapperInterface
 
     private function getListeners(AppInterface $app): \Generator
     {
-        foreach ($this->listeners as $listener) {
-            if (!$listener instanceof ErrorListenerInterface) {
-                $listener = $app->get($listener);
-            }
-            
-            yield $listener;
-        }
+        foreach ($this->listeners as $listener) yield !$listener instanceof ErrorListenerInterface 
+            ? $app->get($listener) : $listener ;
     }
 }
