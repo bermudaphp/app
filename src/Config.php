@@ -53,7 +53,7 @@ final class Config implements Countable, Iterator, ArrayAccess, Arrayable
     /**
      * @inerhitDoc
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->get($offset);
     }
@@ -73,7 +73,7 @@ final class Config implements Countable, Iterator, ArrayAccess, Arrayable
     /**
      * @throws RuntimeException
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         throw $this->notImmutable();
     }
@@ -121,7 +121,7 @@ final class Config implements Countable, Iterator, ArrayAccess, Arrayable
     /**
      * @throws RuntimeException
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         throw $this->notImmutable();
     }
@@ -137,7 +137,7 @@ final class Config implements Countable, Iterator, ArrayAccess, Arrayable
     /**
      * @inerhitDoc
      */
-    public function current()
+    public function current(): mixed
     {
         return current($this->data);
     }
@@ -145,7 +145,7 @@ final class Config implements Countable, Iterator, ArrayAccess, Arrayable
     /**
      * @inerhitDoc
      */
-    public function next()
+    public function next(): void
     {
         next($this->data);
     }
@@ -153,7 +153,7 @@ final class Config implements Countable, Iterator, ArrayAccess, Arrayable
     /**
      * @inerhitDoc
      */
-    public function rewind()
+    public function rewind(): void
     {
         reset($this->data);
     }
