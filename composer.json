@@ -18,7 +18,7 @@
     "bermudaphp/config": "^1.1.1",
     "bermudaphp/exceptor": "^1.0.1",
     "bermudaphp/http": "^1.0.1",
-    "bermudaphp/psr-7-server-factory": "^1.0.1",
+    "bermudaphp/psr-7-server-factory": "^1.0.5",
     "bermudaphp/error-handler": "^1.1.2",
     "bermudaphp/psr15factory": "^2.0.6",
     "bermudaphp/service-factory": "^1.0.2",
