@@ -14,26 +14,38 @@ final class RendererBootstrapper implements BootstrapperInterface
     public function boot(AppInterface $app): void
     {
         $app->registerCallback('render', static function(string $template, array $vars = []) use ($app) {
-            if ($app->has('renderer')) {
-                $content = $app->renderer->render($template, $vars);
-            } elseif ($app->has('Bermuda\Templater\RendererInterface')){
-                $content = $app->get('Bermuda\Templater\RendererInterface')->render($template, $vars);
-            } else {
-                if ($vars !== []) {
-                    var_export($vars);
+            
+            static $renderer = null;
+            static $responder = null;
+
+            if ($renderer === null) {
+                if ($app->has('renderer')) {
+                    $renderer = $app->renderer->render(...);
+                } elseif ($app->has('Bermuda\Templater\RendererInterface')){
+                    $renderer = $app->get('Bermuda\Templater\RendererInterface')->render(...);
+                } else {
+                    $renderer = static function(string $template, array $vars = []): string {
+                        if ($vars !== []) {
+                            var_export($vars);
+                        }
+                        ob_start();
+                        require $template;
+                        return ob_get_clean();
+                    };
                 }
-                ob_start();
-                require $template;
-                $content = ob_get_clean();
             }
 
-            if ($app->has('responder')) {
-                return $app->responder->respond(200, $content);
-            } elseif ($app->has(Responder::class)) {
-                return $app->get(Responder::class)->respond(200, $content);
-            } else {
-                return Responder::fromContainer($app)->respond(200, $content);
+            if ($responder === null) {
+                if ($app->has('responder')) {
+                    $responder = $app->responder;
+                } elseif ($app->has(Responder::class)) {
+                    $responder = $app->get(Responder::class);
+                } else {
+                    $responder = Responder::fromContainer($app);
+                }
             }
+
+            return $responder->respond(200, ($renderer($template, $vars)));
         });
     }
 }
