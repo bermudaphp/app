@@ -58,10 +58,10 @@ final class Bootstrapper implements BootstrapperInterface
         return new self([
             new RouterBootstrapper,
             new PipelineBootstrapper,
-            new ErrorHandlerBootstrapper(
-                $container->get('config')['errors']['listeners'] ?? []
-            ),
+            new ErrorHandlerBootstrapper($container->get('config')['errors']['listeners'] ?? []),
             new HttpBootstrapper,
+            new DateTimeBootstrapper,
+            new RendererBootstrapper
         ]);
     }
 }
