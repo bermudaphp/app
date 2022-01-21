@@ -10,7 +10,7 @@
     ]
   },
   "require": {
-    "php": "^8.0|^8.1",
+    "php": "^8.1",
     "bermudaphp/router": "^3.0.3",
     "bermudaphp/clock": "^1.0.1",
     "bermudaphp/registry": "^1.0.1",
