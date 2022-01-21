@@ -13,7 +13,7 @@ final class RendererBootstrapper implements BootstrapperInterface
      */
     public function boot(AppInterface $app): void
     {
-        $app->registerCallback('render', static function(string $template, array $vars = []) use ($app) {
+        $app->registerCallback('render', static function(string $template, array $vars = []) use ($app): string {
             
             static $renderer = null;
             static $responder = null;
