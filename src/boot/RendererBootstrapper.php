@@ -45,7 +45,7 @@ final class RendererBootstrapper implements BootstrapperInterface
                 }
             }
 
-            return $responder->respond(200, ($renderer($template, $vars)));
+            return $responder->respond(200, $renderer($template, $vars));
         });
     }
 }
