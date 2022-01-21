@@ -4,7 +4,6 @@ namespace Bermuda\App\Boot;
 
 use Bermuda\Clock;
 use Bermuda\App\AppInterface;
-use Bermuda\App\Boot\BootstrapperInterface;
 
 final class DateTimeBootstrapper implements BootstrapperInterface
 {
