@@ -10,25 +10,13 @@ use Psr\Log\LoggerInterface;
 final class Bootstrapper implements BootstrapperInterface
 {
     private array $bootstrap = [];
-    public function __construct(iterable $bootstrap = [])
-    {
-        foreach($bootstrap as $b) {
-            $this->bootstrap[] = $b;
-        }
-    }
-
+    
     /**
      * @inerhitDoc
      */
     public function boot(AppInterface $app): void
     {
-        foreach ($this->bootstrap as $bootstrapper) {
-            if (!$bootstrapper instanceof BootstrapperInterface) {
-                $bootstrapper = $app->get($bootstrapper);
-            }
-
-            $bootstrapper->boot($app);
-        }
+        foreach ($this->bootstrap as $bootstrapper) $bootstrapper->boot($app);
     }
 
     /**
@@ -55,13 +43,14 @@ final class Bootstrapper implements BootstrapperInterface
      */
     public static function withDefaults(ContainerInterface $container): self
     {
-        return new self([
+        $self = new self;
+        $self->bootstrap = [
             new RouterBootstrapper,
             new PipelineBootstrapper,
             new ErrorHandlerBootstrapper($container->get('config')['errors']['listeners'] ?? []),
             new HttpBootstrapper,
             new DateTimeBootstrapper,
             new RendererBootstrapper
-        ]);
+        ]
     }
 }
