@@ -2,18 +2,13 @@
 
 namespace Bermuda\App;
 
-use Bermuda\App\Exceptions\AppException;
-use Bermuda\App\Exceptions\BadMethodCallException;
 use Throwable;
 use DI\FactoryInterface;
 use Invoker\InvokerInterface;
 use Psr\Container\ContainerInterface;
-use Bermuda\ServiceFactory\{
-    Factory as ServiceFactory,
-    FactoryInterface as ServiceFactoryInterface
-};
 use Bermuda\ErrorHandler\ErrorHandlerInterface;
-use function Bermuda\Config\cget;
+use Bermuda\App\Exceptions\AppException;
+use Bermuda\App\Exceptions\BadMethodCallException;
 
 abstract class App implements AppInterface
 {
@@ -25,8 +20,8 @@ abstract class App implements AppInterface
 
     protected Config $config;
 
-    public function __construct(protected ContainerInterface      $container, protected InvokerInterface $invoker,
-                                protected ServiceFactoryInterface $serviceFactory, protected ErrorHandlerInterface $errorHandler
+    public function __construct(protected ContainerInterface $container, protected InvokerInterface $invoker,
+                                protected FactoryInterface   $factory, protected ErrorHandlerInterface $errorHandler
     )
     {
         $this->config = Config::makeFrom($container);
@@ -47,17 +42,10 @@ abstract class App implements AppInterface
     public static function makeFrom(ContainerInterface $container): self
     {
         return new static($container, $container->get(InvokerInterface::class),
-            static::getServiceFactory($container), $container->get(ErrorHandlerInterface::class)
+            $container->get(FactoryInterface::class), $container->get(ErrorHandlerInterface::class)
         );
     }
-
-    protected static function getServiceFactory(ContainerInterface $container): ServiceFactoryInterface
-    {
-        return cget($container, ServiceFactoryInterface::class,
-            static fn() => new ServiceFactory($container->get(FactoryInterface::class), true)
-        );
-    }
-
+    
     /**
      * @return Config
      */
@@ -69,17 +57,9 @@ abstract class App implements AppInterface
     /**
      * @inheritDoc
      */
-    public function __invoke(string $service, array $params = []): object
+    public function make($name, array $params = []): mixed
     {
-        return $this->serviceFactory->make($service, $params);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function make(string $service, array $params = []): object
-    {
-        return $this->serviceFactory->make($service, $params);
+        return $this->factory->make($name, $params);
     }
 
     /**
