@@ -3,9 +3,9 @@
 namespace Bermuda\App;
 
 use Bermuda\App\Exceptions\AppException;
+use DI\FactoryInterface;
 use Invoker\InvokerInterface;
 use Psr\Container\ContainerInterface;
-use Bermuda\ServiceFactory\FactoryInterface;
 use Bermuda\ErrorHandler\ErrorHandlerInterface;
 use Autocomplete\App as Autocomplete;
 
