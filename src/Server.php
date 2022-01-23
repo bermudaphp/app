@@ -2,6 +2,7 @@
 
 namespace Bermuda\App;
 
+use DI\FactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
@@ -20,26 +21,25 @@ use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
 use Nyholm\Psr7Server\ServerRequestCreatorInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\StreamFactoryInterface;
-use Bermuda\ServiceFactory\FactoryInterface as ServiceFactoryInterface;
 
 final class Server extends App implements RequestHandlerInterface
 {
     private PipelineInterface $pipeline;
 
-    public function __construct(ContainerInterface $container, InvokerInterface $invoker,
-                                ServiceFactoryInterface $serviceFactory, ErrorHandlerInterface $errorHandler,
-                                private EmitterInterface $emitter, private MiddlewareFactoryInterface $middlewareFactory,
+    public function __construct(ContainerInterface                    $container, InvokerInterface $invoker,
+                                FactoryInterface               $factory, ErrorHandlerInterface $errorHandler,
+                                private EmitterInterface              $emitter, private MiddlewareFactoryInterface $middlewareFactory,
                                 private ServerRequestCreatorInterface $serverRequestCreator,
     )
     {
-        parent::__construct($container, $invoker, $serviceFactory, $errorHandler);
+        parent::__construct($container, $invoker, $factory, $errorHandler);
         $this->pipeline = $this->make(PipelineInterface::class);
     }
 
     public static function makeFrom(ContainerInterface $container): self
     {
         return new static($container, $container->get(InvokerInterface::class),
-            static::getServiceFactory($container), $container->get(ErrorHandlerInterface::class), $container->get(EmitterInterface::class),
+            $container->get(FactoryInterface::class), $container->get(ErrorHandlerInterface::class), $container->get(EmitterInterface::class),
             $container->get(MiddlewareFactoryInterface::class), $container->get(ServerRequestCreatorInterface::class)
         );
     }
