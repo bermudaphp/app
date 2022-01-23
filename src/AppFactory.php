@@ -14,8 +14,9 @@ final class AppFactory
      */
     public static function create(ContainerInterface $container): AppInterface
     {
-        $app = cget($container, AppInterface::class, static fn() => (new AppFactory)($container));
-        cget($app, Boot\BootstrapperInterface::class, null)?->boot($app);
+        $app = $container->get(AppInterface::class);
+        $app->get(Boot\BootstrapperInterface::class)->boot($app);
+     
         return Registry::set(AppInterface::class, $app);
     }
 
