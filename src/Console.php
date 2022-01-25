@@ -8,26 +8,20 @@ use Psr\Container\ContainerInterface;
 use Bermuda\ErrorHandler\ErrorHandlerInterface;
 use Symfony\Component\Console\Input\{ArgvInput, InputInterface};
 use Symfony\Component\Console\Output\{ConsoleOutput, OutputInterface};
+use Throwable;
 
 final class Console extends App
 {
-    public function __construct(ContainerInterface      $container, InvokerInterface $invoker,
-                                FactoryInterface $factory, ErrorHandlerInterface $errorHandler,
-                                private Console\CommandRunnerInterface $runner,
-                                private Console\CommandResolverInterface $resolver
-    )
+    private Console\CommandRunnerInterface $runner;
+    private Console\CommandResolverInterface $resolver;
+
+    protected function bindEntries(): void
     {
-        parent::__construct($container, $invoker, $factory, $errorHandler);
+        parent::bindEntries();
+        $this->runner = $this->get(Console\CommandRunnerInterface::class);
+        $this->resolver = $this->get(Console\CommandResolverInterface::class);
     }
-    
-    public static function createApp(ContainerInterface $container): Console
-    {
-        return new static($container, $container->get(InvokerInterface::class),
-            $container->get(FactoryInterface::class), $container->get(ErrorHandlerInterface::class),
-            $container->get(Console\CommandRunnerInterface::class), $container->get(Console\CommandResolverInterface::class)
-        );
-    }
-    
+
     /**
      * @inheritDoc
      */
