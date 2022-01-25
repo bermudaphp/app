@@ -25,25 +25,19 @@ use Psr\Http\Message\StreamFactoryInterface;
 final class Server extends App implements RequestHandlerInterface
 {
     private PipelineInterface $pipeline;
+    private EmitterInterface $emitter;
+    private MiddlewareFactoryInterface $middlewareFactory;
+    private ServerRequestCreatorInterface $serverRequestCreator;
 
-    public function __construct(ContainerInterface                    $container, InvokerInterface $invoker,
-                                FactoryInterface               $factory, ErrorHandlerInterface $errorHandler,
-                                private EmitterInterface              $emitter, private MiddlewareFactoryInterface $middlewareFactory,
-                                private ServerRequestCreatorInterface $serverRequestCreator,
-    )
+    protected function bindEntries(): void
     {
-        parent::__construct($container, $invoker, $factory, $errorHandler);
-        $this->pipeline = $this->make(PipelineInterface::class);
+        parent::bindEntries();
+        $this->pipeline = $this->get(PipelineInterface::class);
+        $this->emitter = $this->get(EmitterInterface::class);
+        $this->middlewareFactory = $this->get(MiddlewareFactoryInterface::class);
+        $this->serverRequestCreator = $this->get(ServerRequestCreatorInterface::class);
     }
 
-    public static function createApp(ContainerInterface $container): Server
-    {
-        return new static($container, $container->get(InvokerInterface::class),
-            $container->get(FactoryInterface::class), $container->get(ErrorHandlerInterface::class), $container->get(EmitterInterface::class),
-            $container->get(MiddlewareFactoryInterface::class), $container->get(ServerRequestCreatorInterface::class)
-        );
-    }
-    
     /**
      * @inheritDoc
      */
