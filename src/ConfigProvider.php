@@ -19,7 +19,6 @@ final class ConfigProvider extends AbstractProvider
     protected function getFactories(): array
     {
         return [
-            AppInterface::class => AppFactory::class,
             InputInterface::class => static fn() => new ArgvInput,
             OutputInterface::class => static fn() => new ConsoleOutput,
             CommandRunnerInterface::class => static fn() => new SymfonyConsole,
