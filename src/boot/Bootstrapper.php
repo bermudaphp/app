@@ -51,6 +51,8 @@ final class Bootstrapper implements BootstrapperInterface
             new HttpBootstrapper,
             new DateTimeBootstrapper,
             new RendererBootstrapper
-        ]
+        ];
+        
+        return $self;
     }
 }
