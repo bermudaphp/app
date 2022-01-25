@@ -2,6 +2,9 @@
 
 namespace Bermuda\App;
 
+use DI\Container;
+use DI\Definition\Source\MutableDefinitionSource;
+use DI\Proxy\ProxyFactory;
 use Throwable;
 use DI\FactoryInterface;
 use Invoker\InvokerInterface;
@@ -10,42 +13,42 @@ use Bermuda\ErrorHandler\ErrorHandlerInterface;
 use Bermuda\App\Exceptions\AppException;
 use Bermuda\App\Exceptions\BadMethodCallException;
 
-abstract class App implements AppInterface
+abstract class App extends Container implements AppInterface
 {
-    protected array $entries = [];
-    protected array $callbacks = [];
-    protected array $aliases = [];
-    
     private bool $isRun = false;
 
     protected Config $config;
 
-    public function __construct(protected ContainerInterface $container, protected InvokerInterface $invoker,
-                                protected FactoryInterface   $factory, protected ErrorHandlerInterface $errorHandler
-    )
-    {
-        $this->config = Config::makeFrom($container);
+    protected array $callbacks = [];
+    protected array $aliases = [];
+
+    protected ErrorHandlerInterface $errorHandler;
+
+    public function __construct(
+        MutableDefinitionSource $definitionSource = null,
+        ProxyFactory $proxyFactory = null,
+        ContainerInterface $wrapperContainer = null
+    ){
+        parent::__construct($definitionSource, $proxyFactory, $wrapperContainer);
         $this->bindEntries();
     }
 
     protected function bindEntries(): void
     {
-        $this->entries[AppInterface::class]
-            = $this->entries[ContainerInterface::class]
-            = $this->entries[FactoryInterface::class]
-            = $this->entries[ServiceFactoryInterface::class]
-            = $this->entries[InvokerInterface::class]
-            = $this;
-        $this->entries[Config::class] = $this->config;
+        $this->resolvedEntries[AppInterface::class] = $this;
+        $this->resolvedEntries[Config::class] = $this->config = Config::createConfig($this);
+        $this->errorHandler = $this->get(ErrorHandlerInterface::class);
     }
 
+    /**
+     * @param ContainerInterface $container
+     * @return static
+     */
     public static function createApp(ContainerInterface $container): self
     {
-        return new static($container, $container->get(InvokerInterface::class),
-            $container->get(FactoryInterface::class), $container->get(ErrorHandlerInterface::class)
-        );
+        return new static(null, null, $container);
     }
-    
+
     /**
      * @return Config
      */
@@ -59,11 +62,33 @@ abstract class App implements AppInterface
      */
     public function make($name, array $params = []): mixed
     {
-        return $this->factory->make($name, $params);
+        return parent::make($name, $params);
     }
 
     /**
-     * @inheritDoc
+     * @inerhitDoc
+     */
+    public function get($name)
+    {
+        if (isset($this->aliases[$name])) {
+            $name = $this->aliases[$name];
+        }
+
+        return parent::get($name);
+    }
+
+    /**
+     * @inerhitDoc
+     */
+    public function has($name): bool
+    {
+        return parent::has($name) || isset($this->aliases[$name]);
+    }
+
+    /**
+     * @param string $id
+     * @param $value
+     * @return AppInterface
      */
     public function set(string $id, $value): AppInterface
     {
@@ -71,16 +96,8 @@ abstract class App implements AppInterface
             throw AppException::entryExists($id);
         }
 
-        $this->entries[$id] = $value;
+        parent::set($id, $value);
         return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function has($id): bool
-    {
-        return array_key_exists($id, $this->entries) || $this->container->has($id);
     }
 
     /**
@@ -88,20 +105,9 @@ abstract class App implements AppInterface
      */
     public function extend(string $id, callable $extender): self
     {
-        $this->entries[$id] = $extender($this->get($id), $this);
+        $entry = $this->get($id);
+        $this->resolvedEntries[$id] = $extender($entry, $this);
         return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function get($id)
-    {
-        if (isset($this->aliases[$id])) {
-            $id = $this->aliases[$id];
-        }
-
-        return $this->entries[$id] ?? $this->container->get($id);
     }
 
     /**
@@ -127,14 +133,6 @@ abstract class App implements AppInterface
         $this->errorHandler->handleException($e);
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function call($callable, array $parameters = [])
-    {
-        return $this->invoker->call($callable, $parameters);
-    }
-    
      /**
      * @param string $name
      * @param array $arguments
@@ -166,7 +164,7 @@ abstract class App implements AppInterface
      */
     public function registerAlias(string $alias, string $link): AppInterface
     {
-        if (array_key_exists($alias, $this->entries)) {
+        if (array_key_exists($alias, $this->resolvedEntries)) {
             throw AppException::entryExists($alias);
         } elseif (isset($this->aliases[$alias])) {
             throw AppException::aliasExists($alias);
