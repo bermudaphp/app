@@ -20,6 +20,14 @@ final class Console extends App
         parent::__construct($container, $invoker, $factory, $errorHandler);
     }
     
+    public static function createApp(ContainerInterface $container): Console
+    {
+        return new static($container, $container->get(InvokerInterface::class),
+            $container->get(FactoryInterface::class), $container->get(ErrorHandlerInterface::class),
+            $container->get(Console\CommandRunnerInterface::class), $container->get(Console\CommandResolverInterface::class)
+        );
+    }
+    
     /**
      * @inheritDoc
      */
