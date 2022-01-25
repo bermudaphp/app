@@ -39,7 +39,7 @@ abstract class App implements AppInterface
         $this->entries[Config::class] = $this->config;
     }
 
-    public static function makeFrom(ContainerInterface $container): self
+    public static function createApp(ContainerInterface $container): self
     {
         return new static($container, $container->get(InvokerInterface::class),
             $container->get(FactoryInterface::class), $container->get(ErrorHandlerInterface::class)
