@@ -3,6 +3,7 @@
 namespace Bermuda\App\Boot;
 
 use Bermuda\App\AppInterface;
+use function Bermuda\App\is_cli;
 
 final class PipelineBootstrapper implements BootstrapperInterface
 {
@@ -11,6 +12,6 @@ final class PipelineBootstrapper implements BootstrapperInterface
      */
     public function boot(AppInterface $app): void
     {
-        require '.\config' . (PHP_SAPI === 'cli' ? '\commands.php' : '\pipeline.php' );
+        require '.\config' . (is_cli() ? '\commands.php' : '\pipeline.php' );
     }
 }
