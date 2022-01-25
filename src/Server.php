@@ -36,7 +36,7 @@ final class Server extends App implements RequestHandlerInterface
         $this->pipeline = $this->make(PipelineInterface::class);
     }
 
-    public static function makeFrom(ContainerInterface $container): self
+    public static function createApp(ContainerInterface $container): Server
     {
         return new static($container, $container->get(InvokerInterface::class),
             $container->get(FactoryInterface::class), $container->get(ErrorHandlerInterface::class), $container->get(EmitterInterface::class),
