@@ -28,7 +28,7 @@ final class Config implements Countable, Iterator, ArrayAccess, Arrayable
      * @throws NotFoundExceptionInterface  No entry was found for **this** identifier.
      * @throws ContainerExceptionInterface Error while retrieving the entry.
      */
-    public static function makeFrom(ContainerInterface $container): self
+    public static function createConfig(ContainerInterface $container): self
     {
         return new self($container->get('config'));
     }
