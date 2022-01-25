@@ -6,7 +6,7 @@ use Bermuda\App\AppInterface;
 use Bermuda\Router\Route;
 use Bermuda\Router\RouteMap;
 use Bermuda\Router\Router;
-use function Bermuda\App\is_console_sapi;
+use function Bermuda\App\is_cli;
 
 final class RouterBootstrapper implements BootstrapperInterface
 {
@@ -15,7 +15,7 @@ final class RouterBootstrapper implements BootstrapperInterface
      */
     public function boot(AppInterface $app): void
     {
-        if (!is_console_sapi()) $this($app);
+        if (!is_cli()) $this($app);
     }
 
     public function __invoke(AppInterface $app): RouteMap
