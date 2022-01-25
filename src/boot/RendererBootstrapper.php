@@ -4,6 +4,7 @@ namespace Bermuda\App\Boot;
 
 use Bermuda\HTTP\Responder;
 use Bermuda\App\AppInterface;
+use Psr\Http\Message\ResponseInterface;
 
 final class RendererBootstrapper implements BootstrapperInterface
 {
@@ -13,7 +14,7 @@ final class RendererBootstrapper implements BootstrapperInterface
      */
     public function boot(AppInterface $app): void
     {
-        $app->registerCallback('render', static function(string $template, array $vars = []) use ($app): string {
+        $app->registerCallback('render', static function(string $template, array $vars = []) use ($app): ResponseInterface {
             
             static $renderer = null;
             static $responder = null;
