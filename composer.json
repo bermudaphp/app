@@ -20,6 +20,7 @@
     "bermudaphp/psr-7-server-factory": "^1.0.5",
     "bermudaphp/error-handler": "^1.1.2",
     "bermudaphp/psr15factory": "^2.0.6",
-    "symfony/console": "^6.0.2"
+    "symfony/console": "^6.0.2",
+    "php-di/php-di": "6.3.5"
   }
 }
