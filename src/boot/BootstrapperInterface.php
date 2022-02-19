@@ -13,6 +13,7 @@ interface BootstrapperInterface
     /**
      * Application boot
      * @param AppInterface $app
+     * @return AppInterface
      */
     public function boot(AppInterface $app): AppInterface ;
 }
