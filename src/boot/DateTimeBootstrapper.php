@@ -7,7 +7,7 @@ use Bermuda\App\AppInterface;
 
 final class DateTimeBootstrapper implements BootstrapperInterface
 {
-    public function boot(AppInterface $app): void
+    public function boot(AppInterface $app): AppInterface
     {
         Clock::timeZone($app->config->timeZone);
         Clock::locale($app->config->locale);
