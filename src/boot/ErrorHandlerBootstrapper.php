@@ -34,6 +34,8 @@ final class ErrorHandlerBootstrapper implements BootstrapperInterface
                 $handler->listen($listener);
             }
         }
+        
+        return $app;
     }
     
     private static function getErrorHandler(AppInterface $app): ErrorHandlerInterface
