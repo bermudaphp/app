@@ -14,5 +14,5 @@ interface BootstrapperInterface
      * Application boot
      * @param AppInterface $app
      */
-    public function boot(AppInterface $app): void ;
+    public function boot(AppInterface $app): AppInterface ;
 }
