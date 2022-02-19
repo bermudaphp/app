@@ -13,5 +13,6 @@ final class DateTimeBootstrapper implements BootstrapperInterface
         Clock::locale($app->config->locale);
 
         $app->registerCallback('createDate', '\Bermuda\Clock\Clock::create');
+        return $app;
     }
 }
