@@ -17,7 +17,7 @@ final class HttpBootstrapper implements BootstrapperInterface
     /**
      * @inerhitDoc
      */
-    public function boot(AppInterface $app): void
+    public function boot(AppInterface $app): AppInterface
     {
         $app->registerCallback('respond', static function(int $code = 200, $content = null, string $contentType = null) use ($app): ResponseInterface {
             return $app->get(Responder::class)->respond($code, $content, $contentType);
@@ -31,5 +31,7 @@ final class HttpBootstrapper implements BootstrapperInterface
             $path = $app->router->generate($name, $params);
             return $redirect ? $app->redirect($path) : $path;
         });
+        
+        return $app;
     }
 }
