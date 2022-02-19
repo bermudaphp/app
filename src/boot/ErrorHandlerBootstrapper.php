@@ -25,7 +25,7 @@ final class ErrorHandlerBootstrapper implements BootstrapperInterface
     /**
      * @inerhitDoc 
      */
-    public function boot(AppInterface $app): void
+    public function boot(AppInterface $app): AppInterface
     {
         $handler = self::getErrorHandler($app);
 
