@@ -14,9 +14,10 @@ final class Bootstrapper implements BootstrapperInterface
     /**
      * @inerhitDoc
      */
-    public function boot(AppInterface $app): void
+    public function boot(AppInterface $app): AppInterface
     {
         foreach ($this->bootstrap as $bootstrapper) $bootstrapper->boot($app);
+        return $app;
     }
 
     /**
