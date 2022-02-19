@@ -12,9 +12,10 @@ final class RouterBootstrapper implements BootstrapperInterface
     /**
      * @inerhitDoc
      */
-    public function boot(AppInterface $app): void
+    public function boot(AppInterface $app): AppInterface
     {
         if (!is_cli()) $this($app);
+        return $app;
     }
 
     public function __invoke(AppInterface $app): RouteMap
