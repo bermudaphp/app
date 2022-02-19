@@ -12,7 +12,7 @@ final class RendererBootstrapper implements BootstrapperInterface
      * @param AppInterface $app
      * @return void
      */
-    public function boot(AppInterface $app): void
+    public function boot(AppInterface $app): AppInterface
     {
         $app->registerCallback('render', static function(string $template, array $vars = []) use ($app): ResponseInterface {
             
@@ -48,5 +48,7 @@ final class RendererBootstrapper implements BootstrapperInterface
 
             return $responder->respond(200, $renderer($template, $vars));
         });
+        
+        return $app;
     }
 }
