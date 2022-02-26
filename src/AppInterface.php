@@ -13,7 +13,7 @@ use Autocomplete\App as Autocomplete;
  * @mixin Autocomplete
  */
 interface AppInterface extends ContainerInterface, 
-    FactoryInterface, InvokerInterface, ErrorHandlerInterface
+    FactoryInterface, InvokerInterface
 {
     /**
      * Run application
@@ -26,6 +26,12 @@ interface AppInterface extends ContainerInterface,
      * @throws \RuntimeException
      */
     public function pipe($any): self ;
+        
+    /**
+     * @param Throwable $e
+     * @return never
+     */
+    public function handleException(Throwable $e): never ;
          
     /**
      * @param string $name
