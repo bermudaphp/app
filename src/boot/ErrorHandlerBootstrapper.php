@@ -13,10 +13,10 @@ final class ErrorHandlerBootstrapper implements BootstrapperInterface
     }
 
     /**
-     * @param iterable $listeners
+     * @param ErrorListenerInterface[] $listeners
      * @return $this
      */
-    public function setListeners(iterable  $listeners): self
+    public function setListeners(iterable $listeners): self
     {
         $this->listeners = $listeners;
         return $this;
@@ -27,14 +27,8 @@ final class ErrorHandlerBootstrapper implements BootstrapperInterface
      */
     public function boot(AppInterface $app): AppInterface
     {
-        $handler = self::getErrorHandler($app);
-
-        if ($handler instanceof ErrorHandler) {
-            foreach ($this->getListeners($app) as $listener) {
-                $handler->listen($listener);
-            }
-        }
-        
+        $handler = $app->get(ErrorHandlerInterface::class);
+        foreach ($this->getListeners($app) as $listener) $handler->on($listener);
         return $app;
     }
     
