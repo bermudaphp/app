@@ -128,7 +128,7 @@ abstract class App extends Container implements AppInterface
     /**
      * @inheritDoc
      */
-    public function handleException(Throwable $e): void
+    public function handleException(Throwable $e): never
     {
         $this->errorHandler->handleException($e);
     }
