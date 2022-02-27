@@ -12,8 +12,7 @@ final class ErrorHandlerBootstrapper implements BootstrapperInterface
      */
     public function boot(AppInterface $app): AppInterface
     {
-        $handler = $app->get(ErrorHandler::class);
-        foreach ($this->getListeners($app) as $l) $handler->on($l);
+        foreach ($this->getListeners($app) as $l) $app->errorHandler->on($l);
         return $app;
     }
    
