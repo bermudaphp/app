@@ -17,12 +17,12 @@ abstract class App extends Container implements AppInterface
 {
     private bool $isRun = false;
 
-    protected Config $config;
+    public readonly Config $config;
 
     protected array $callbacks = [];
     protected array $aliases = [];
 
-    protected ErrorHandler $errorHandler;
+    public readonly ErrorHandler $errorHandler;
 
     public function __construct(
         MutableDefinitionSource $definitionSource = null,
