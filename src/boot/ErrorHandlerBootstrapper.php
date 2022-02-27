@@ -2,6 +2,7 @@
 
 namespace Bermuda\App\Boot;
 
+use Generator;
 use Bermuda\App\AppInterface;
 use Bermuda\ErrorHandler\{ErrorHandler, ErrorListenerInterface, ConfigProvider};
 
@@ -16,7 +17,7 @@ final class ErrorHandlerBootstrapper implements BootstrapperInterface
         return $app;
     }
    
-    private function getListeners(AppInterface $app): \Generator
+    private function getListeners(AppInterface $app): Generator
     {
         $config = $app->config['error'];
         if ($config !== null && is_iterable($config['error.listeners'])) {
@@ -24,7 +25,5 @@ final class ErrorHandlerBootstrapper implements BootstrapperInterface
                 yield $l instanceof ErrorListenerInterface ? $l : $app->get($l);
             }
         }
-        
-        yield;
     }
 }
