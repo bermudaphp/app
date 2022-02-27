@@ -7,11 +7,13 @@ use Bermuda\App\Exceptions\AppException;
 use DI\FactoryInterface;
 use Invoker\InvokerInterface;
 use Psr\Container\ContainerInterface;
-use Bermuda\ErrorHandler\ErrorHandlerInterface;
+use Bermuda\ErrorHandler\ErrorHandler;
 use Autocomplete\App as Autocomplete;
 
 /**
  * @mixin Autocomplete
+ * @property-read ErrorHandler $errorHandler
+ * @property-read Config $config
  */
 interface AppInterface extends ContainerInterface, 
     FactoryInterface, InvokerInterface
