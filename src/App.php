@@ -9,7 +9,7 @@ use Throwable;
 use DI\FactoryInterface;
 use Invoker\InvokerInterface;
 use Psr\Container\ContainerInterface;
-use Bermuda\ErrorHandler\ErrorHandlerInterface;
+use Bermuda\ErrorHandler\ErrorHandler;
 use Bermuda\App\Exceptions\AppException;
 use Bermuda\App\Exceptions\BadMethodCallException;
 
@@ -22,7 +22,7 @@ abstract class App extends Container implements AppInterface
     protected array $callbacks = [];
     protected array $aliases = [];
 
-    protected ErrorHandlerInterface $errorHandler;
+    protected ErrorHandler $errorHandler;
 
     public function __construct(
         MutableDefinitionSource $definitionSource = null,
@@ -37,7 +37,7 @@ abstract class App extends Container implements AppInterface
     {
         $this->resolvedEntries[AppInterface::class] = $this;
         $this->resolvedEntries[Config::class] = $this->config = Config::createConfig($this);
-        $this->errorHandler = $this->get(ErrorHandlerInterface::class);
+        $this->errorHandler = $this->get(ErrorHandler::class);
     }
 
     /**
