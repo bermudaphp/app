@@ -48,7 +48,7 @@ final class Bootstrapper implements BootstrapperInterface
         $self->bootstrap = [
             new RouterBootstrapper,
             new PipelineBootstrapper,
-            new ErrorHandlerBootstrapper($container->get('config')['errors']['listeners'] ?? []),
+            new ErrorHandlerBootstrapper,
             new HttpBootstrapper,
             new DateTimeBootstrapper,
             new RendererBootstrapper
