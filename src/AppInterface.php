@@ -2,6 +2,7 @@
 
 namespace Bermuda\App;
 
+use Throwable;
 use Bermuda\App\Exceptions\AppException;
 use DI\FactoryInterface;
 use Invoker\InvokerInterface;
