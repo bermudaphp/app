@@ -48,8 +48,7 @@ final class Server extends App implements RequestHandlerInterface
     
     /**
      * Run application
-     * @throws ServerException if request handling is failure
-     * @throws Throwable if request creation is failure
+     * @throws Throwable if request creation or response emitting is failure
      */
     protected function doRun(): void
     {
@@ -57,10 +56,11 @@ final class Server extends App implements RequestHandlerInterface
         
         try {
             $response = $this->pipeline->handle($request);
-            $this->emitter->emit($response);
         } catch(Throwable $e) {
-            throw new ServerException($e, $request);
+            $this->errorHandler->setServerRequest($request)->generateResponse($response, true);
         }
+
+        $this->emitter->emit($response);
     }
 
     /**
