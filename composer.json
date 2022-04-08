@@ -6,7 +6,7 @@
       "Bermuda\\App\\": "src/"
     },
     "files": [
-            "src/functions.php"
+            "src/define.php"
     ]
   },
   "require": {
