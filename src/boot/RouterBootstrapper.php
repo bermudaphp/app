@@ -5,7 +5,7 @@ namespace Bermuda\App\Boot;
 use Bermuda\App\AppInterface;
 use Bermuda\Router\RouteMap;
 use Bermuda\Router\Router;
-use function Bermuda\App\is_cli;
+
 
 final class RouterBootstrapper implements BootstrapperInterface
 {
@@ -14,7 +14,7 @@ final class RouterBootstrapper implements BootstrapperInterface
      */
     public function boot(AppInterface $app): AppInterface
     {
-        if (!is_cli()) $this($app);
+        if (\Bermuda\App\is_cli) $this($app);
         return $app;
     }
 
