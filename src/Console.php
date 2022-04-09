@@ -25,7 +25,7 @@ final class Console extends App
     /**
      * @inheritDoc
      */
-    public function pipe($any): AppInterface
+    public function pipe(mixed $any): AppInterface
     {
         try {
             $this->runner->add($this->resolver->resolve($any));
