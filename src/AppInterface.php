@@ -28,7 +28,7 @@ interface AppInterface extends ContainerInterface,
      * @return AppInterface
      * @throws \RuntimeException
      */
-    public function pipe($any): self ;
+    public function pipe(mixed $any): AppInterface ;
         
     /**
      * @param Throwable $e
@@ -77,7 +77,7 @@ interface AppInterface extends ContainerInterface,
      * @return AppInterface
      * @throws AppException
      */
-    public function set(string $id, $value): self ;
+    public function set(string $id, $value): AppInterface ;
     
      /**
      * @param string $id
@@ -85,5 +85,5 @@ interface AppInterface extends ContainerInterface,
      * @return AppInterface
      * @throws AppException
      */
-    public function extend(string $id, callable $extender): self ;
+    public function extend(string $id, callable $extender): AppInterface ;
 }
