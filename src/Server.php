@@ -66,7 +66,7 @@ final class Server extends App implements RequestHandlerInterface
     /**
      * @inheritDoc
      */
-    public function pipe($any): AppInterface
+    public function pipe(mixed $any): AppInterface
     {
         try {
             $this->pipeline->pipe($this->middlewareFactory->make($any));
