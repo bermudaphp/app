@@ -12,7 +12,7 @@ final class PipelineBootstrapper implements BootstrapperInterface
      */
     public function boot(AppInterface $app): AppInterface
     {
-        require '.\config' . (is_cli ? '\commands.php' : '\pipeline.php' );
+        require './config' . (is_cli ? '/commands.php' : '/pipeline.php' );
         return $app;
     }
 }
