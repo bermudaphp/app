@@ -18,6 +18,8 @@ use Autocomplete\App as Autocomplete;
 interface AppInterface extends ContainerInterface, 
     FactoryInterface, InvokerInterface
 {
+    const devMode = 'devMode';
+        
     /**
      * Run application
      */
