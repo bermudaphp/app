@@ -3,7 +3,9 @@
   "license": "MIT",
   "autoload": {
     "psr-4": {
-      "Bermuda\\App\\": "src/"
+      "Bermuda\\App\\": "src/",
+      "Bermuda\\App\\Console\\": "src/console/",
+      "Bermuda\\App\\Console\\Asker\\": "src/console/asker/"
     },
     "files": [
             "src/define.php"
