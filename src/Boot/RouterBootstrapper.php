@@ -23,7 +23,12 @@ final class RouterBootstrapper implements BootstrapperInterface
         $app->registerAlias('router', Router::class);
 
         $routes = (static function (RouteMap $routes) use ($app): RouteMap {
-            require_once './config/routes.php';
+            if ($app->config[$app::devMode]) {
+                require_once '.\config\routes.php';
+            } else {
+                $routes = $routes::createFromCache('.\config\cached_routes.php', compact('app'));
+            }
+
             return $routes;
         })($app->get(Router::class)->getRoutes());
 
