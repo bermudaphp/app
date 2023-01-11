@@ -41,10 +41,10 @@ abstract class App extends Container implements AppInterface
     }
 
     /**
-     * @param ContainerInterface|null $wrapperContainer
+     * @param ContainerInterface|null $container
      * @return static
      */
-    public static function createApp(ContainerInterface $wrapperContainer = null): self
+    public static function createApp(ContainerInterface $container = null): self
     {
         return new static(null, null, $container);
     }
