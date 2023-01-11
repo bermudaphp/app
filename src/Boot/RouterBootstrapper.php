@@ -2,6 +2,7 @@
 
 namespace Bermuda\App\Boot;
 
+use Bermuda\Config\Config;
 use Bermuda\App\AppInterface;
 use Bermuda\Router\RouteMap;
 use Bermuda\Router\Router;
