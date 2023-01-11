@@ -26,7 +26,7 @@ final class RouterBootstrapper implements BootstrapperInterface
             if (Config::$devMode) {
                 require_once '.\config\routes.php';
             } else {
-                $routes = $routes::createFromCache('.\config\cached_routes.php', compact('app'));
+                $routes = $routes::createFromCache('.\config\cache\routes.php', compact('app'));
             }
 
             return $routes;
