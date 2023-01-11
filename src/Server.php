@@ -22,12 +22,12 @@ use Nyholm\Psr7Server\ServerRequestCreatorInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 
-final class Server extends App implements RequestHandlerInterface
+class Server extends App implements RequestHandlerInterface
 {
-    private PipelineInterface $pipeline;
-    private EmitterInterface $emitter;
-    private MiddlewareFactoryInterface $middlewareFactory;
-    private ServerRequestCreatorInterface $serverRequestCreator;
+    protected PipelineInterface $pipeline;
+    protected EmitterInterface $emitter;
+    protected MiddlewareFactoryInterface $middlewareFactory;
+    protected ServerRequestCreatorInterface $serverRequestCreator;
 
     protected function bindEntries(): void
     {
