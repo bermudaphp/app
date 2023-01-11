@@ -4,6 +4,7 @@
   "autoload": {
     "psr-4": {
       "Bermuda\\App\\": "src/",
+      "Bermuda\\App\\Compile\\": "src/compile/",
       "Bermuda\\App\\Console\\": "src/console/",
       "Bermuda\\App\\Console\\Asker\\": "src/console/asker/"
     },
