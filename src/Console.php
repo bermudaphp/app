@@ -10,10 +10,10 @@ use Symfony\Component\Console\Input\{ArgvInput, InputInterface};
 use Symfony\Component\Console\Output\{ConsoleOutput, OutputInterface};
 use Throwable;
 
-final class Console extends App
+class Console extends App
 {
-    private Console\CommandRunnerInterface $runner;
-    private Console\CommandResolverInterface $resolver;
+    protected Console\CommandRunnerInterface $runner;
+    protected Console\CommandResolverInterface $resolver;
 
     protected function bindEntries(): void
     {
