@@ -6,7 +6,10 @@
       "Bermuda\\App\\": "src/",
       "Bermuda\\App\\Console\\": "src/console/",
       "Bermuda\\App\\Console\\Asker\\": "src/console/asker/"
-    }
+    },
+    "files": [
+            "src/constants.php"
+    ]
   },
   "require": {
     "php": "^8.1",
