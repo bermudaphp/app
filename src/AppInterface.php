@@ -17,7 +17,7 @@ use Autocomplete\App as Autocomplete;
  */
 interface AppInterface extends ContainerInterface, 
     FactoryInterface, InvokerInterface
-{ 
+{     
     /**
      * Run application
      */
