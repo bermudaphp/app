@@ -17,7 +17,7 @@
     "bermudaphp/router": "^3.0.3",
     "bermudaphp/clock": "^1.0",
     "bermudaphp/stringy": "^2.0.2",
-    "bermudaphp/config": "^1.1.1",
+    "bermudaphp/config": "^1.1.3",
     "bermudaphp/exceptor": "^1.0.1",
     "bermudaphp/http": "^1.0.1",
     "bermudaphp/psr-7-server-factory": "^1.0.5",
