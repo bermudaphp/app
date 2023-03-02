@@ -6,9 +6,6 @@ use Bermuda\HTTP\Responder;
 use Bermuda\App\AppInterface;
 use Bermuda\Router\Generator;
 use Bermuda\Router\Router;
-use Bermuda\String\Json;
-use Bermuda\String\Stringable;
-
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 
