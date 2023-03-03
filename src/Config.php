@@ -2,7 +2,7 @@
 
 namespace Bermuda\App;
 
-use Bermuda\Arrayable;
+use Bermuda\Stdlib\Arrayable;
 use Psr\Container\{
     ContainerInterface, 
     NotFoundExceptionInterface, 
