@@ -9,6 +9,7 @@ use Throwable;
 use DI\FactoryInterface;
 use Invoker\InvokerInterface;
 use Psr\Container\ContainerInterface;
+use Bermuda\Config\Config;
 use Bermuda\ErrorHandler\ErrorHandler;
 use Bermuda\App\Exceptions\AppException;
 use Bermuda\App\Exceptions\BadMethodCallException;
