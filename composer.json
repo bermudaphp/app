@@ -9,7 +9,7 @@
       "Bermuda\\App\\Console\\Asker\\": "src/console/asker/"
     },
     "files": [
-            "src/constants.php"
+      "src/constants.php"
     ]
   },
   "require": {
