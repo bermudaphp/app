@@ -9,6 +9,7 @@ use Invoker\InvokerInterface;
 use Psr\Container\ContainerInterface;
 use Bermuda\ErrorHandler\ErrorHandler;
 use Autocomplete\App as Autocomplete;
+use Bermuda\Config\Config;
 
 /**
  * @mixin Autocomplete
