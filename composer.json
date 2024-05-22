@@ -13,8 +13,8 @@
     ]
   },
   "require": {
-    "php": "^8.1",
-    "bermudaphp/router": "^3.1.1|^4.0",
+    "php": "^8.3",
+    "bermudaphp/router": "^4.0",
     "bermudaphp/clock": "^1.0",
     "bermudaphp/config": "^1.3",
     "bermudaphp/exceptor": "^1.0.1",
@@ -22,7 +22,7 @@
     "bermudaphp/psr-7-server-factory": "^1.0.5",
     "bermudaphp/error-handler": "^2.0",
     "bermudaphp/psr15factory": "^2.0.6",
-    "symfony/console": "^6.0.2",
-    "php-di/php-di": "^6.3.5"
+    "symfony/console": "^7.0",
+    "php-di/php-di": "^7.0"
   }
 }
