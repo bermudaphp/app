@@ -73,17 +73,11 @@ interface AppInterface extends ContainerInterface,
     public function getConfig(): Config ;
 
     /**
-     * @param string $id
-     * @param $value
-     * @return AppInterface
      * @throws AppException
      */
-    public function set(string $id, $value): AppInterface ;
+    public function set(string $id, mixed $value): void ;
     
      /**
-     * @param string $id
-     * @param callable $extender
-     * @return AppInterface
      * @throws AppException
      */
     public function extend(string $id, callable $extender): AppInterface ;
