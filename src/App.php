@@ -98,7 +98,6 @@ abstract class App extends Container implements AppInterface
         }
 
         parent::set($id, $value);
-        return $this;
     }
 
     /**
