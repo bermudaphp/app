@@ -69,7 +69,7 @@ abstract class App extends Container implements AppInterface
     /**
      * @inerhitDoc
      */
-    public function get($name)
+    public function get(string $name): mixed
     {
         if (isset($this->aliases[$name])) {
             $name = $this->aliases[$name];
@@ -81,7 +81,7 @@ abstract class App extends Container implements AppInterface
     /**
      * @inerhitDoc
      */
-    public function has($name): bool
+    public function has(string $name): bool
     {
         return parent::has($name) || isset($this->aliases[$name]);
     }
@@ -91,7 +91,7 @@ abstract class App extends Container implements AppInterface
      * @param $value
      * @return AppInterface
      */
-    public function set(string $id, $value): AppInterface
+    public function set(string $id, mixed $value): void
     {
         if ($this->has($id)) {
             throw AppException::entryExists($id);
