@@ -86,13 +86,14 @@ abstract class App extends Container implements AppInterface
         return parent::has($name) || isset($this->aliases[$name]);
     }
 
-    public function set(string $id, $value): void
+    public function set(string $id, $value): AppInterface
     {
         if ($this->has($id)) {
             throw AppException::entryExists($id);
         }
 
         parent::set($id, $value);
+        return $this;
     }
 
     /**
