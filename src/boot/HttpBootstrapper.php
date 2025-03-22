@@ -16,7 +16,7 @@ final class HttpBootstrapper implements BootstrapperInterface
      */
     public function boot(AppInterface $app): AppInterface
     {
-        $app->registerCallback('respond', static function(int $code = 200, $content = null, string $contentType = null) use ($app): ResponseInterface {
+        $app->registerCallback('respond', static function(int $code = 200, mixed $content = null, ?string $contentType = null) use ($app): ResponseInterface {
             return $app->get(Responder::class)->respond($code, $content, $contentType);
         });
         
