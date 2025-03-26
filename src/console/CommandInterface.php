@@ -8,10 +8,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 interface CommandInterface
 {
-    public const success = Command::SUCCESS;
-    public const failure = Command::FAILURE;
+    public const SUCCESS = Command::SUCCESS;
+    public const FAILURE = Command::FAILURE;
 
     public function getName(): string ;
     public function getDescription(): string ;
-    public function __invoke(InputInterface $input, OutputInterface $output): int ;
+    public function executeCommand(InputInterface $input, OutputInterface $output): int ;
 }

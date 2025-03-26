@@ -23,7 +23,7 @@ abstract class SymfonyCommand extends Command implements CommandInterface
              */
             protected function execute(InputInterface $input, OutputInterface $output): int
             {
-                return ($this->command)($input, $output);
+                return $this->command->executeCommand($input, $output);
             }
 
             /**
@@ -66,7 +66,7 @@ abstract class SymfonyCommand extends Command implements CommandInterface
      * @return int
      * @throws \Exception
      */
-    public function __invoke(InputInterface $input, OutputInterface $output): int
+    public function executeCommand(InputInterface $input, OutputInterface $output): int
     {
         return $this->run($input, $output);
     }

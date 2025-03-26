@@ -8,13 +8,10 @@ final class UnresolvableCommandException extends RuntimeException
 {
     private mixed $command;
 
-    public function __construct(?string $message = null, $command = null)
+    public function __construct(?string $message = null, mixed $command = null)
     {
         $this->command = $command;
-
-        if (!$message && is_string($command)) {
-            $message = 'Unresolvable command: ' . $command;
-        }
+        if (!$message && is_string($command)) $message = 'Unresolvable command: ' . $command;
 
         parent::__construct($message ?? 'Unresolvable command');
     }
@@ -29,7 +26,7 @@ final class UnresolvableCommandException extends RuntimeException
         throw $self;
     }
 
-    public function getCommand()
+    public function getCommand(): mixed
     {
         return $this->command;
     }

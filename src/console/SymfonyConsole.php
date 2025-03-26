@@ -2,6 +2,7 @@
 
 namespace Bermuda\App\Console;
 
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -28,10 +29,7 @@ final class SymfonyConsole implements CommandRunnerInterface
      */
     public function getConsole(): Application
     {
-        if ($this->console == null){
-            return $this->console = new Application;
-        }
-
+        if ($this->console == null) return $this->console = new Application;
         return $this->console;
     }
 
@@ -42,5 +40,10 @@ final class SymfonyConsole implements CommandRunnerInterface
     public function run(InputInterface $input, OutputInterface $output): void
     {
         $this->getConsole()->run($input, $output);
+    }
+
+    public static function createFromContainer(ContainerInterface $ignored): self
+    {
+        return new SymfonyConsole;
     }
 }

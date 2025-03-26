@@ -28,4 +28,9 @@ final class CommandResolver implements CommandResolverInterface
 
         throw new UnresolvableCommandException(null, $any);
     }
+
+    public static function createFromContainer(ContainerInterface $container): self
+    {
+        return new CommandResolver($container);
+    }
 }
