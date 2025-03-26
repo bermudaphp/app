@@ -1,6 +1,6 @@
 <?php
 
-namespace Bermuda\App\Exceptions;
+namespace Bermuda\App;
 
 use Bermuda\Exceptor\Exceptor;
 
@@ -10,7 +10,7 @@ class AppException extends \RuntimeException
     
     public static function isRun(): self
     {
-        return new static('Application is already run');
+        return new static('Application is already runned');
     }
 
     public static function entryExists(string $id): self
