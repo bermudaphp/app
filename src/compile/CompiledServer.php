@@ -2,33 +2,10 @@
 
 namespace Bermuda\App\Compile;
 
-class CompiledServer extends Server
+use Bermuda\App\Trait\ServerApp;
+use DI\CompiledContainer;
+
+class CompiledServer extends CompiledContainer
 {
-    /**
-     * This const is overridden in child classes (compiled containers).
-     * @var array
-     */
-    const METHOD_MAPPING = [];
-
-    use CompiledTrait {
-        get as compiledGet;
-        has as compiledHas;
-    }
-
-    public function get($name)
-    {
-        if (isset($this->aliases[$name])) {
-            $name = $this->aliases[$name];
-        }
-
-        return $this->compiledGet($name);
-    }
-
-    /**
-     * @inerhitDoc
-     */
-    public function has($name): bool
-    {
-        return $this->compiledHas($name) || isset($this->aliases[$name]);
-    }
+    use ServerApp;
 }
