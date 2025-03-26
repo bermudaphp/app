@@ -2,6 +2,8 @@
 
 namespace Bermuda\App;
 
+use Bermuda\App\Boot\Bootable;
+use Bermuda\App\Boot\BootstrapperInterface;
 use Throwable;
 use Bermuda\App\Exceptions\AppException;
 use DI\FactoryInterface;
@@ -13,34 +15,31 @@ use Bermuda\Config\Config;
 
 /**
  * @mixin Autocomplete
- * @property-read ErrorHandler $errorHandler
- * @property-read Config $config
  */
 interface AppInterface extends ContainerInterface, 
     FactoryInterface, InvokerInterface
-{     
+{
+    public Config $config { get ;}
+    public ErrorHandler $errorHandler { get ;}
+
     /**
      * Run application
+     * @throws AppException
+     * If application is already runned
      */
-    public function run(): void ;
+    public function run(?Bootable $bootable = null): void ;
 
     /**
      * @param mixed $any
      * @return AppInterface
-     * @throws \RuntimeException
+     * @throws AppException
      */
     public function pipe(mixed $any): AppInterface ;
-        
-    /**
-     * @param Throwable $e
-     * @return never
-     */
-    public function handleException(Throwable $e): never ;
-         
+
     /**
      * @param string $name
      * @param array $arguments
-     * @return Exceptions\BadMethodCallException
+     * @return \BadMethodCallException
      */
     public function __call(string $name, array $arguments): mixed ;
 
@@ -66,11 +65,6 @@ interface AppInterface extends ContainerInterface,
      * @see ContainerInterface::get()
      */
     public function __get(string $name);
-
-    /**
-     * @return Config
-     */
-    public function getConfig(): Config ;
 
     /**
      * @throws AppException

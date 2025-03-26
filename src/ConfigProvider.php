@@ -21,8 +21,8 @@ final class ConfigProvider extends AbstractProvider
         return [
             InputInterface::class => static fn() => new ArgvInput,
             OutputInterface::class => static fn() => new ConsoleOutput,
-            CommandRunnerInterface::class => static fn() => new SymfonyConsole,
-            CommandResolverInterface::class => static fn(ContainerInterface $container) => new CommandResolver($container)
+            CommandRunnerInterface::class => [SymfonyConsole::class, 'createFromContainer'],
+            CommandResolverInterface::class => [CommandResolver::class, 'createFromContainer'],
         ];
     }
 }
