@@ -9,7 +9,7 @@
       "Bermuda\\App\\Compile\\": "src/compile/",
       "Bermuda\\App\\Console\\": "src/console/",
       "Bermuda\\App\\Console\\Asker\\": "src/console/asker/"
-    },
+    }
   },
   "require": {
     "php": "^8.4",
