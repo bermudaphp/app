@@ -19,7 +19,7 @@
     "bermudaphp/exceptor": "^1.0.1",
     "bermudaphp/http": "^1.0.1",
     "bermudaphp/psr-7-server-factory": "^1.0.5",
-    "bermudaphp/error-handler": "^3.0",
+    "bermudaphp/error-handler": "^3.0.0",
     "bermudaphp/psr15factory": "^2.0.6",
     "symfony/console": "^7.1.10",
     "php-di/php-di": "^7.0.9"
