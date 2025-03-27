@@ -15,9 +15,7 @@ class Configurator implements Bootable
             if (is_callable($bootable)) $bootable($app);
             else if ($bootable instanceof \Bermuda\App\Boot\Bootable) {
                 $bootable->boot($app);
-            }
-
-            throw new \RuntimeException("Invalid bootable provided for key: $key");
+            } else throw new \RuntimeException("Invalid bootable provided for key: $key");
         }
     }
 }
