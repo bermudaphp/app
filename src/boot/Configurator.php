@@ -11,11 +11,13 @@ class Configurator implements Bootable
     {
         foreach ($app->config->get(ConfigProvider::bootstrap, []) as $key => $bootable) {
             if (is_string($bootable)) $bootable = $app->get($bootable);
-            if (!$bootable instanceof \Bermuda\App\Boot\Bootable) {
-                throw new \RuntimeException("Invalid bootable provided for key: $key");
+
+            if (is_callable($bootable)) $bootable($app);
+            else if ($bootable instanceof \Bermuda\App\Boot\Bootable) {
+                $bootable->boot($app);
             }
 
-            $bootable->boot($app);
+            throw new \RuntimeException("Invalid bootable provided for key: $key");
         }
     }
 }
