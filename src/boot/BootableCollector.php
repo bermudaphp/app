@@ -41,7 +41,7 @@ final class BootableCollector implements Bootable
             new Pipeline,
             new ErrorHandling,
             new Http,
-            new Config,
+            new Configurator,
             new DateTime,
             new Renderer
         ]);
