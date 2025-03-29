@@ -52,14 +52,7 @@ abstract class SymfonyCommand extends Command implements CommandInterface
         return parent::getName();
     }
 
-    /**
-     * @return string
-     */
-    public function getDescription(): string
-    {
-        return parent::getDescription();
-    }
-
+   
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
