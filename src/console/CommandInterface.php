@@ -8,9 +8,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 interface CommandInterface
 {
-    public const SUCCESS = Command::SUCCESS;
-    public const FAILURE = Command::FAILURE;
-
+    public const int success = Command::SUCCESS;
+    public const int failure = Command::FAILURE;
+    
     public function getName(): string ;
     public function getDescription(): string ;
     public function executeCommand(InputInterface $input, OutputInterface $output): int ;
