@@ -13,16 +13,28 @@ use Bermuda\Config\ConfigProvider as AbstractProvider;
 
 final class ConfigProvider extends AbstractProvider
 {
+    public const CONFIG_KEY_CONTAINERS = 'app.containers';
+
     /**
      * @inheritDoc
      */
     protected function getFactories(): array
     {
         return [
-            InputInterface::class => static fn() => new ArgvInput,
-            OutputInterface::class => static fn() => new ConsoleOutput,
+            InputInterface::class => [ConfigProvider::class, 'createArgvInput'],
+            OutputInterface::class => [ConfigProvider::class, 'createConsoleOutput'],
             CommandRunnerInterface::class => [SymfonyConsole::class, 'createFromContainer'],
             CommandResolverInterface::class => [CommandResolver::class, 'createFromContainer'],
         ];
+    }
+
+    public static function createArgvInput(): ArgvInput
+    {
+        return new ArgvInput;
+    }
+
+    public static function createConsoleOutput(): ConsoleOutput
+    {
+        return new ConsoleOutput;
     }
 }
