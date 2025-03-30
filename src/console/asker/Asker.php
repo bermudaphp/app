@@ -23,7 +23,7 @@ final class Asker
      * @param bool|null $hidden
      * @return array|string|int|bool|float|null
      */
-    public function ask(string|callable $question, string|int|float|bool $default = null, ?array $autocomplete = null, ?bool $hidden = null): array|string|int|bool|float|null
+    public function ask(string|callable $question, null|string|int|float|bool $default = null, ?array $autocomplete = null, ?bool $hidden = null): array|string|int|bool|float|null
     {
         $question = $this->builder($question)
             ->setDefaultValue($default)
@@ -40,7 +40,7 @@ final class Asker
      * @param string $pattern
      * @return array|string|int|bool|float|null
      */
-    public function askConfirm(string|callable $question, string|int|float|bool $default = null, string $pattern = '/^y/i'): array|string|int|bool|float|null
+    public function askConfirm(string|callable $question, null|string|int|float|bool $default = null, string $pattern = '/^y/i'): array|string|int|bool|float|null
     {
         $question = $this->builder($question)
             ->setDefaultValue($default)
@@ -57,7 +57,7 @@ final class Asker
      * @param string|null $errorMessage
      * @return array|string|int|bool|float|null
      */
-    public function askMultiselect(string|callable $question, array $variants, string|int|float|bool $default = null, ?string $errorMessage = null): array|string|int|bool|float|null
+    public function askMultiselect(string|callable $question, array $variants, null|string|int|float|bool $default = null, ?string $errorMessage = null): array|string|int|bool|float|null
     {
         return $this->askSelect($question, $variants, $default, $errorMessage, true);
     }
@@ -70,7 +70,7 @@ final class Asker
      * @param bool $multiselect
      * @return array|string|int|bool|float|null
      */
-    public function askSelect(string|callable $question, array $variants, string|int|float|bool $default = null, ?string $errorMessage = null, ?bool $multiselect = null): array|string|int|bool|float|null
+    public function askSelect(string|callable $question, array $variants, null|string|int|float|bool $default = null, ?string $errorMessage = null, ?bool $multiselect = null): array|string|int|bool|float|null
     {
         $question = $this->builder($question)
             ->setVariants($variants)
