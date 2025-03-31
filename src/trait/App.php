@@ -7,6 +7,7 @@ use Bermuda\App\Boot\Bootable;
 use DI\Container;
 use DI\Definition\Source\MutableDefinitionSource;
 use DI\Proxy\ProxyFactory;
+use Psr\Container\NotFoundExceptionInterface;
 use Throwable;
 use DI\FactoryInterface;
 use Invoker\InvokerInterface;
@@ -24,6 +25,11 @@ trait App
     protected(set) bool $isRunned = false;
 
     /**
+     * @var ContainerInterface[];
+     */
+    protected array $containers = [];
+
+    /**
      * @var callable[]
      */
     protected array $callbacks = [];
@@ -37,7 +43,8 @@ trait App
         ?ProxyFactory $proxyFactory = null,
         ?ContainerInterface $wrapperContainer = null
     ){
-        parent::__construct($definitionSource, $proxyFactory, $wrapperContainer);
+        parent::__construct($definitionSource, $proxyFactory, null);
+        if ($wrapperContainer) $this->addContainer($wrapperContainer);
         $this->bindEntries();
     }
 
@@ -46,6 +53,11 @@ trait App
         $this->resolvedEntries[AppInterface::class] = $this;
         $this->resolvedEntries[Config::class] = $this->config = Config::createConfig($this);
         $this->errorHandler = $this->get(ErrorHandler::class);
+    }
+    
+    public function addContainer(ContainerInterface $container): void
+    {
+        $this->containers[] = $container;
     }
 
     /**
@@ -63,6 +75,13 @@ trait App
      */
     public function get(string $name): mixed
     {
+        foreach ($this->containers as $container) {
+            try {
+                $container->get($name);
+            } catch (NotFoundExceptionInterface $e) {
+                continue;
+            }
+        }
         if (isset($this->aliases[$name])) $name = $this->aliases[$name];
         return parent::get($name);
     }
@@ -72,6 +91,7 @@ trait App
      */
     public function has(string $name): bool
     {
+        foreach ($this->containers as $container) if ($container->has($name)) return true;
         return parent::has($name) || isset($this->aliases[$name]);
     }
 
