@@ -6,5 +6,5 @@ use Psr\Container\ContainerInterface;
 
 interface ContainerCollectorInterface
 {
-    public function add(ContainerInterface $container): void ;
+    public function addContainer(ContainerInterface $container): void ;
 }
