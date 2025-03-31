@@ -22,7 +22,7 @@ use Nyholm\Psr7Server\ServerRequestCreatorInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 
-class ServerApp extends Container implements AppInterface, RequestHandlerInterface
+class ServerApp extends Container implements AppInterface, RequestHandlerInterface, ContainerCollectorInterface
 {
     use Trait\ServerApp;
 }
