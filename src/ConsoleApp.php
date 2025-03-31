@@ -13,7 +13,7 @@ use Symfony\Component\Console\Input\{ArgvInput, InputInterface};
 use Symfony\Component\Console\Output\{ConsoleOutput, OutputInterface};
 use Throwable;
 
-class ConsoleApp extends Container implements AppInterface
+class ConsoleApp extends Container implements AppInterface, ContainerCollectorInterface
 {
     use Trait\ConsoleApp;
 }
