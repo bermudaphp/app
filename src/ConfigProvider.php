@@ -12,7 +12,7 @@ use Bermuda\App\Console\CommandResolverInterface;
 use Bermuda\App\Console\CommandRunnerInterface;
 use Bermuda\App\Console\SymfonyConsole;
 
-final class ConfigProvider extends Bermuda\Config\ConfigProvider
+final class ConfigProvider extends \Bermuda\Config\ConfigProvider
 {
     public const CONFIG_KEY_CONTAINERS = 'app.containers';
 
