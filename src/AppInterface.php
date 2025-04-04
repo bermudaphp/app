@@ -69,7 +69,7 @@ interface AppInterface extends ContainerInterface,
     /**
      * @throws AppException
      */
-    public function set(string $id, mixed $value): void ;
+    public function set(string $id, mixed $value, bool $override = false): void ;
     
      /**
      * @throws AppException
