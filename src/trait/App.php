@@ -96,14 +96,11 @@ trait App
     }
 
     /**
-     * @param string $id
-     * @param $value
-     * @return AppInterface
      * @throws AppException
      */
-    public function set(string $id, mixed $value): void
+    public function set(string $id, mixed $value, bool $override = false): void
     {
-        if ($this->has($id)) throw AppException::entryExists($id);
+        if ($this->has($id) && !$override) throw AppException::entryExists($id);
         parent::set($id, $value);
     }
 
