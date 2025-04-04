@@ -2,6 +2,8 @@
 
 namespace Bermuda\App;
 
+use Bermuda\App\Boot\Bootable;
+use Bermuda\App\Boot\BootableCollector;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Input\{ArgvInput, InputInterface};
 use Symfony\Component\Console\Output\{ConsoleOutput, OutputInterface};
@@ -9,9 +11,8 @@ use Bermuda\App\Console\CommandResolver;
 use Bermuda\App\Console\CommandResolverInterface;
 use Bermuda\App\Console\CommandRunnerInterface;
 use Bermuda\App\Console\SymfonyConsole;
-use Bermuda\Config\ConfigProvider as AbstractProvider;
 
-final class ConfigProvider extends AbstractProvider
+final class ConfigProvider extends Bermuda\Config\ConfigProvider
 {
     public const CONFIG_KEY_CONTAINERS = 'app.containers';
 
@@ -21,6 +22,7 @@ final class ConfigProvider extends AbstractProvider
     protected function getFactories(): array
     {
         return [
+            Bootable::class => [BootableCollector::class, 'createFromContainer'],
             InputInterface::class => [ConfigProvider::class, 'createArgvInput'],
             OutputInterface::class => [ConfigProvider::class, 'createConsoleOutput'],
             CommandRunnerInterface::class => [SymfonyConsole::class, 'createFromContainer'],
