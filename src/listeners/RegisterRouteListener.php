@@ -67,7 +67,11 @@ class RegisterRouteListener implements FinalizedListenerInterface
              * @var Route $route
              */
             $route = $attribute->newInstance();
-            $this->routes[$route->priority][] = [$reflector->getName(), $route];
+            $target = $attribute->target;
+
+            if ($target instanceof \ReflectionMethod) {
+                $this->routes[$route->priority][] = ["$target->class@$target->name", $route];
+            } else $this->routes[$route->priority][] = [$target->name, $route];
         }
     }
 
