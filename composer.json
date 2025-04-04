@@ -14,7 +14,7 @@
   },
   "require": {
     "php": "^8.4",
-    "bermudaphp/router": "^4.0.2",
+    "bermudaphp/router": "^4.1",
     "bermudaphp/clock": "^1.0",
     "bermudaphp/finder": "^1.0",
     "bermudaphp/config": "^1.3",
