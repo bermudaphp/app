@@ -8,6 +8,7 @@
       "Bermuda\\App\\Trait\\": "src/trait/",
       "Bermuda\\App\\Compile\\": "src/compile/",
       "Bermuda\\App\\Console\\": "src/console/",
+      "Bermuda\\App\\Listeners\\": "src/listeners/",
       "Bermuda\\App\\Console\\Asker\\": "src/console/asker/"
     }
   },
