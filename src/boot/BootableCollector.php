@@ -12,7 +12,7 @@ final class BootableCollector implements Bootable
     public const string CONFIG_KEY_BOOTABLES = 'Bermuda\App\Boot\Bootable:bootables';
     public const string CONFIG_KEY_EXCLUDE = 'Bermuda\App\Boot\Bootable:exclude';
     
-    private const array defaults = [
+    public const array defaults = [
         PathHelper::class,
         Routing::class,
         Finder::class,
