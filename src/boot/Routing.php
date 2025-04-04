@@ -6,7 +6,6 @@ use Bermuda\Config\Config;
 use Bermuda\App\AppInterface;
 use Bermuda\Router\RouteMap;
 use Bermuda\Router\Router;
-use const Bermuda\App\is_cli;
 
 final class Routing implements Bootable
 {
@@ -15,7 +14,7 @@ final class Routing implements Bootable
      */
     public function boot(AppInterface $app): void
     {
-        if (PHP_SAPI != 'cli') $this->loadRoutes($app);
+        $this->loadRoutes($app);
     }
 
     public function loadRoutes(AppInterface $app): RouteMap
@@ -27,14 +26,13 @@ final class Routing implements Bootable
                 require_once '.\config\routes.php';
             } else {
                 $routes = $routes::createFromCache('.\config\cache\routes.php', compact('app'));
+                $app->extend(Router::class, static function (Router $router) use ($routes): Router {
+                    return $router->withRoutes($routes);
+                });
             }
 
             return $routes;
-        })($app->get(Router::class)->getRoutes());
-
-        $app->extend(Router::class, static function(Router $router) use ($routes): Router {
-            return $router->withRoutes($routes);
-        });
+        })($app->get(RouteMap::class));
 
         return $routes;
     }
