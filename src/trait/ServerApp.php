@@ -63,9 +63,9 @@ trait ServerApp
     public function pipe(mixed $any): AppInterface
     {
         try {
-            $this->pipeline->pipe($this->middlewareFactory->make($any));
+            $this->pipeline->pipe($this->middlewareFactory->makeMiddleware($any));
         } catch (UnresolvableMiddlewareException $e) {
-            UnresolvableMiddlewareException::reThrow($e, debug_backtrace()[0]);
+            throw $e->setBacktrace(debug_backtrace()[0]);
         }
 
         return $this;
